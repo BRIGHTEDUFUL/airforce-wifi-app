@@ -1,0 +1,5 @@
+{
+  "name": "Air Force Key Manager",
+  "description": "Internal credential management system for network and WiFi credentials with SQLite backend.",
+  "requestFramePermissions": []
+}

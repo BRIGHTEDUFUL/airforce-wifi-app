@@ -1,11 +1,34 @@
-<div align="center">
+# Air Force Key Manager
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Internal credential management system.
 
-  <h1>Built with AI Studio</h2>
+## Setup Instructions
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+2. Start the application:
+   ```bash
+   npm run dev
+   ```
 
-</div>
+3. Access the application at `http://localhost:3000`.
+
+## Docker Support
+
+1. Build the image:
+   ```bash
+   docker build -t airforce-key-manager .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 3000:3000 airforce-key-manager
+   ```
+
+## Default Credentials
+- Email: `admin@airforce.mil`
+- Password: `adminpassword`
+- Role: Administrator
