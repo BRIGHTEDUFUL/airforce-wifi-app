@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Wifi, Key, AlertTriangle, Clock } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { formatDate } from '../lib/utils';
+import { 
+  Shield, 
+  Wifi, 
+  Key, 
+  AlertTriangle, 
+  Clock, 
+  RefreshCw, 
+  Moon, 
+  Sun,
+  Fingerprint,
+  Activity,
+  Plus,
+  History,
+  Lock,
+  ChevronRight,
+  Monitor,
+  Zap,
+  Mail
+} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { cn } from '../lib/utils';
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+  setActiveTab: (tab: string) => void;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const [stats, setStats] = useState<any>(null);
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     fetch('/api/stats', {
@@ -16,96 +43,155 @@ const Dashboard: React.FC = () => {
       .then(data => setStats(data));
   }, [token]);
 
-  if (!stats) return <div className="p-8">Loading dashboard...</div>;
-
-  const statCards = [
-    { label: 'Total Devices', value: stats.totalDevices, icon: Shield, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20' },
-    { label: 'WiFi Networks', value: stats.totalWifi, icon: Wifi, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
-    { label: 'Stored Credentials', value: stats.totalCredentials, icon: Key, color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-900/20' },
-    { label: 'Active Alerts', value: stats.alerts.length, icon: AlertTriangle, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-900/20' },
-  ];
+  if (!stats) return (
+    <div className="flex items-center justify-center h-full">
+      <div className="flex flex-col items-center gap-4">
+        <RefreshCw className="w-8 h-8 text-command-blue animate-spin" />
+        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Initializing Command Portal...</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="p-6 space-y-8 animate-in fade-in duration-500">
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
-        <p className="text-slate-500 dark:text-slate-400">System status and credential statistics.</p>
+    <div className="p-8 space-y-8 bg-command-light min-h-full animate-in fade-in duration-700">
+      {/* Header */}
+      <header className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Command Dashboard</h1>
+          <p className="text-slate-500 font-medium">
+            {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm hover:bg-slate-50 transition-all text-sm font-bold text-slate-700">
+            <RefreshCw size={16} />
+            Refresh
+          </button>
+          <button className="p-2.5 bg-command-blue text-white rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-600 transition-all">
+            <Moon size={20} />
+          </button>
+        </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((card, i) => (
-          <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-            <div className={`p-3 rounded-xl ${card.bg} ${card.color}`}>
-              <card.icon size={24} />
+      {/* Hero Card */}
+      <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-blue-800 to-blue-500 p-10 text-white shadow-2xl shadow-blue-600/20">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <h2 className="text-4xl font-bold tracking-tight">
+                Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'}, {user?.name?.split(' ')[0] || 'bright'}!
+              </h2>
+              <div className="px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center gap-2">
+                <Shield size={14} />
+                <span className="text-[10px] font-black uppercase tracking-widest">{user?.role || 'Administrator'}</span>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{card.label}</p>
-              <p className="text-2xl font-bold">{card.value}</p>
+            <p className="text-blue-100 text-lg font-medium opacity-80">
+              Network security overview — {stats.totalDevices} devices monitored, {stats.totalWifi} active credentials
+            </p>
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex items-center gap-2 text-2xl font-bold tracking-tighter">
+              <Clock size={24} className="text-blue-200" />
+              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs font-bold text-blue-100 uppercase tracking-widest">System operational</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Decorative Circles */}
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-64 h-64 bg-blue-400/20 rounded-full blur-2xl" />
+      </div>
+
+      {/* Status Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { label: 'Authentication', status: 'Active', icon: Shield, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+          { label: 'Authorization', status: 'Admin', icon: Fingerprint, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+          { label: 'Monitoring', status: `${stats.recentLogs.length} events`, icon: Activity, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+        ].map((card, i) => (
+          <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+            <div className="flex items-center gap-4">
+              <div className={cn("p-4 rounded-2xl", card.bg, card.color)}>
+                <card.icon size={24} />
+              </div>
+              <div>
+                <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{card.label}</p>
+                <p className="text-sm font-bold text-slate-700">Secure system access</p>
+              </div>
+            </div>
+            <div className={cn("px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest", card.bg, card.color)}>
+              {card.status}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <h3 className="text-lg font-semibold mb-6">Activity Trends</h3>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={[
-                { name: 'Mon', actions: 12 },
-                { name: 'Tue', actions: 19 },
-                { name: 'Wed', actions: 15 },
-                { name: 'Thu', actions: 22 },
-                { name: 'Fri', actions: 30 },
-                { name: 'Sat', actions: 8 },
-                { name: 'Sun', actions: 5 },
-              ]}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.1} />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '8px', color: '#f8fafc' }}
-                  itemStyle={{ color: '#3b82f6' }}
-                />
-                <Bar dataKey="actions" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Clock size={18} className="text-slate-400" />
-            Recent Activity
-          </h3>
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-            {stats.recentLogs.map((log: any) => (
-              <div key={log.id} className="flex gap-3 text-sm border-l-2 border-blue-500 pl-3 py-1">
-                <div className="flex-1">
-                  <p className="font-medium">{log.action}</p>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs">{log.user_name} • {log.module}</p>
-                </div>
-                <span className="text-[10px] text-slate-400 whitespace-nowrap">{new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <h3 className="text-lg font-semibold mb-4">Security Alerts & Notifications</h3>
-        <div className="space-y-3">
-          {stats.alerts.length > 0 ? stats.alerts.map((alert: any) => (
-            <div key={alert.id} className="p-4 rounded-xl bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/20 flex items-start gap-3">
-              <AlertTriangle className="text-rose-600 mt-0.5" size={18} />
-              <div>
-                <p className="font-semibold text-rose-900 dark:text-rose-200 text-sm">{alert.title}</p>
-                <p className="text-rose-700 dark:text-rose-300 text-xs">{alert.content}</p>
+      {/* Metric Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { label: 'Total Devices', value: stats.totalDevices, icon: Monitor, color: 'text-blue-500', bg: 'bg-blue-50' },
+          { label: 'Active Credentials', value: stats.totalCredentials, icon: Key, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+          { label: 'Expiring Soon', value: stats.alerts.filter((a: any) => a.title.includes('Expiry')).length, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
+          { label: 'Expired', value: 0, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-50' },
+        ].map((card, i) => (
+          <div key={i} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm space-y-6 hover:shadow-lg transition-all">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{card.label}</p>
+              <div className={cn("p-3 rounded-2xl", card.bg, card.color)}>
+                <card.icon size={20} />
               </div>
             </div>
-          )) : (
-            <p className="text-slate-500 text-sm italic">No active security alerts.</p>
-          )}
+            <div className="space-y-1">
+              <p className="text-5xl font-bold text-slate-900 tracking-tighter">{card.value}</p>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase">
+                <Activity size={12} />
+                {card.label === 'Total Devices' ? 'Registered' : card.label === 'Active Credentials' ? 'In use' : card.label === 'Expiring Soon' ? 'Within 7 days' : 'Need rotation'}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+              <Zap size={20} />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 tracking-tight">Quick Actions</h3>
+          </div>
+          <button className="text-xs font-bold text-command-blue uppercase tracking-widest hover:underline">View All</button>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          {[
+            { id: 'devices', label: 'Add Device', desc: 'Register new hardware', icon: Plus, color: 'text-blue-600', bg: 'bg-blue-50' },
+            { id: 'generator', label: 'Gen Password', desc: 'Create secure keys', icon: Key, color: 'text-amber-600', bg: 'bg-amber-50' },
+            { id: 'wifi', label: 'WiFi Access', desc: 'Manage credentials', icon: Wifi, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+            { id: 'vault', label: 'Secure Vault', desc: 'Encrypted storage', icon: Lock, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+            { id: 'audit', label: 'Audit Logs', desc: 'System history', icon: History, color: 'text-slate-600', bg: 'bg-slate-50' },
+            { id: 'messages', label: 'Messages', desc: 'System alerts', icon: Mail, color: 'text-rose-600', bg: 'bg-rose-50' },
+          ].map((action, i) => (
+            <button 
+              key={i} 
+              onClick={() => setActiveTab(action.id)}
+              className="flex flex-col items-center text-center gap-3 p-6 rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all group"
+            >
+              <div className={cn("p-4 rounded-2xl transition-all group-hover:scale-110 group-hover:shadow-lg", action.bg, action.color)}>
+                <action.icon size={24} />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-bold text-slate-800 whitespace-nowrap">{action.label}</p>
+                <p className="text-[10px] font-medium text-slate-500 leading-tight">{action.desc}</p>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -180,6 +180,13 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  app.delete('/api/wifi/:id', authenticateToken, authorizeRoles('Administrator'), (req, res) => {
+    const wifi: any = db.prepare('SELECT ssid FROM wifi_credentials WHERE id = ?').get(req.params.id);
+    db.prepare('DELETE FROM wifi_credentials WHERE id = ?').run(req.params.id);
+    logAudit((req as any).user.id, (req as any).user.name, 'Deleted WiFi Network', 'WiFi', wifi?.ssid);
+    res.json({ success: true });
+  });
+
   // --- Vault Routes ---
   app.get('/api/vault', authenticateToken, (req, res) => {
     const items = db.prepare(`
@@ -205,6 +212,23 @@ async function startServer() {
     res.json({ id: result.lastInsertRowid });
   });
 
+  app.put('/api/vault/:id', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
+    const { service_name, username, password, category, notes, device_id } = req.body;
+    const encryptedPassword = encrypt(password);
+    db.prepare('UPDATE password_vault SET service_name = ?, username = ?, password = ?, category = ?, notes = ?, device_id = ? WHERE id = ?').run(
+      service_name, username, encryptedPassword, category, notes, device_id || null, req.params.id
+    );
+    logAudit((req as any).user.id, (req as any).user.name, 'Updated Vault Credential', 'Vault', service_name);
+    res.json({ success: true });
+  });
+
+  app.delete('/api/vault/:id', authenticateToken, authorizeRoles('Administrator'), (req, res) => {
+    const item: any = db.prepare('SELECT service_name FROM password_vault WHERE id = ?').get(req.params.id);
+    db.prepare('DELETE FROM password_vault WHERE id = ?').run(req.params.id);
+    logAudit((req as any).user.id, (req as any).user.name, 'Deleted Vault Credential', 'Vault', item?.service_name);
+    res.json({ success: true });
+  });
+
   // --- Notes Routes ---
   app.get('/api/notes', authenticateToken, (req, res) => {
     const notes = db.prepare('SELECT * FROM secure_notes WHERE is_archived = 0 ORDER BY is_pinned DESC, created_at DESC').all();
@@ -218,6 +242,22 @@ async function startServer() {
     );
     logAudit((req as any).user.id, (req as any).user.name, 'Created Note', 'Notes', title);
     res.json({ id: result.lastInsertRowid });
+  });
+
+  app.put('/api/notes/:id', authenticateToken, (req, res) => {
+    const { title, content, category, is_pinned, is_archived } = req.body;
+    db.prepare('UPDATE secure_notes SET title = ?, content = ?, category = ?, is_pinned = ?, is_archived = ? WHERE id = ?').run(
+      title, content, category, is_pinned ? 1 : 0, is_archived ? 1 : 0, req.params.id
+    );
+    logAudit((req as any).user.id, (req as any).user.name, 'Updated Note', 'Notes', title);
+    res.json({ success: true });
+  });
+
+  app.delete('/api/notes/:id', authenticateToken, (req, res) => {
+    const note: any = db.prepare('SELECT title FROM secure_notes WHERE id = ?').get(req.params.id);
+    db.prepare('DELETE FROM secure_notes WHERE id = ?').run(req.params.id);
+    logAudit((req as any).user.id, (req as any).user.name, 'Deleted Note', 'Notes', note?.title);
+    res.json({ success: true });
   });
 
   // --- Audit Logs ---

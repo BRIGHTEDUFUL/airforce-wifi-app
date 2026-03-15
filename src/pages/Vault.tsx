@@ -10,6 +10,7 @@ const Vault: React.FC = () => {
   const [showPasswords, setShowPasswords] = useState<Record<number, boolean>>({});
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const { token, user } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -26,7 +27,8 @@ const Vault: React.FC = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setItems(data));
+      .then(data => setItems(data))
+      .catch(err => console.error('Failed to fetch vault:', err));
   };
 
   const fetchDevices = () => {
@@ -34,7 +36,8 @@ const Vault: React.FC = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setDevices(data));
+      .then(data => setDevices(data))
+      .catch(err => console.error('Failed to fetch devices:', err));
   };
 
   useEffect(() => {
@@ -42,10 +45,31 @@ const Vault: React.FC = () => {
     fetchDevices();
   }, [token]);
 
+  const handleOpenModal = (item: any = null) => {
+    if (item) {
+      setEditingItem(item);
+      setFormData({
+        service_name: item.service_name,
+        username: item.username,
+        password: item.password,
+        category: item.category,
+        notes: item.notes || '',
+        device_id: item.device_id?.toString() || ''
+      });
+    } else {
+      setEditingItem(null);
+      setFormData({ service_name: '', username: '', password: '', category: 'Network', notes: '', device_id: '' });
+    }
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('/api/vault', {
-      method: 'POST',
+    const url = editingItem ? `/api/vault/${editingItem.id}` : '/api/vault';
+    const method = editingItem ? 'PUT' : 'POST';
+
+    fetch(url, {
+      method,
       headers: { 
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -59,6 +83,15 @@ const Vault: React.FC = () => {
       setIsModalOpen(false);
       setFormData({ service_name: '', username: '', password: '', category: 'Network', notes: '', device_id: '' });
     });
+  };
+
+  const handleDelete = (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this credential? This action cannot be undone.')) return;
+    
+    fetch(`/api/vault/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(() => fetchVault());
   };
 
   const filteredItems = items.filter(item => 
@@ -77,7 +110,7 @@ const Vault: React.FC = () => {
         </div>
         {user?.role !== 'Viewer' && (
           <button 
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => handleOpenModal()}
             className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-lg shadow-amber-600/20"
           >
             <Plus size={20} />
@@ -114,12 +147,32 @@ const Vault: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {item.device_name && (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-900/30">
-                    <Server size={12} />
-                    {item.device_name}
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {item.device_name && (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-900/30">
+                      <Server size={12} />
+                      {item.device_name}
+                    </div>
+                  )}
+                  {user?.role !== 'Viewer' && (
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={() => handleOpenModal(item)}
+                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-blue-600 transition-colors"
+                        title="Edit"
+                      >
+                        <Plus size={16} className="rotate-45" /> {/* Using Plus as a placeholder for Edit if needed, or just use a text button */}
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(item.id)}
+                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-rose-600 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -167,7 +220,7 @@ const Vault: React.FC = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 w-full max-w-lg shadow-2xl">
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <h2 className="text-xl font-bold">Add New Credential</h2>
+              <h2 className="text-xl font-bold">{editingItem ? 'Edit Credential' : 'Add New Credential'}</h2>
               
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold uppercase text-slate-500">Service Name</label>
@@ -255,7 +308,7 @@ const Vault: React.FC = () => {
                   type="submit"
                   className="flex-1 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors shadow-lg shadow-amber-600/20"
                 >
-                  Add Credential
+                  {editingItem ? 'Update Credential' : 'Add Credential'}
                 </button>
               </div>
             </form>

@@ -8,6 +8,7 @@ import Devices from './pages/Devices';
 import WiFi from './pages/WiFi';
 import Vault from './pages/Vault';
 import Notes from './pages/Notes';
+import Messages from './pages/Messages';
 import Audit from './pages/Audit';
 import Analytics from './pages/Analytics';
 import Generator from './pages/Generator';
@@ -39,11 +40,12 @@ function AppContent() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashboard />;
+      case 'dashboard': return <Dashboard setActiveTab={setActiveTab} />;
       case 'devices': return <Devices />;
       case 'wifi': return <WiFi />;
       case 'vault': return <Vault />;
       case 'notes': return <Notes />;
+      case 'messages': return <Messages />;
       case 'audit': return <Audit />;
       case 'analytics': return <Analytics />;
       case 'generator': return <Generator />;
@@ -53,7 +55,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="flex h-screen bg-command-light text-slate-900 transition-colors">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 

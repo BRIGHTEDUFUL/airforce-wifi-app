@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Wifi, MapPin, Eye, EyeOff, Copy, Check, Edit2 } from 'lucide-react';
+import { Plus, Wifi, MapPin, Eye, EyeOff, Copy, Check, Edit2, Trash2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 
@@ -62,6 +62,14 @@ const WiFi: React.FC = () => {
     });
   };
 
+  const handleDelete = (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this network?')) return;
+    fetch(`/api/wifi/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(() => fetchWifi());
+  };
+
   return (
     <div className="p-6 space-y-6">
       <header className="flex justify-between items-center">
@@ -101,16 +109,28 @@ const WiFi: React.FC = () => {
                   </div>
                 </div>
                 {user?.role !== 'Viewer' && (
-                  <button 
-                    onClick={() => {
-                      setEditingNetwork(net);
-                      setFormData({ ...net });
-                      setIsModalOpen(true);
-                    }}
-                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-emerald-500 transition-colors"
-                  >
-                    <Edit2 size={18} />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button 
+                      onClick={() => {
+                        setEditingNetwork(net);
+                        setFormData({ ...net });
+                        setIsModalOpen(true);
+                      }}
+                      className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-emerald-500 transition-colors"
+                      title="Edit"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    {user?.role === 'Administrator' && (
+                      <button 
+                        onClick={() => handleDelete(net.id)}
+                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-rose-500 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
 
