@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, Lock, Zap, Wifi, Globe, Server, ChevronRight, Fingerprint, Activity } from 'lucide-react';
+import { APP_CREST_URL, APP_FULL_NAME } from '../constants';
 
 interface LandingProps {
   onEnter: () => void;
@@ -38,7 +39,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-blue-500/20 p-1 bg-slate-900/80 backdrop-blur-xl shadow-2xl">
               <div className="w-full h-full rounded-full overflow-hidden bg-slate-950 flex items-center justify-center p-3">
                 <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Crest_of_the_Ghana_Air_Force.svg/1200px-Crest_of_the_Ghana_Air_Force.svg.png" 
+                  src={APP_CREST_URL} 
                   alt="Ghana Air Force Crest"
                   className="w-full h-full object-contain"
                   referrerPolicy="no-referrer"
@@ -70,7 +71,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
               Command <span className="text-blue-600">Portal</span>
             </h1>
             <p className="text-xl md:text-2xl font-bold text-slate-400 uppercase tracking-[0.2em]">
-              Air Force Key Manager v2.5
+              {APP_FULL_NAME} v2.5
             </p>
           </motion.div>
 

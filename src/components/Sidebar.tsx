@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
+import { APP_CREST_URL, APP_NAME } from '../constants';
 
 interface SidebarProps {
   activeTab: string;
@@ -47,15 +48,21 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
 
   return (
     <div className={cn(
-      "flex flex-col h-full transition-all duration-300 border-r border-navy-700 relative z-20 bg-navy-800 text-slate-300 shadow-2xl",
+      "flex flex-col h-full transition-all duration-300 border-r relative z-20 shadow-2xl transition-colors",
+      darkMode 
+        ? "bg-command-dark-card border-command-dark-border text-slate-300" 
+        : "bg-navy-800 border-navy-700 text-slate-300",
       collapsed ? "w-20" : "w-64"
     )}>
       {/* Sidebar Header with Crest */}
-      <div className="p-6 flex flex-col items-center gap-4 border-b border-navy-700/50 bg-navy-900/20">
+      <div className={cn(
+        "p-6 flex flex-col items-center gap-4 border-b transition-colors",
+        darkMode ? "border-command-dark-border bg-black/20" : "border-navy-700/50 bg-navy-900/20"
+      )}>
         <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-white/5 p-2 border border-white/10 shadow-inner group cursor-pointer">
           <div className="absolute inset-0 bg-command-blue/10 opacity-0 group-hover:opacity-100 transition-opacity" />
           <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Crest_of_the_Ghana_Air_Force.svg/1200px-Crest_of_the_Ghana_Air_Force.svg.png" 
+            src={APP_CREST_URL} 
             alt="Crest"
             className="w-full h-full object-contain relative z-10 group-hover:scale-110 transition-transform duration-500"
             referrerPolicy="no-referrer"
@@ -63,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         </div>
         {!collapsed && (
           <div className="text-center animate-in fade-in slide-in-from-top-2 duration-500">
-            <h2 className="text-sm font-bold text-white tracking-tight">Air Force Key Manager</h2>
+            <h2 className="text-sm font-bold text-white tracking-tight">{APP_NAME} Command</h2>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghana Air Force</p>
           </div>
         )}
@@ -102,7 +109,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         </nav>
       </div>
 
-      <div className="p-4 space-y-3 border-t border-navy-700/50 bg-navy-900/40">
+      <div className={cn(
+        "p-4 space-y-3 border-t transition-colors",
+        darkMode ? "border-command-dark-border bg-black/20" : "border-navy-700/50 bg-navy-900/40"
+      )}>
         {!collapsed && (
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">System Controls</p>
         )}
@@ -137,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
             )}
           >
             {darkMode ? <Sun size={18} className="group-hover:rotate-90 transition-transform duration-700" /> : <Moon size={18} className="group-hover:-rotate-12 transition-transform duration-700" />}
-            {!collapsed && <span className="text-sm font-bold tracking-tight">Dark Mode</span>}
+            {!collapsed && <span className="text-sm font-bold tracking-tight">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
 
           {/* Collapse Toggle */}

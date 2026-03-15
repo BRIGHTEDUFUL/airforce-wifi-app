@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Key, Search, Eye, EyeOff, Copy, Check, Trash2, Tag, Server } from 'lucide-react';
+import { Plus, Key, Search, Eye, EyeOff, Copy, Check, Trash2, Tag, Server, Edit2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn, formatDate } from '../lib/utils';
 
@@ -102,16 +102,16 @@ const Vault: React.FC = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Password Vault</h1>
-          <p className="text-slate-500 dark:text-slate-400">Secure encrypted storage for all service credentials.</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Vault</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">Secure encrypted storage for all service credentials.</p>
         </div>
         {user?.role !== 'Viewer' && (
           <button 
             onClick={() => handleOpenModal()}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-lg shadow-amber-600/20"
+            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-amber-600/20 font-bold text-sm"
           >
             <Plus size={20} />
             Add Credential
@@ -119,78 +119,78 @@ const Vault: React.FC = () => {
         )}
       </header>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+      <div className="relative group">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600 group-focus-within:text-amber-600 transition-colors" size={20} />
         <input 
           type="text" 
           placeholder="Search by service, username, category or device..." 
-          className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none transition-all"
+          className="w-full pl-12 pr-4 py-4 bg-white dark:bg-command-dark-card border border-slate-200 dark:border-command-dark-border rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none transition-all shadow-sm dark:text-white"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {filteredItems.map((item) => (
-          <div key={item.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-6">
-            <div className="flex-1 space-y-4">
+          <div key={item.id} className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden flex flex-col md:flex-row gap-8 hover:shadow-xl hover:border-amber-200 dark:hover:border-amber-500/50 transition-all duration-300 group">
+            <div className="p-8 flex-1 space-y-6">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl">
-                    <Key size={20} />
+                <div className="flex items-center gap-4">
+                  <div className="p-4 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition-transform">
+                    <Key size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg">{item.service_name}</h3>
-                    <div className="flex items-center gap-2">
-                      <Tag size={12} className="text-slate-400" />
-                      <span className="text-xs text-slate-500">{item.category}</span>
+                    <h3 className="font-bold text-xl text-slate-900 dark:text-white">{item.service_name}</h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Tag size={12} className="text-slate-400 dark:text-slate-500" />
+                      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{item.category}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {item.device_name && (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-900/30">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100 dark:border-blue-500/20">
                       <Server size={12} />
                       {item.device_name}
                     </div>
                   )}
                   {user?.role !== 'Viewer' && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                       <button 
                         onClick={() => handleOpenModal(item)}
-                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-blue-600 transition-colors"
+                        className="p-2 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-xl text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
                         title="Edit"
                       >
-                        <Plus size={16} className="rotate-45" /> {/* Using Plus as a placeholder for Edit if needed, or just use a text button */}
+                        <Edit2 size={18} />
                       </button>
                       <button 
                         onClick={() => handleDelete(item.id)}
-                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-rose-600 transition-colors"
+                        className="p-2 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
                         title="Delete"
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Username</span>
-                  <p className="font-medium text-slate-700 dark:text-slate-200">{item.username}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Username</span>
+                  <p className="font-bold text-slate-700 dark:text-slate-300">{item.username}</p>
                 </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Password</span>
+                <div className="space-y-2">
+                  <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em]">Password</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-slate-700 dark:text-slate-200">
+                    <span className="font-mono text-lg text-slate-700 dark:text-slate-300 tracking-wider">
                       {showPasswords[item.id] ? item.password : '••••••••••••'}
                     </span>
                     <button 
                       onClick={() => setShowPasswords(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
-                      className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-400"
+                      className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
                     >
-                      {showPasswords[item.id] ? <EyeOff size={14} /> : <Eye size={14} />}
+                      {showPasswords[item.id] ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                     <button 
                       onClick={() => {
@@ -198,18 +198,18 @@ const Vault: React.FC = () => {
                         setCopiedId(item.id);
                         setTimeout(() => setCopiedId(null), 2000);
                       }}
-                      className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-400"
+                      className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-all"
                     >
-                      {copiedId === item.id ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      {copiedId === item.id ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
                     </button>
                   </div>
                 </div>
               </div>
             </div>
             {item.notes && (
-              <div className="md:w-48 pt-4 md:pt-0 md:pl-4 md:border-l border-slate-100 dark:border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Notes</span>
-                <p className="text-xs text-slate-500 mt-1 line-clamp-3">{item.notes}</p>
+              <div className="md:w-64 p-8 bg-slate-50 dark:bg-black/20 md:border-l border-slate-100 dark:border-command-dark-border flex flex-col justify-center">
+                <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3">Notes</span>
+                <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed line-clamp-4">{item.notes}</p>
               </div>
             )}
           </div>
@@ -217,101 +217,108 @@ const Vault: React.FC = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 w-full max-w-lg shadow-2xl">
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <h2 className="text-xl font-bold">{editingItem ? 'Edit Credential' : 'Add New Credential'}</h2>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+            <div className="p-10 space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl">
+                  <Key size={24} />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{editingItem ? 'Edit Credential' : 'Add New Credential'}</h2>
+              </div>
               
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase text-slate-500">Service Name</label>
-                <input 
-                  required
-                  type="text" 
-                  placeholder="e.g. AWS Console, Internal DB"
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
-                  value={formData.service_name}
-                  onChange={e => setFormData({...formData, service_name: e.target.value})}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase text-slate-500">Username</label>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Service Name</label>
                   <input 
                     required
                     type="text" 
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
-                    value={formData.username}
-                    onChange={e => setFormData({...formData, username: e.target.value})}
+                    placeholder="e.g. AWS Console, Internal DB"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    value={formData.service_name}
+                    onChange={e => setFormData({...formData, service_name: e.target.value})}
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase text-slate-500">Password</label>
-                  <input 
-                    required
-                    type="text" 
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 font-mono"
-                    value={formData.password}
-                    onChange={e => setFormData({...formData, password: e.target.value})}
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase text-slate-500">Category</label>
-                  <select 
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
-                    value={formData.category}
-                    onChange={e => setFormData({...formData, category: e.target.value})}
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Username</label>
+                    <input 
+                      required
+                      type="text" 
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      value={formData.username}
+                      onChange={e => setFormData({...formData, username: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Password</label>
+                    <input 
+                      required
+                      type="text" 
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
+                      value={formData.password}
+                      onChange={e => setFormData({...formData, password: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Category</label>
+                    <select 
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      value={formData.category}
+                      onChange={e => setFormData({...formData, category: e.target.value})}
+                    >
+                      <option>Network</option>
+                      <option>Database</option>
+                      <option>Cloud</option>
+                      <option>Application</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Assign Device</label>
+                    <select 
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      value={formData.device_id}
+                      onChange={e => setFormData({...formData, device_id: e.target.value})}
+                    >
+                      <option value="">None</option>
+                      {devices.map(d => (
+                        <option key={d.id} value={d.id}>{d.device_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
+                  <textarea 
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
+                    value={formData.notes}
+                    onChange={e => setFormData({...formData, notes: e.target.value})}
+                  ></textarea>
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button 
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                   >
-                    <option>Network</option>
-                    <option>Database</option>
-                    <option>Cloud</option>
-                    <option>Application</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase text-slate-500">Assign Device</label>
-                  <select 
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
-                    value={formData.device_id}
-                    onChange={e => setFormData({...formData, device_id: e.target.value})}
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-4 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-bold transition-all shadow-lg shadow-amber-600/20"
                   >
-                    <option value="">None</option>
-                    {devices.map(d => (
-                      <option key={d.id} value={d.id}>{d.device_name}</option>
-                    ))}
-                  </select>
+                    {editingItem ? 'Update Credential' : 'Add Credential'}
+                  </button>
                 </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase text-slate-500">Notes</label>
-                <textarea 
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 min-h-[80px]"
-                  value={formData.notes}
-                  onChange={e => setFormData({...formData, notes: e.target.value})}
-                ></textarea>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button 
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit"
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors shadow-lg shadow-amber-600/20"
-                >
-                  {editingItem ? 'Update Credential' : 'Add Credential'}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}
