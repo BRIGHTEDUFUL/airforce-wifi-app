@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Sidebar from './components/Sidebar';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Devices from './pages/Devices';
@@ -15,6 +16,7 @@ import Users from './pages/Users';
 function AppContent() {
   const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [view, setView] = useState<'landing' | 'login'>('landing');
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('afkm_dark') === 'true';
   });
@@ -29,7 +31,10 @@ function AppContent() {
   }, [darkMode]);
 
   if (!isAuthenticated) {
-    return <Login />;
+    if (view === 'landing') {
+      return <Landing onEnter={() => setView('login')} />;
+    }
+    return <Login onBack={() => setView('landing')} />;
   }
 
   const renderContent = () => {

@@ -56,14 +56,22 @@ export function initDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       service_name TEXT NOT NULL,
       username TEXT NOT NULL,
-      password TEXT NOT NULL, -- This should be encrypted in a real app, we'll simulate or use a simple XOR/Base64 for demo if needed, but bcrypt is for hashing. We'll use a simple encryption helper.
+      password TEXT NOT NULL,
       category TEXT NOT NULL,
       notes TEXT,
+      device_id INTEGER,
       created_by INTEGER,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (created_by) REFERENCES users(id)
+      FOREIGN KEY (created_by) REFERENCES users(id),
+      FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE SET NULL
     )
   `);
+
+  try {
+    db.exec('ALTER TABLE password_vault ADD COLUMN device_id INTEGER REFERENCES devices(id) ON DELETE SET NULL');
+  } catch (e) {
+    // Column already exists
+  }
 
   // Secure Notes Table
   db.exec(`

@@ -182,7 +182,12 @@ async function startServer() {
 
   // --- Vault Routes ---
   app.get('/api/vault', authenticateToken, (req, res) => {
-    const items = db.prepare('SELECT * FROM password_vault ORDER BY created_at DESC').all() as any[];
+    const items = db.prepare(`
+      SELECT v.*, d.device_name 
+      FROM password_vault v 
+      LEFT JOIN devices d ON v.device_id = d.id 
+      ORDER BY v.created_at DESC
+    `).all() as any[];
     const decryptedItems = items.map(item => ({
       ...item,
       password: decrypt(item.password)
@@ -191,10 +196,10 @@ async function startServer() {
   });
 
   app.post('/api/vault', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
-    const { service_name, username, password, category, notes } = req.body;
+    const { service_name, username, password, category, notes, device_id } = req.body;
     const encryptedPassword = encrypt(password);
-    const result = db.prepare('INSERT INTO password_vault (service_name, username, password, category, notes, created_by) VALUES (?, ?, ?, ?, ?, ?)').run(
-      service_name, username, encryptedPassword, category, notes, (req as any).user.id
+    const result = db.prepare('INSERT INTO password_vault (service_name, username, password, category, notes, device_id, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)').run(
+      service_name, username, encryptedPassword, category, notes, device_id || null, (req as any).user.id
     );
     logAudit((req as any).user.id, (req as any).user.name, 'Added Vault Credential', 'Vault', service_name);
     res.json({ id: result.lastInsertRowid });

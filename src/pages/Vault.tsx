@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Key, Search, Eye, EyeOff, Copy, Check, Trash2, Tag } from 'lucide-react';
+import { Plus, Key, Search, Eye, EyeOff, Copy, Check, Trash2, Tag, Server } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { cn, formatDate } from '../lib/utils';
 
 const Vault: React.FC = () => {
   const [items, setItems] = useState<any[]>([]);
+  const [devices, setDevices] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [showPasswords, setShowPasswords] = useState<Record<number, boolean>>({});
   const [copiedId, setCopiedId] = useState<number | null>(null);
@@ -16,7 +17,8 @@ const Vault: React.FC = () => {
     username: '',
     password: '',
     category: 'Network',
-    notes: ''
+    notes: '',
+    device_id: ''
   });
 
   const fetchVault = () => {
@@ -27,8 +29,17 @@ const Vault: React.FC = () => {
       .then(data => setItems(data));
   };
 
+  const fetchDevices = () => {
+    fetch('/api/devices', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setDevices(data));
+  };
+
   useEffect(() => {
     fetchVault();
+    fetchDevices();
   }, [token]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,18 +50,22 @@ const Vault: React.FC = () => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({
+        ...formData,
+        device_id: formData.device_id ? parseInt(formData.device_id) : null
+      })
     }).then(() => {
       fetchVault();
       setIsModalOpen(false);
-      setFormData({ service_name: '', username: '', password: '', category: 'Network', notes: '' });
+      setFormData({ service_name: '', username: '', password: '', category: 'Network', notes: '', device_id: '' });
     });
   };
 
   const filteredItems = items.filter(item => 
     item.service_name.toLowerCase().includes(search.toLowerCase()) ||
     item.username.toLowerCase().includes(search.toLowerCase()) ||
-    item.category.toLowerCase().includes(search.toLowerCase())
+    item.category.toLowerCase().includes(search.toLowerCase()) ||
+    (item.device_name && item.device_name.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -75,7 +90,7 @@ const Vault: React.FC = () => {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
         <input 
           type="text" 
-          placeholder="Search by service, username or category..." 
+          placeholder="Search by service, username, category or device..." 
           className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none transition-all"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -86,17 +101,25 @@ const Vault: React.FC = () => {
         {filteredItems.map((item) => (
           <div key={item.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-6">
             <div className="flex-1 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl">
-                  <Key size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">{item.service_name}</h3>
-                  <div className="flex items-center gap-2">
-                    <Tag size={12} className="text-slate-400" />
-                    <span className="text-xs text-slate-500">{item.category}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl">
+                    <Key size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">{item.service_name}</h3>
+                    <div className="flex items-center gap-2">
+                      <Tag size={12} className="text-slate-400" />
+                      <span className="text-xs text-slate-500">{item.category}</span>
+                    </div>
                   </div>
                 </div>
+                {item.device_name && (
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-900/30">
+                    <Server size={12} />
+                    {item.device_name}
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -181,19 +204,34 @@ const Vault: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase text-slate-500">Category</label>
-                <select 
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
-                  value={formData.category}
-                  onChange={e => setFormData({...formData, category: e.target.value})}
-                >
-                  <option>Network</option>
-                  <option>Database</option>
-                  <option>Cloud</option>
-                  <option>Application</option>
-                  <option>Other</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold uppercase text-slate-500">Category</label>
+                  <select 
+                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
+                    value={formData.category}
+                    onChange={e => setFormData({...formData, category: e.target.value})}
+                  >
+                    <option>Network</option>
+                    <option>Database</option>
+                    <option>Cloud</option>
+                    <option>Application</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold uppercase text-slate-500">Assign Device</label>
+                  <select 
+                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500"
+                    value={formData.device_id}
+                    onChange={e => setFormData({...formData, device_id: e.target.value})}
+                  >
+                    <option value="">None</option>
+                    {devices.map(d => (
+                      <option key={d.id} value={d.id}>{d.device_name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="space-y-1.5">
