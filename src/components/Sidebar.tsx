@@ -14,7 +14,9 @@ import {
   ChevronRight,
   Moon,
   Sun,
-  Mail
+  Mail,
+  Menu,
+  X
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { usePermissions } from '../hooks/usePermissions';
@@ -30,6 +32,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, setDarkMode }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
   const { isAdmin, isOperator, canManageUsers, canViewAudit } = usePermissions();
 
@@ -38,6 +41,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
     : isOperator
     ? { label: 'Operator', cls: 'bg-blue-500/10 border-blue-500/20 text-blue-500' }
     : { label: 'Viewer', cls: 'bg-slate-500/10 border-slate-500/20 text-slate-500' };
+
+  function isViewer() { return !isAdmin && !isOperator; }
 
   const menuItems = [
     { id: 'dashboard',  label: 'Dashboard',      icon: LayoutDashboard },
@@ -52,33 +57,37 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
     { id: 'users',      label: 'User Management', icon: Users,   show: canManageUsers },
   ];
 
-  function isViewer() { return !isAdmin && !isOperator; }
-
   const filteredMenu = menuItems.filter(item => item.show === undefined || item.show);
 
-  return (
+  const handleNavClick = (id: string) => {
+    setActiveTab(id);
+    setMobileOpen(false);
+  };
+
+  const sidebarContent = (isMobile = false) => (
     <div className={cn(
-      "flex flex-col h-full transition-all duration-300 border-r relative z-20 shadow-2xl transition-colors",
-      darkMode 
-        ? "bg-command-dark-card border-command-dark-border text-slate-300" 
+      "flex flex-col h-full transition-all duration-300 border-r relative z-20 shadow-2xl",
+      darkMode
+        ? "bg-command-dark-card border-command-dark-border text-slate-300"
         : "bg-white border-slate-200 text-slate-600",
-      collapsed ? "w-20" : "w-64"
+      !isMobile && (collapsed ? "w-20" : "w-64"),
+      isMobile && "w-72"
     )}>
-      {/* Sidebar Header with Crest */}
+      {/* Header */}
       <div className={cn(
         "p-6 flex flex-col items-center gap-4 border-b transition-colors",
         darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
         <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-900 p-2 border border-white/10 shadow-inner group cursor-pointer">
           <div className="absolute inset-0 bg-command-blue/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <img 
-            src={APP_CREST_URL} 
+          <img
+            src={APP_CREST_URL}
             alt="Crest"
             className="w-full h-full object-contain relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]"
             referrerPolicy="no-referrer"
           />
         </div>
-        {!collapsed && (
+        {(!collapsed || isMobile) && (
           <div className="text-center animate-in fade-in slide-in-from-top-2 duration-500">
             <h2 className={cn("text-sm font-bold tracking-tight", darkMode ? "text-white" : "text-slate-900")}>{APP_NAME} Management</h2>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghana Air Force HQ</p>
@@ -86,8 +95,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         )}
       </div>
 
+      {/* Nav */}
       <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
-        {!collapsed && (
+        {(!collapsed || isMobile) && (
           <div className="px-6 mb-4">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
               {isAdmin ? 'Admin Navigation' : isOperator ? 'Operator Navigation' : 'Viewer Navigation'}
@@ -98,11 +108,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
           {filteredMenu.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleNavClick(item.id)}
               className={cn(
                 "flex items-center gap-3 w-full p-3 rounded-xl transition-all group relative overflow-hidden",
-                activeTab === item.id 
-                  ? "bg-command-blue text-white shadow-lg shadow-blue-600/30" 
+                activeTab === item.id
+                  ? "bg-command-blue text-white shadow-lg shadow-blue-600/30"
                   : cn("hover:bg-slate-50 text-slate-500 hover:text-slate-900", darkMode && "hover:bg-white/5 text-slate-400 hover:text-slate-200")
               )}
             >
@@ -110,8 +120,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
               )}
               <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : darkMode ? "text-slate-400 group-hover:text-slate-200" : "text-slate-400 group-hover:text-slate-700")} />
-              {!collapsed && <span className="font-bold text-sm relative z-10 tracking-tight">{item.label}</span>}
-              {activeTab === item.id && !collapsed && (
+              {(!collapsed || isMobile) && <span className="font-bold text-sm relative z-10 tracking-tight">{item.label}</span>}
+              {activeTab === item.id && (!collapsed || isMobile) && (
                 <div className="ml-auto relative z-10">
                   <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 </div>
@@ -121,27 +131,27 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         </nav>
       </div>
 
+      {/* Footer */}
       <div className={cn(
         "p-4 space-y-3 border-t transition-colors",
         darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
-        {!collapsed && (
+        {(!collapsed || isMobile) && (
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">System Controls</p>
         )}
-        
-        {/* User Profile Section */}
-        {!collapsed && (
+
+        {(!collapsed || isMobile) && (
           <div className={cn(
             "rounded-2xl p-3 border mb-4 group transition-all cursor-pointer relative overflow-hidden",
             darkMode ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-white border-slate-100 hover:bg-slate-50"
           )}>
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="flex items-center gap-3 relative z-10">
-              <div className="w-10 h-10 rounded-full bg-command-blue flex items-center justify-center text-white font-bold text-lg shadow-inner group-hover:scale-105 transition-transform">
-                {user?.name?.charAt(0).toUpperCase() || 'B'}
+              <div className="w-10 h-10 rounded-full bg-command-blue flex items-center justify-center text-white font-bold text-lg shadow-inner">
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className={cn("text-xs font-bold truncate", darkMode ? "text-white" : "text-slate-900")}>{user?.email || 'bright@123.airforce.com'}</span>
+                <span className={cn("text-xs font-bold truncate", darkMode ? "text-white" : "text-slate-900")}>{user?.email}</span>
                 <div className="flex items-center gap-1 mt-0.5">
                   <div className={cn("px-1.5 py-0.5 rounded border text-[8px] font-black uppercase tracking-tighter", roleBadge.cls)}>
                     {roleBadge.label}
@@ -153,46 +163,89 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         )}
 
         <div className="space-y-1">
-          {/* Theme Toggle */}
-          <button 
+          <button
             onClick={() => setDarkMode(!darkMode)}
             className={cn(
               "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
               darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
-              collapsed && "justify-center"
+              (collapsed && !isMobile) && "justify-center"
             )}
           >
             {darkMode ? <Sun size={18} className="group-hover:rotate-90 transition-transform duration-700" /> : <Moon size={18} className="group-hover:-rotate-12 transition-transform duration-700" />}
-            {!collapsed && <span className="text-sm font-bold tracking-tight">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
+            {(!collapsed || isMobile) && <span className="text-sm font-bold tracking-tight">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
 
-          {/* Collapse Toggle */}
-          <button 
-            onClick={() => setCollapsed(!collapsed)}
-            className={cn(
-              "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
-              darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
-              collapsed && "justify-center"
-            )}
-          >
-            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />}
-            {!collapsed && <span className="text-sm font-bold tracking-tight">Collapse Sidebar</span>}
-          </button>
-          
-          {/* Logout */}
+          {!isMobile && (
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className={cn(
+                "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
+                darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
+                collapsed && "justify-center"
+              )}
+            >
+              {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />}
+              {!collapsed && <span className="text-sm font-bold tracking-tight">Collapse Sidebar</span>}
+            </button>
+          )}
+
           <button
             onClick={logout}
             className={cn(
               "flex items-center gap-3 w-full p-3 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-all group",
-              collapsed && "justify-center"
+              (collapsed && !isMobile) && "justify-center"
             )}
           >
             <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
-            {!collapsed && <span className="text-sm font-bold tracking-tight">Sign Out</span>}
+            {(!collapsed || isMobile) && <span className="text-sm font-bold tracking-tight">Sign Out</span>}
           </button>
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div className={cn(
+        "md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 border-b shadow-sm",
+        darkMode ? "bg-command-dark-card border-command-dark-border" : "bg-white border-slate-200"
+      )}>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-blue-400 to-blue-900 p-1">
+            <img src={APP_CREST_URL} alt="Crest" className="w-full h-full object-contain" />
+          </div>
+          <span className={cn("text-sm font-bold tracking-tight", darkMode ? "text-white" : "text-slate-900")}>{APP_NAME}</span>
+        </div>
+        <button
+          onClick={() => setMobileOpen(true)}
+          className={cn("p-2 rounded-xl transition-all", darkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")}
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex h-full">
+        {sidebarContent(false)}
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <div className="relative flex h-full">
+            {sidebarContent(true)}
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-[-48px] p-2 bg-white dark:bg-slate-800 rounded-xl shadow-lg text-slate-600 dark:text-slate-300"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -27,35 +27,35 @@ const Messages: React.FC = () => {
   );
 
   return (
-    <div className="flex h-full bg-slate-50 dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
-      {/* Mail Sidebar */}
-      <div className="w-72 border-r border-slate-100 dark:border-command-dark-border bg-white dark:bg-command-dark-card flex flex-col">
-        <div className="p-8">
-          <button className="w-full bg-command-blue text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-command-blue/20 hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
+    <div className="flex flex-col md:flex-row h-full bg-slate-50 dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
+      {/* Mail Sidebar — horizontal on mobile, vertical on desktop */}
+      <div className="md:w-72 border-b md:border-b-0 md:border-r border-slate-100 dark:border-command-dark-border bg-white dark:bg-command-dark-card flex flex-col">
+        <div className="p-4 md:p-8">
+          <button className="w-full bg-command-blue text-white py-3 md:py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-command-blue/20 hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
             <Mail size={18} />
             Compose
           </button>
         </div>
         
-        <nav className="flex-1 px-4 space-y-2">
+        <nav className="flex flex-row md:flex-col px-4 pb-4 md:pb-0 gap-1 md:space-y-2 overflow-x-auto md:overflow-x-visible">
           {folders.map(folder => (
             <button
               key={folder.id}
               onClick={() => setActiveFolder(folder.id)}
               className={cn(
-                "w-full flex items-center justify-between px-5 py-3.5 rounded-2xl transition-all text-sm font-bold",
+                "flex items-center justify-between px-4 md:px-5 py-2.5 md:py-3.5 rounded-2xl transition-all text-sm font-bold whitespace-nowrap",
                 activeFolder === folder.id 
                   ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue" 
                   : "text-slate-400 dark:text-slate-500 hover:bg-white dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300"
               )}
             >
-              <div className="flex items-center gap-4">
-                <folder.icon size={18} className={cn(activeFolder === folder.id ? "text-command-blue" : "text-slate-400 dark:text-slate-500")} />
-                {folder.label}
+              <div className="flex items-center gap-2 md:gap-4">
+                <folder.icon size={16} className={cn(activeFolder === folder.id ? "text-command-blue" : "text-slate-400 dark:text-slate-500")} />
+                <span className="hidden md:inline">{folder.label}</span>
               </div>
               {folder.count > 0 && (
                 <span className={cn(
-                  "px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest",
+                  "px-2 py-0.5 rounded-full text-[10px] font-black tracking-widest ml-2",
                   activeFolder === folder.id ? "bg-command-blue text-white" : "bg-white border border-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
                 )}>
                   {folder.count}

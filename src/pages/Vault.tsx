@@ -104,16 +104,16 @@ const Vault: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
-      <header className="flex justify-between items-center">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Vault</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">Secure encrypted storage for all service credentials.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Vault</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Secure encrypted storage for all service credentials.</p>
         </div>
         {canCreate && (
           <button 
             onClick={() => handleOpenModal()}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-amber-600/20 font-bold text-sm"
+            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-amber-600/20 font-bold text-sm w-full sm:w-auto justify-center"
           >
             <Plus size={20} />
             Add Credential
@@ -248,7 +248,7 @@ const Vault: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Username</label>
                     <input 
@@ -271,7 +271,7 @@ const Vault: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Category</label>
                     <select 

@@ -24,13 +24,13 @@ const Audit: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
-      <header className="flex justify-between items-center">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Audit Logs</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">Read-only history of all system actions and access.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Audit Logs</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Read-only history of all system actions and access.</p>
         </div>
-        <button className="bg-white dark:bg-command-dark-card hover:bg-white dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 px-6 py-2.5 rounded-xl border border-slate-200 dark:border-command-dark-border flex items-center gap-2 transition-all shadow-sm font-bold text-sm">
+        <button className="bg-white dark:bg-command-dark-card hover:bg-white dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 px-6 py-2.5 rounded-xl border border-slate-200 dark:border-command-dark-border flex items-center gap-2 transition-all shadow-sm font-bold text-sm w-full sm:w-auto justify-center">
           <Download size={18} />
           Export CSV
         </button>

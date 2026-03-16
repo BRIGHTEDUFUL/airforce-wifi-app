@@ -69,11 +69,11 @@ const Devices: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
-      <header className="flex justify-between items-center">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Device Management</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">Inventory of all network hardware and workstations.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Device Management</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Inventory of all network hardware and workstations.</p>
         </div>
         {canCreate && (
           <button 
@@ -82,7 +82,7 @@ const Devices: React.FC = () => {
               setFormData({ device_name: '', device_type: 'Router', location: '', ip_address: '', installation: '', notes: '' });
               setIsModalOpen(true);
             }}
-            className="bg-command-blue hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-blue-600/20 font-bold text-sm"
+            className="bg-command-blue hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-blue-600/20 font-bold text-sm w-full sm:w-auto justify-center"
           >
             <Plus size={20} />
             Add Device
@@ -184,7 +184,7 @@ const Devices: React.FC = () => {
               </div>
               
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Device Name</label>
                     <input 
@@ -212,7 +212,7 @@ const Devices: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Location</label>
                     <input 

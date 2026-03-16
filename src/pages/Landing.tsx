@@ -9,7 +9,7 @@ interface LandingProps {
 
 const Landing: React.FC<LandingProps> = ({ onEnter }) => {
   return (
-    <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-500/10 overflow-hidden relative flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-500/10 relative flex flex-col items-center justify-center px-4 py-16 gap-8">
       {/* Background Grid & Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
@@ -67,7 +67,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             transition={{ delay: 0.2 }}
             className="space-y-4"
           >
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-slate-900 uppercase leading-none">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-slate-900 uppercase leading-none">
               WiFi <span className="text-blue-600">Portal</span>
             </h1>
             <p className="text-xl md:text-2xl font-bold text-slate-400 uppercase tracking-[0.2em]">
@@ -125,15 +125,15 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
       </div>
 
       {/* Footer System Info */}
-      <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+      <div className="relative mt-8 w-full max-w-5xl flex flex-col sm:flex-row justify-between items-center gap-4 px-4 text-center sm:text-left">
         <div className="space-y-1">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">System Status</p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-start gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]" />
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">All Nodes Operational</span>
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-center sm:text-right">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Terminal ID</p>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AF-DX-2026-03-15</p>
         </div>

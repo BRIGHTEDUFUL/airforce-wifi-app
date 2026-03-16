@@ -83,10 +83,10 @@ const Generator: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Generator</h1>
-        <p className="text-slate-500 dark:text-slate-400 font-medium">Generate secure, compliant passwords and assign them to infrastructure.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Generator</h1>
+        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Generate secure, compliant passwords and assign them to infrastructure.</p>
       </header>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">

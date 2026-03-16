@@ -67,12 +67,12 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
   );
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       {/* Header */}
-      <header className="flex items-center justify-between">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">WiFi Management Dashboard</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">WiFi Management Dashboard</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm md:text-base">
             {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
         </div>
@@ -95,25 +95,25 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
       </header>
 
       {/* Hero Card */}
-      <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-blue-800 to-blue-500 p-10 text-white shadow-2xl shadow-blue-600/20">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <h2 className="text-4xl font-bold tracking-tight">
-                Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'}, {user?.name?.split(' ')[0] || 'bright'}!
+      <div className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-r from-blue-800 to-blue-500 p-6 md:p-10 text-white shadow-2xl shadow-blue-600/20">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-3 md:space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-2xl md:text-4xl font-bold tracking-tight">
+                Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'}, {user?.name?.split(' ')[0] || 'User'}!
               </h2>
               <div className="px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center gap-2">
                 <Shield size={14} />
                 <span className="text-[10px] font-black uppercase tracking-widest">{user?.role || 'Administrator'}</span>
               </div>
             </div>
-            <p className="text-blue-100 text-lg font-medium opacity-80">
+            <p className="text-blue-100 text-sm md:text-lg font-medium opacity-80">
               Network security overview — {stats.totalDevices} devices monitored, {stats.totalWifi} active credentials
             </p>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-2 text-2xl font-bold tracking-tighter">
-              <Clock size={24} className="text-blue-200" />
+          <div className="flex flex-row md:flex-col md:items-end items-center gap-4 md:gap-2">
+            <div className="flex items-center gap-2 text-xl md:text-2xl font-bold tracking-tighter">
+              <Clock size={20} className="text-blue-200" />
               {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
             <div className="flex items-center gap-2">
@@ -122,8 +122,6 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
             </div>
           </div>
         </div>
-        
-        {/* Decorative Circles */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-64 h-64 bg-blue-400/20 rounded-full blur-2xl" />
       </div>
@@ -179,18 +177,18 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-8">
+      <div className="bg-white dark:bg-command-dark-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-6 md:space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-slate-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl border border-slate-100 dark:border-transparent">
               <Zap size={20} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Quick Actions</h3>
+            <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white tracking-tight">Quick Actions</h3>
           </div>
           <button className="text-xs font-bold text-command-blue uppercase tracking-widest hover:underline">View All</button>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4">
           {[
             { id: 'devices', label: 'Add Device', desc: 'Register new hardware', icon: Plus, color: 'text-blue-600', bg: 'bg-slate-50 dark:bg-blue-500/10' },
             { id: 'generator', label: 'Gen Password', desc: 'Create secure keys', icon: Key, color: 'text-amber-600', bg: 'bg-slate-50 dark:bg-amber-500/10' },
@@ -202,14 +200,14 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
             <button 
               key={i} 
               onClick={() => setActiveTab(action.id)}
-              className="flex flex-col items-center text-center gap-3 p-6 rounded-2xl border border-slate-100 dark:border-command-dark-border hover:border-blue-200 dark:hover:border-blue-500/50 hover:bg-white dark:hover:bg-blue-500/5 transition-all group"
+              className="flex flex-col items-center text-center gap-2 md:gap-3 p-4 md:p-6 rounded-2xl border border-slate-100 dark:border-command-dark-border hover:border-blue-200 dark:hover:border-blue-500/50 hover:bg-white dark:hover:bg-blue-500/5 transition-all group"
             >
-              <div className={cn("p-4 rounded-2xl transition-all group-hover:scale-110 group-hover:shadow-lg", action.bg, action.color)}>
-                <action.icon size={24} />
+              <div className={cn("p-3 md:p-4 rounded-2xl transition-all group-hover:scale-110 group-hover:shadow-lg", action.bg, action.color)}>
+                <action.icon size={20} />
               </div>
-              <div className="space-y-1">
-                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">{action.label}</p>
-                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-tight">{action.desc}</p>
+              <div className="space-y-0.5 md:space-y-1">
+                <p className="text-xs md:text-sm font-bold text-slate-800 dark:text-slate-200">{action.label}</p>
+                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-tight hidden sm:block">{action.desc}</p>
               </div>
             </button>
           ))}

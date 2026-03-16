@@ -59,15 +59,15 @@ const UserManagement: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
-      <header className="flex justify-between items-center">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">User Management</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">Control system access and assign roles.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">User Management</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Control system access and assign roles.</p>
         </div>
         {canManageUsers && (
           <button onClick={() => setIsModalOpen(true)}
-            className="bg-command-blue hover:bg-command-blue/90 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-command-blue/20 font-bold text-sm">
+            className="bg-command-blue hover:bg-command-blue/90 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-command-blue/20 font-bold text-sm w-full sm:w-auto justify-center">
             <Plus size={20} /> Create User
           </button>
         )}
