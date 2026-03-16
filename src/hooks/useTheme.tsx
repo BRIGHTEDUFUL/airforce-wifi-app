@@ -23,7 +23,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (oldDark === 'true') return 'dark';
       if (oldDark === 'false') return 'light';
     }
-    return saved ?? 'system';
+    return saved ?? 'light';
   });
 
   const [systemDark, setSystemDark] = useState(

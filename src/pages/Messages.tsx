@@ -27,7 +27,7 @@ const Messages: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row h-full bg-slate-50 dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
+    <div className="flex flex-col md:flex-row h-full bg-white dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
       {/* Mail Sidebar — horizontal on mobile, vertical on desktop */}
       <div className="md:w-72 border-b md:border-b-0 md:border-r border-slate-100 dark:border-command-dark-border bg-white dark:bg-command-dark-card flex flex-col">
         <div className="p-4 md:p-8">
@@ -67,7 +67,7 @@ const Messages: React.FC = () => {
       </div>
 
       {/* Message List */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-command-dark-bg">
+      <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-command-dark-bg">
         <header className="h-24 border-b border-slate-100 dark:border-command-dark-border flex items-center px-8 gap-6 bg-white dark:bg-command-dark-card">
           <div className="relative flex-1 max-w-md group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-command-blue transition-colors" size={18} />

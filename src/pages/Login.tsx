@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
       <div className="w-full max-w-md space-y-10">
         <div className="text-center space-y-6">
           {onBack && (

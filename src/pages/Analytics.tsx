@@ -30,7 +30,7 @@ const Analytics: React.FC = () => {
   const chartTooltipLabel = isDark ? '#f8fafc' : '#0f172a';
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">System Analytics</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Detailed metrics and data distribution across all modules.</p>

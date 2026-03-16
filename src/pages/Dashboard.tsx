@@ -56,7 +56,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
   }, [token]);
 
   if (!stats) return (
-    <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-command-dark-bg transition-colors">
+    <div className="flex items-center justify-center h-full bg-white dark:bg-command-dark-bg transition-colors">
       <div className="flex flex-col items-center gap-4">
         <RefreshCw className="w-8 h-8 text-command-blue animate-spin" />
         <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Loading WiFi Portal...</p>
@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
   );
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

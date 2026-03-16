@@ -11,7 +11,7 @@
       (function() {
         var saved = localStorage.getItem('afkm_theme');
         var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'dark' || (!saved && prefersDark) || saved === 'system' && prefersDark) {
+        if (saved === 'dark' || (saved === 'system' && prefersDark)) {
           document.documentElement.classList.add('dark');
         }
       })();
