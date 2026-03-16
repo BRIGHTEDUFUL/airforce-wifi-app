@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Copy, Check, RefreshCw, ShieldCheck, Layout, Save, Server } from 'lucide-react';
-import { generatePassword, generateStructuredPassword } from '../lib/utils';
+import { generatePassword, generateStructuredPassword, cn } from '../lib/utils';
 import { useAuth } from '../hooks/useAuth';
 
 const Generator: React.FC = () => {
@@ -83,7 +83,7 @@ const Generator: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Generator</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium">Generate secure, compliant passwords and assign them to infrastructure.</p>
@@ -116,7 +116,7 @@ const Generator: React.FC = () => {
             </div>
 
             <div className="p-10 space-y-10">
-              <div className="bg-white dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border flex flex-col items-center gap-6">
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border flex flex-col items-center gap-6">
                 <div className="w-full text-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3 block">Generated Password</span>
                   <div className="text-4xl font-mono font-bold tracking-widest break-all min-h-[48px] text-slate-900 dark:text-white">
@@ -152,7 +152,7 @@ const Generator: React.FC = () => {
                         Security Settings
                       </h4>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-white dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Symbols</span>
                           <input 
                             type="checkbox" 
@@ -161,7 +161,7 @@ const Generator: React.FC = () => {
                             onChange={e => setIncludeSymbols(e.target.checked)}
                           />
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-white dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Numbers</span>
                           <input 
                             type="checkbox" 
@@ -179,7 +179,7 @@ const Generator: React.FC = () => {
                           type="range" 
                           min="8" 
                           max="32" 
-                          className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-command-blue"
+                          className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-command-blue"
                           value={length}
                           onChange={e => setLength(parseInt(e.target.value))}
                         />
@@ -316,5 +316,4 @@ const Generator: React.FC = () => {
   );
 };
 
-import { cn } from '../lib/utils';
 export default Generator;

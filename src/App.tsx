@@ -40,27 +40,27 @@ function AppContent() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashboard setActiveTab={setActiveTab} darkMode={darkMode} setDarkMode={setDarkMode} />;
-      case 'devices': return <Devices darkMode={darkMode} />;
-      case 'wifi': return <WiFi darkMode={darkMode} />;
-      case 'vault': return <Vault darkMode={darkMode} />;
-      case 'notes': return <Notes darkMode={darkMode} />;
-      case 'messages': return <Messages darkMode={darkMode} />;
-      case 'audit': return <Audit darkMode={darkMode} />;
-      case 'analytics': return <Analytics darkMode={darkMode} />;
-      case 'generator': return <Generator darkMode={darkMode} />;
-      case 'users': return <Users darkMode={darkMode} />;
-      default: return <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />;
+      case 'dashboard':  return <Dashboard setActiveTab={setActiveTab} darkMode={darkMode} setDarkMode={setDarkMode} />;
+      case 'devices':    return <Devices />;
+      case 'wifi':       return <WiFi />;
+      case 'vault':      return <Vault />;
+      case 'notes':      return <Notes />;
+      case 'messages':   return <Messages />;
+      case 'audit':      return <Audit />;
+      case 'analytics':  return <Analytics darkMode={darkMode} />;
+      case 'generator':  return <Generator />;
+      case 'users':      return <Users />;
+      default:           return <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-white text-slate-900 transition-colors">
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
+    <div className="flex h-screen bg-slate-50 dark:bg-command-dark-bg text-slate-900 dark:text-slate-100 transition-colors">
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
       <main className="flex-1 overflow-y-auto">
         {renderContent()}

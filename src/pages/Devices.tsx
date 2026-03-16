@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit2, Trash2, MapPin, Server, Info } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { usePermissions } from '../hooks/usePermissions';
 import { cn, formatDate } from '../lib/utils';
 
 const Devices: React.FC = () => {
@@ -8,7 +9,8 @@ const Devices: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDevice, setEditingDevice] = useState<any>(null);
-  const { token, user } = useAuth();
+  const { token } = useAuth();
+  const { canCreate, canEdit, canDelete } = usePermissions();
 
   const [formData, setFormData] = useState({
     device_name: '',
@@ -67,13 +69,13 @@ const Devices: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Device Management</h1>
           <p className="text-slate-500 dark:text-slate-400 font-medium">Inventory of all network hardware and workstations.</p>
         </div>
-        {user?.role !== 'Viewer' && (
+        {canCreate && (
           <button 
             onClick={() => {
               setEditingDevice(null);
@@ -115,7 +117,7 @@ const Devices: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                {user?.role !== 'Viewer' && (
+                {canCreate && (
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
                     <button 
                       onClick={() => {
@@ -127,7 +129,7 @@ const Devices: React.FC = () => {
                     >
                       <Edit2 size={18} />
                     </button>
-                    {user?.role === 'Administrator' && (
+                    {canDelete && (
                       <button 
                         onClick={() => handleDelete(device.id)}
                         className="p-2 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
@@ -159,7 +161,7 @@ const Devices: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="px-8 py-4 bg-white dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-[10px] font-bold text-slate-400 dark:text-slate-500 flex justify-between uppercase tracking-widest">
+            <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-[10px] font-bold text-slate-400 dark:text-slate-500 flex justify-between uppercase tracking-widest">
               <span>Registered: {formatDate(device.created_at)}</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -188,7 +190,7 @@ const Devices: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.device_name}
                       onChange={e => setFormData({...formData, device_name: e.target.value})}
                     />
@@ -196,7 +198,7 @@ const Devices: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Type</label>
                     <select 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.device_type}
                       onChange={e => setFormData({...formData, device_type: e.target.value})}
                     >
@@ -216,7 +218,7 @@ const Devices: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.location}
                       onChange={e => setFormData({...formData, location: e.target.value})}
                     />
@@ -225,7 +227,7 @@ const Devices: React.FC = () => {
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">IP Address</label>
                     <input 
                       type="text" 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.ip_address}
                       onChange={e => setFormData({...formData, ip_address: e.target.value})}
                     />
@@ -237,7 +239,7 @@ const Devices: React.FC = () => {
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.installation}
                     onChange={e => setFormData({...formData, installation: e.target.value})}
                   />
@@ -246,7 +248,7 @@ const Devices: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[120px] resize-none"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[120px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>

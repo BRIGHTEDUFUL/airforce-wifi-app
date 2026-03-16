@@ -4,7 +4,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const db = new Database(path.join(__dirname, 'database.db'));
+
+// In production use /app/data so a Docker volume can persist the DB
+const dbDir = process.env.NODE_ENV === 'production'
+  ? '/app/data'
+  : __dirname;
+
+const db = new Database(path.join(dbDir, 'database.db'));
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
@@ -115,17 +121,20 @@ export function initDb() {
     )
   `);
 
-  // Seed Admin User if not exists
-  const adminExists = db.prepare('SELECT * FROM users WHERE email = ?').get('admin@airforce.mil');
-  if (!adminExists) {
-    const hashedPassword = bcrypt.hashSync('adminpassword', 10);
-    db.prepare('INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)').run(
-      'System Admin',
-      'admin@airforce.mil',
-      'Administrator',
-      hashedPassword
-    );
-    console.log('Default admin user created: admin@airforce.mil / adminpassword');
+  // Seed default users if not exist
+  const seedUsers = [
+    { name: 'System Admin',    email: 'admin@airforce.mil',    role: 'Administrator', password: 'adminpassword' },
+    { name: 'Ops Officer',     email: 'operator@airforce.mil', role: 'Operator',      password: 'operatorpass' },
+    { name: 'Viewer Account',  email: 'viewer@airforce.mil',   role: 'Viewer',        password: 'viewerpass' },
+  ];
+
+  for (const u of seedUsers) {
+    const exists = db.prepare('SELECT id FROM users WHERE email = ?').get(u.email);
+    if (!exists) {
+      const hash = bcrypt.hashSync(u.password, 10);
+      db.prepare('INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)').run(u.name, u.email, u.role, hash);
+      console.log(`Seeded user: ${u.email} / ${u.password} [${u.role}]`);
+    }
   }
 }
 

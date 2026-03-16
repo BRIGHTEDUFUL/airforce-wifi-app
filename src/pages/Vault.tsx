@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Key, Search, Eye, EyeOff, Copy, Check, Trash2, Tag, Server, Edit2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { usePermissions } from '../hooks/usePermissions';
 import { cn, formatDate } from '../lib/utils';
 
 const Vault: React.FC = () => {
@@ -11,7 +12,8 @@ const Vault: React.FC = () => {
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-  const { token, user } = useAuth();
+  const { token } = useAuth();
+  const { canCreate, canDelete, canViewPasswords } = usePermissions();
 
   const [formData, setFormData] = useState({
     service_name: '',
@@ -102,13 +104,13 @@ const Vault: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Vault</h1>
           <p className="text-slate-500 dark:text-slate-400 font-medium">Secure encrypted storage for all service credentials.</p>
         </div>
-        {user?.role !== 'Viewer' && (
+        {canCreate && (
           <button 
             onClick={() => handleOpenModal()}
             className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-amber-600/20 font-bold text-sm"
@@ -130,6 +132,12 @@ const Vault: React.FC = () => {
         />
       </div>
 
+      {!canViewPasswords && (
+        <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-2xl text-amber-700 dark:text-amber-400 text-sm font-bold">
+          <Key size={16} />
+          Passwords are hidden for your role. Contact an Administrator or Operator to view credentials.
+        </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {filteredItems.map((item) => (
           <div key={item.id} className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden flex flex-col md:flex-row gap-8 hover:shadow-xl hover:border-amber-200 dark:hover:border-amber-500/50 transition-all duration-300 group">
@@ -154,7 +162,7 @@ const Vault: React.FC = () => {
                       {item.device_name}
                     </div>
                   )}
-                  {user?.role !== 'Viewer' && (
+                  {canCreate && (
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                       <button 
                         onClick={() => handleOpenModal(item)}
@@ -207,7 +215,7 @@ const Vault: React.FC = () => {
               </div>
             </div>
             {item.notes && (
-              <div className="md:w-64 p-8 bg-white dark:bg-black/20 md:border-l border-slate-100 dark:border-command-dark-border flex flex-col justify-center">
+              <div className="md:w-64 p-8 bg-slate-50 dark:bg-black/20 md:border-l border-slate-100 dark:border-command-dark-border flex flex-col justify-center">
                 <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3">Notes</span>
                 <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed line-clamp-4">{item.notes}</p>
               </div>
@@ -234,7 +242,7 @@ const Vault: React.FC = () => {
                     required
                     type="text" 
                     placeholder="e.g. AWS Console, Internal DB"
-                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.service_name}
                     onChange={e => setFormData({...formData, service_name: e.target.value})}
                   />
@@ -246,7 +254,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.username}
                       onChange={e => setFormData({...formData, username: e.target.value})}
                     />
@@ -256,7 +264,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
                       value={formData.password}
                       onChange={e => setFormData({...formData, password: e.target.value})}
                     />
@@ -267,7 +275,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Category</label>
                     <select 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.category}
                       onChange={e => setFormData({...formData, category: e.target.value})}
                     >
@@ -281,7 +289,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Assign Device</label>
                     <select 
-                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.device_id}
                       onChange={e => setFormData({...formData, device_id: e.target.value})}
                     >
@@ -296,7 +304,7 @@ const Vault: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>

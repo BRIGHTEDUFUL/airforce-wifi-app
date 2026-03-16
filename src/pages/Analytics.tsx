@@ -32,7 +32,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
   const chartTooltipLabel = darkMode ? '#f8fafc' : '#0f172a';
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">System Analytics</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium">Detailed metrics and data distribution across all modules.</p>
@@ -164,7 +164,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
                   <span className="font-bold text-slate-700 dark:text-slate-300">{user.name}</span>
                   <span className="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest">{user.value} actions</span>
                 </div>
-                <div className="w-full h-2 bg-white dark:bg-slate-900 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-indigo-500 rounded-full transition-all duration-1000" 
                     style={{ width: `${(user.value / stats.topUsers[0].value) * 100}%` }}
@@ -216,7 +216,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
               <span className="font-bold text-slate-700 dark:text-slate-300">Database Storage</span>
               <span className="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest">1.2 MB / 100 MB</span>
             </div>
-            <div className="w-full h-2.5 bg-white dark:bg-slate-900 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
               <div className="h-full bg-command-blue rounded-full w-[1.2%]"></div>
             </div>
           </div>
@@ -225,7 +225,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
               <span className="font-bold text-slate-700 dark:text-slate-300">API Response Time</span>
               <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest">45ms (Optimal)</span>
             </div>
-            <div className="w-full h-2.5 bg-white dark:bg-slate-900 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
               <div className="h-full bg-emerald-500 rounded-full w-[15%]"></div>
             </div>
           </div>
@@ -234,7 +234,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
               <span className="font-bold text-slate-700 dark:text-slate-300">Encryption Load</span>
               <span className="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest">Low</span>
             </div>
-            <div className="w-full h-2.5 bg-white dark:bg-slate-900 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
               <div className="h-full bg-amber-500 rounded-full w-[8%]"></div>
             </div>
           </div>

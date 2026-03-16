@@ -17,6 +17,7 @@ import {
   Mail
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { usePermissions } from '../hooks/usePermissions';
 import { cn } from '../lib/utils';
 import { APP_CREST_URL, APP_NAME } from '../constants';
 
@@ -30,21 +31,30 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, setDarkMode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
+  const { isAdmin, isOperator, canManageUsers, canViewAudit } = usePermissions();
+
+  const roleBadge = isAdmin
+    ? { label: 'Administrator', cls: 'bg-rose-500/10 border-rose-500/20 text-rose-500' }
+    : isOperator
+    ? { label: 'Operator', cls: 'bg-blue-500/10 border-blue-500/20 text-blue-500' }
+    : { label: 'Viewer', cls: 'bg-slate-500/10 border-slate-500/20 text-slate-500' };
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'devices', label: 'Devices', icon: Shield },
-    { id: 'wifi', label: 'WiFi Passwords', icon: Wifi },
-    { id: 'vault', label: 'Password Vault', icon: Key },
-    { id: 'notes', label: 'Secure Notes', icon: FileText },
-    { id: 'messages', label: 'Messages', icon: Mail },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'generator', label: 'Password Gen', icon: Zap },
-    { id: 'audit', label: 'Audit Logs', icon: History, roles: ['Administrator'] },
-    { id: 'users', label: 'User Management', icon: Users, roles: ['Administrator'] },
+    { id: 'dashboard',  label: 'Dashboard',      icon: LayoutDashboard },
+    { id: 'devices',    label: 'Devices',         icon: Shield },
+    { id: 'wifi',       label: 'WiFi Passwords',  icon: Wifi },
+    { id: 'vault',      label: 'Password Vault',  icon: Key },
+    { id: 'notes',      label: 'Secure Notes',    icon: FileText },
+    { id: 'messages',   label: 'Messages',        icon: Mail },
+    { id: 'analytics',  label: 'Analytics',       icon: BarChart3 },
+    { id: 'generator',  label: 'Password Gen',    icon: Zap, show: !isViewer() },
+    { id: 'audit',      label: 'Audit Logs',      icon: History, show: canViewAudit },
+    { id: 'users',      label: 'User Management', icon: Users,   show: canManageUsers },
   ];
 
-  const filteredMenu = menuItems.filter(item => !item.roles || item.roles.includes(user?.role || ''));
+  function isViewer() { return !isAdmin && !isOperator; }
+
+  const filteredMenu = menuItems.filter(item => item.show === undefined || item.show);
 
   return (
     <div className={cn(
@@ -76,10 +86,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar bg-white dark:bg-transparent">
+      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
         {!collapsed && (
           <div className="px-6 mb-4">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Admin Navigation</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+              {isAdmin ? 'Admin Navigation' : isOperator ? 'Operator Navigation' : 'Viewer Navigation'}
+            </p>
           </div>
         )}
         <nav className="px-3 space-y-1.5">
@@ -91,13 +103,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
                 "flex items-center gap-3 w-full p-3 rounded-xl transition-all group relative overflow-hidden",
                 activeTab === item.id 
                   ? "bg-command-blue text-white shadow-lg shadow-blue-600/30" 
-                  : cn("hover:bg-slate-50 text-slate-400 hover:text-slate-900", darkMode && "hover:bg-white/5 hover:text-slate-200")
+                  : cn("hover:bg-slate-50 text-slate-500 hover:text-slate-900", darkMode && "hover:bg-white/5 text-slate-400 hover:text-slate-200")
               )}
             >
               {activeTab === item.id && (
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
               )}
-              <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : "text-slate-500 group-hover:text-slate-900")} />
+              <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : darkMode ? "text-slate-400 group-hover:text-slate-200" : "text-slate-400 group-hover:text-slate-700")} />
               {!collapsed && <span className="font-bold text-sm relative z-10 tracking-tight">{item.label}</span>}
               {activeTab === item.id && !collapsed && (
                 <div className="ml-auto relative z-10">
@@ -131,8 +143,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
               <div className="flex flex-col min-w-0">
                 <span className={cn("text-xs font-bold truncate", darkMode ? "text-white" : "text-slate-900")}>{user?.email || 'bright@123.airforce.com'}</span>
                 <div className="flex items-center gap-1 mt-0.5">
-                  <div className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-[8px] font-black text-amber-500 uppercase tracking-tighter">
-                    {user?.role || 'Administrator'}
+                  <div className={cn("px-1.5 py-0.5 rounded border text-[8px] font-black uppercase tracking-tighter", roleBadge.cls)}>
+                    {roleBadge.label}
                   </div>
                 </div>
               </div>

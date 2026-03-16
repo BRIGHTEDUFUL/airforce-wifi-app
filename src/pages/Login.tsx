@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
       <div className="w-full max-w-md space-y-10">
         <div className="text-center space-y-6">
           {onBack && (
@@ -95,7 +95,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
                   required
                   type="email" 
                   placeholder="admin@airforce.mil"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
@@ -110,7 +110,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
                   required
                   type="password" 
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                 />

@@ -7,10 +7,34 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db, { initDb } from './database.ts';
 import crypto from 'crypto';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key';
+
+// Auto-generate a strong secret if none is provided.
+// In production the generated secret is persisted to /app/data/.secret
+// so it survives container restarts (tokens stay valid across restarts).
+
+function loadOrCreateSecret(): string {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+
+  const secretFile = process.env.NODE_ENV === 'production'
+    ? '/app/data/.secret'
+    : path.join(__dirname, '.secret');
+
+  if (fs.existsSync(secretFile)) {
+    return fs.readFileSync(secretFile, 'utf8').trim();
+  }
+
+  const generated = crypto.randomBytes(48).toString('hex');
+  fs.mkdirSync(path.dirname(secretFile), { recursive: true });
+  fs.writeFileSync(secretFile, generated, { mode: 0o600 });
+  console.log('Generated JWT_SECRET and saved to', secretFile);
+  return generated;
+}
+
+const JWT_SECRET = loadOrCreateSecret();
 
 // Simple encryption for vault passwords (not for production, but meets "encrypted storage" requirement for this demo)
 const ENCRYPTION_KEY = crypto.scryptSync(JWT_SECRET, 'salt', 32);
@@ -195,11 +219,12 @@ async function startServer() {
       LEFT JOIN devices d ON v.device_id = d.id 
       ORDER BY v.created_at DESC
     `).all() as any[];
-    const decryptedItems = items.map(item => ({
+    const isViewer = (req as any).user.role === 'Viewer';
+    const result = items.map(item => ({
       ...item,
-      password: decrypt(item.password)
+      password: isViewer ? '••••••••••••' : decrypt(item.password)
     }));
-    res.json(decryptedItems);
+    res.json(result);
   });
 
   app.post('/api/vault', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
@@ -235,7 +260,7 @@ async function startServer() {
     res.json(notes);
   });
 
-  app.post('/api/notes', authenticateToken, (req, res) => {
+  app.post('/api/notes', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
     const { title, content, category, is_pinned } = req.body;
     const result = db.prepare('INSERT INTO secure_notes (title, content, category, is_pinned, created_by) VALUES (?, ?, ?, ?, ?)').run(
       title, content, category, is_pinned ? 1 : 0, (req as any).user.id
@@ -244,7 +269,7 @@ async function startServer() {
     res.json({ id: result.lastInsertRowid });
   });
 
-  app.put('/api/notes/:id', authenticateToken, (req, res) => {
+  app.put('/api/notes/:id', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
     const { title, content, category, is_pinned, is_archived } = req.body;
     db.prepare('UPDATE secure_notes SET title = ?, content = ?, category = ?, is_pinned = ?, is_archived = ? WHERE id = ?').run(
       title, content, category, is_pinned ? 1 : 0, is_archived ? 1 : 0, req.params.id
@@ -253,7 +278,7 @@ async function startServer() {
     res.json({ success: true });
   });
 
-  app.delete('/api/notes/:id', authenticateToken, (req, res) => {
+  app.delete('/api/notes/:id', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
     const note: any = db.prepare('SELECT title FROM secure_notes WHERE id = ?').get(req.params.id);
     db.prepare('DELETE FROM secure_notes WHERE id = ?').run(req.params.id);
     logAudit((req as any).user.id, (req as any).user.name, 'Deleted Note', 'Notes', note?.title);
@@ -290,6 +315,17 @@ async function startServer() {
     const user: any = db.prepare('SELECT email FROM users WHERE id = ?').get(req.params.id);
     db.prepare('DELETE FROM users WHERE id = ?').run(req.params.id);
     logAudit((req as any).user.id, (req as any).user.name, 'Deleted User', 'Users', user?.email);
+    res.json({ success: true });
+  });
+
+  app.put('/api/users/:id', authenticateToken, authorizeRoles('Administrator'), (req, res) => {
+    const { role } = req.body;
+    const validRoles = ['Administrator', 'Operator', 'Viewer'];
+    if (!validRoles.includes(role)) return res.status(400).json({ message: 'Invalid role' });
+    const target: any = db.prepare('SELECT email FROM users WHERE id = ?').get(req.params.id);
+    if (!target) return res.status(404).json({ message: 'User not found' });
+    db.prepare('UPDATE users SET role = ? WHERE id = ?').run(role, req.params.id);
+    logAudit((req as any).user.id, (req as any).user.name, 'Updated User Role', 'Users', `${target.email} → ${role}`);
     res.json({ success: true });
   });
 

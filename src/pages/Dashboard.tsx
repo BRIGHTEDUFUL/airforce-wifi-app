@@ -58,7 +58,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
   }, [token]);
 
   if (!stats) return (
-    <div className="flex items-center justify-center h-full bg-white dark:bg-command-dark-bg transition-colors">
+    <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-command-dark-bg transition-colors">
       <div className="flex flex-col items-center gap-4">
         <RefreshCw className="w-8 h-8 text-command-blue animate-spin" />
         <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Loading WiFi Portal...</p>
@@ -67,7 +67,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
   );
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       {/* Header */}
       <header className="flex items-center justify-between">
         <div>
@@ -131,9 +131,9 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: 'Authentication', status: 'Active', icon: Shield, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-          { label: 'Authorization', status: 'Admin', icon: Fingerprint, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-          { label: 'Monitoring', status: `${stats.recentLogs.length} events`, icon: Activity, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+          { label: 'Authentication', status: 'Active', icon: Shield, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+          { label: 'Authorization', status: 'Admin', icon: Fingerprint, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
+          { label: 'Monitoring', status: `${stats.recentLogs.length} events`, icon: Activity, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
         ].map((card, i) => (
           <div key={i} className="bg-white dark:bg-command-dark-card p-6 rounded-3xl border border-slate-100 dark:border-command-dark-border shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
             <div className="flex items-center gap-4">
@@ -155,10 +155,10 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
       {/* Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Total Devices', value: stats.totalDevices, icon: Monitor, color: 'text-blue-500', bg: 'bg-white dark:bg-blue-500/10' },
-          { label: 'Active Credentials', value: stats.totalCredentials, icon: Key, color: 'text-emerald-500', bg: 'bg-white dark:bg-emerald-500/10' },
-          { label: 'Expiring Soon', value: stats.alerts.filter((a: any) => a.title.includes('Expiry')).length, icon: Clock, color: 'text-amber-500', bg: 'bg-white dark:bg-amber-500/10' },
-          { label: 'Expired', value: 0, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-white dark:bg-rose-500/10' },
+          { label: 'Total Devices', value: stats.totalDevices, icon: Monitor, color: 'text-blue-500', bg: 'bg-slate-50 dark:bg-blue-500/10' },
+          { label: 'Active Credentials', value: stats.totalCredentials, icon: Key, color: 'text-emerald-500', bg: 'bg-slate-50 dark:bg-emerald-500/10' },
+          { label: 'Expiring Soon', value: stats.alerts.filter((a: any) => a.title.includes('Expiry')).length, icon: Clock, color: 'text-amber-500', bg: 'bg-slate-50 dark:bg-amber-500/10' },
+          { label: 'Expired', value: 0, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-slate-50 dark:bg-rose-500/10' },
         ].map((card, i) => (
           <div key={i} className="bg-white dark:bg-command-dark-card p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-6 hover:shadow-lg transition-all">
             <div className="flex items-center justify-between">
@@ -182,7 +182,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
       <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl border border-slate-100 dark:border-transparent">
+            <div className="p-3 bg-slate-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl border border-slate-100 dark:border-transparent">
               <Zap size={20} />
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Quick Actions</h3>
@@ -192,12 +192,12 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {[
-            { id: 'devices', label: 'Add Device', desc: 'Register new hardware', icon: Plus, color: 'text-blue-600', bg: 'bg-white dark:bg-blue-500/10' },
-            { id: 'generator', label: 'Gen Password', desc: 'Create secure keys', icon: Key, color: 'text-amber-600', bg: 'bg-white dark:bg-amber-500/10' },
-            { id: 'wifi', label: 'WiFi Access', desc: 'Manage credentials', icon: Wifi, color: 'text-emerald-600', bg: 'bg-white dark:bg-emerald-500/10' },
-            { id: 'vault', label: 'Secure Vault', desc: 'Encrypted storage', icon: Lock, color: 'text-indigo-600', bg: 'bg-white dark:bg-indigo-500/10' },
-            { id: 'audit', label: 'Audit Logs', desc: 'System history', icon: History, color: 'text-slate-600', bg: 'bg-white dark:bg-slate-500/10' },
-            { id: 'messages', label: 'Messages', desc: 'System alerts', icon: Mail, color: 'text-rose-600', bg: 'bg-white dark:bg-rose-500/10' },
+            { id: 'devices', label: 'Add Device', desc: 'Register new hardware', icon: Plus, color: 'text-blue-600', bg: 'bg-slate-50 dark:bg-blue-500/10' },
+            { id: 'generator', label: 'Gen Password', desc: 'Create secure keys', icon: Key, color: 'text-amber-600', bg: 'bg-slate-50 dark:bg-amber-500/10' },
+            { id: 'wifi', label: 'WiFi Access', desc: 'Manage credentials', icon: Wifi, color: 'text-emerald-600', bg: 'bg-slate-50 dark:bg-emerald-500/10' },
+            { id: 'vault', label: 'Secure Vault', desc: 'Encrypted storage', icon: Lock, color: 'text-indigo-600', bg: 'bg-slate-50 dark:bg-indigo-500/10' },
+            { id: 'audit', label: 'Audit Logs', desc: 'System history', icon: History, color: 'text-slate-600', bg: 'bg-slate-50 dark:bg-slate-500/10' },
+            { id: 'messages', label: 'Messages', desc: 'System alerts', icon: Mail, color: 'text-rose-600', bg: 'bg-slate-50 dark:bg-rose-500/10' },
           ].map((action, i) => (
             <button 
               key={i} 

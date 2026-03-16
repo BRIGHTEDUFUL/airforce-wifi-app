@@ -24,7 +24,7 @@ const Audit: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Audit Logs</h1>
@@ -57,7 +57,7 @@ const Audit: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white dark:bg-slate-900/50 text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">
+              <tr className="bg-slate-50 dark:bg-slate-900/50 text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">
                 <th className="px-8 py-6">Timestamp</th>
                 <th className="px-8 py-6">User</th>
                 <th className="px-8 py-6">Action</th>
