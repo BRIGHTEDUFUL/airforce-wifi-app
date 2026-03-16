@@ -6,7 +6,7 @@
   --color-navy-800: #1A2B4B;
   --color-navy-700: #2A3B5B;
   --color-command-blue: #007BFF;
-  --color-command-light: #F3F6F9;
+  --color-command-light: #FFFFFF;
   --color-command-dark-bg: #0A192F;
   --color-command-dark-card: #112240;
   --color-command-dark-border: #1D2D50;
@@ -16,7 +16,7 @@
 
 @layer base {
   body {
-    @apply antialiased text-slate-900 bg-command-light dark:bg-command-dark-bg dark:text-slate-100 transition-colors duration-300;
+    @apply antialiased text-slate-900 bg-white dark:bg-command-dark-bg dark:text-slate-100 transition-colors duration-300;
   }
 }
 
@@ -30,11 +30,11 @@
   }
   
   .command-button-secondary {
-    @apply bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition-all;
+    @apply bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition-all;
   }
   
   .command-input {
-    @apply w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white;
+    @apply w-full px-5 py-3.5 bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white;
   }
   
   .command-label {

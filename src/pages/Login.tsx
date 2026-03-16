@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-command-light dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
       <div className="w-full max-w-md space-y-10">
         <div className="text-center space-y-6">
           {onBack && (
@@ -57,12 +57,12 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
           )}
           
           <div className="relative inline-block group">
-            <div className="absolute -inset-4 bg-command-blue/10 rounded-full blur-2xl group-hover:bg-command-blue/20 transition-all duration-500" />
-            <div className="relative w-24 h-24 rounded-[2.5rem] bg-white dark:bg-slate-800 shadow-2xl flex items-center justify-center border border-slate-50 dark:border-slate-700 p-4">
+            <div className="absolute -inset-4 bg-command-blue/10 rounded-[2rem] blur-2xl group-hover:bg-command-blue/20 transition-all duration-500" />
+            <div className="relative w-24 h-24 rounded-[2rem] bg-gradient-to-br from-blue-400 to-blue-900 shadow-2xl flex items-center justify-center border border-slate-50 dark:border-slate-700 p-4 overflow-hidden">
               <img 
                 src={APP_CREST_URL} 
                 alt="Crest" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -70,9 +70,9 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
 
           <div className="space-y-2">
             <h1 className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">
-              Command <span className="text-command-blue">Access</span>
+              Portal <span className="text-command-blue">Login</span>
             </h1>
-            <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em]">{APP_FULL_NAME} v2.5</p>
+            <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em]">{APP_FULL_NAME}</p>
           </div>
         </div>
 
@@ -88,14 +88,14 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
             )}
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Terminal ID / Email</label>
+              <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Email Address</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-command-blue transition-colors" size={20} />
                 <input 
                   required
                   type="email" 
                   placeholder="admin@airforce.mil"
-                  className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
@@ -103,14 +103,14 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Access Protocol / Password</label>
+              <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Password</label>
               <div className="relative group">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600 group-focus-within:text-command-blue transition-colors" size={20} />
                 <input 
                   required
                   type="password" 
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold dark:text-white"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                 />
@@ -123,7 +123,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
               className="group relative w-full py-5 bg-command-blue hover:bg-blue-700 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-command-blue/20 disabled:opacity-50 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              {isLoading ? 'Authenticating...' : 'Initialize Session'}
+              {isLoading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
         </div>

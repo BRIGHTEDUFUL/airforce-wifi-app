@@ -104,7 +104,7 @@ const Notes: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Secure Notes</h1>
@@ -139,7 +139,7 @@ const Notes: React.FC = () => {
                   {note.is_pinned === 1 && <Pin size={16} className="text-command-blue fill-command-blue" />}
                   <h3 className="font-bold text-xl text-slate-900 dark:text-white leading-tight">{note.title}</h3>
                 </div>
-                <span className="text-[10px] font-black px-3 py-1 bg-slate-50 dark:bg-slate-900/50 rounded-full text-slate-400 dark:text-slate-500 uppercase tracking-widest border border-slate-100 dark:border-command-dark-border">
+                <span className="text-[10px] font-black px-3 py-1 bg-white dark:bg-slate-900/50 rounded-full text-slate-400 dark:text-slate-500 uppercase tracking-widest border border-slate-100 dark:border-command-dark-border">
                   {note.category}
                 </span>
               </div>
@@ -151,21 +151,21 @@ const Notes: React.FC = () => {
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
                   <button 
                     onClick={() => togglePin(note)}
-                    className={cn("p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl transition-all", note.is_pinned === 1 ? "text-command-blue" : "text-slate-400 dark:text-slate-500")}
+                    className={cn("p-2 hover:bg-white dark:hover:bg-white/5 rounded-xl transition-all", note.is_pinned === 1 ? "text-command-blue" : "text-slate-400 dark:text-slate-500")}
                     title={note.is_pinned === 1 ? "Unpin" : "Pin"}
                   >
                     <Pin size={16} className={note.is_pinned === 1 ? "fill-command-blue" : ""} />
                   </button>
                   <button 
                     onClick={() => handleOpenModal(note)}
-                    className="p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 hover:text-command-blue transition-all"
+                    className="p-2 hover:bg-white dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 hover:text-command-blue transition-all"
                     title="Edit"
                   >
                     <Edit2 size={16} />
                   </button>
                   <button 
                     onClick={() => toggleArchive(note)}
-                    className="p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 hover:text-amber-600 transition-all"
+                    className="p-2 hover:bg-white dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 hover:text-amber-600 transition-all"
                     title="Archive"
                   >
                     <Archive size={16} />
@@ -202,7 +202,7 @@ const Notes: React.FC = () => {
                     required
                     type="text" 
                     placeholder="Enter note title"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
                     value={formData.title}
                     onChange={e => setFormData({...formData, title: e.target.value})}
                   />
@@ -212,7 +212,7 @@ const Notes: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Category</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 appearance-none"
+                      className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 appearance-none"
                       value={formData.category}
                       onChange={e => setFormData({...formData, category: e.target.value})}
                     >
@@ -245,7 +245,7 @@ const Notes: React.FC = () => {
                   <textarea 
                     required
                     placeholder="Enter note content..."
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 min-h-[200px] resize-none"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 min-h-[200px] resize-none"
                     value={formData.content}
                     onChange={e => setFormData({...formData, content: e.target.value})}
                   ></textarea>
@@ -255,7 +255,7 @@ const Notes: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-command-dark-border text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-command-dark-border text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-white/5 transition-all"
                   >
                     Cancel
                   </button>

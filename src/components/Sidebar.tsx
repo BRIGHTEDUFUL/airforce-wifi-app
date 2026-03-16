@@ -51,32 +51,32 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
       "flex flex-col h-full transition-all duration-300 border-r relative z-20 shadow-2xl transition-colors",
       darkMode 
         ? "bg-command-dark-card border-command-dark-border text-slate-300" 
-        : "bg-navy-800 border-navy-700 text-slate-300",
+        : "bg-white border-slate-200 text-slate-600",
       collapsed ? "w-20" : "w-64"
     )}>
       {/* Sidebar Header with Crest */}
       <div className={cn(
         "p-6 flex flex-col items-center gap-4 border-b transition-colors",
-        darkMode ? "border-command-dark-border bg-black/20" : "border-navy-700/50 bg-navy-900/20"
+        darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
-        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-white/5 p-2 border border-white/10 shadow-inner group cursor-pointer">
+        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-900 p-2 border border-white/10 shadow-inner group cursor-pointer">
           <div className="absolute inset-0 bg-command-blue/10 opacity-0 group-hover:opacity-100 transition-opacity" />
           <img 
             src={APP_CREST_URL} 
             alt="Crest"
-            className="w-full h-full object-contain relative z-10 group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-contain relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]"
             referrerPolicy="no-referrer"
           />
         </div>
         {!collapsed && (
           <div className="text-center animate-in fade-in slide-in-from-top-2 duration-500">
-            <h2 className="text-sm font-bold text-white tracking-tight">{APP_NAME} Command</h2>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghana Air Force</p>
+            <h2 className={cn("text-sm font-bold tracking-tight", darkMode ? "text-white" : "text-slate-900")}>{APP_NAME} Management</h2>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghana Air Force HQ</p>
           </div>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar bg-white dark:bg-transparent">
         {!collapsed && (
           <div className="px-6 mb-4">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Admin Navigation</p>
@@ -91,13 +91,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
                 "flex items-center gap-3 w-full p-3 rounded-xl transition-all group relative overflow-hidden",
                 activeTab === item.id 
                   ? "bg-command-blue text-white shadow-lg shadow-blue-600/30" 
-                  : "hover:bg-white/5 text-slate-400 hover:text-slate-200"
+                  : cn("hover:bg-slate-50 text-slate-400 hover:text-slate-900", darkMode && "hover:bg-white/5 hover:text-slate-200")
               )}
             >
               {activeTab === item.id && (
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
               )}
-              <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : "text-slate-500 group-hover:text-slate-300")} />
+              <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : "text-slate-500 group-hover:text-slate-900")} />
               {!collapsed && <span className="font-bold text-sm relative z-10 tracking-tight">{item.label}</span>}
               {activeTab === item.id && !collapsed && (
                 <div className="ml-auto relative z-10">
@@ -111,7 +111,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
 
       <div className={cn(
         "p-4 space-y-3 border-t transition-colors",
-        darkMode ? "border-command-dark-border bg-black/20" : "border-navy-700/50 bg-navy-900/40"
+        darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
         {!collapsed && (
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">System Controls</p>
@@ -119,14 +119,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         
         {/* User Profile Section */}
         {!collapsed && (
-          <div className="bg-white/5 rounded-2xl p-3 border border-white/5 mb-4 group hover:bg-white/10 transition-all cursor-pointer relative overflow-hidden">
+          <div className={cn(
+            "rounded-2xl p-3 border mb-4 group transition-all cursor-pointer relative overflow-hidden",
+            darkMode ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-white border-slate-100 hover:bg-slate-50"
+          )}>
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="flex items-center gap-3 relative z-10">
               <div className="w-10 h-10 rounded-full bg-command-blue flex items-center justify-center text-white font-bold text-lg shadow-inner group-hover:scale-105 transition-transform">
                 {user?.name?.charAt(0).toUpperCase() || 'B'}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-xs font-bold text-white truncate">{user?.email || 'bright@123.airforce.com'}</span>
+                <span className={cn("text-xs font-bold truncate", darkMode ? "text-white" : "text-slate-900")}>{user?.email || 'bright@123.airforce.com'}</span>
                 <div className="flex items-center gap-1 mt-0.5">
                   <div className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-[8px] font-black text-amber-500 uppercase tracking-tighter">
                     {user?.role || 'Administrator'}
@@ -142,7 +145,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
           <button 
             onClick={() => setDarkMode(!darkMode)}
             className={cn(
-              "flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400 hover:text-slate-200 group",
+              "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
+              darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
               collapsed && "justify-center"
             )}
           >
@@ -154,7 +158,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
           <button 
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              "flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400 hover:text-slate-200 group",
+              "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
+              darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
               collapsed && "justify-center"
             )}
           >

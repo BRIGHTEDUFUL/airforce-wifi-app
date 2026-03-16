@@ -67,7 +67,7 @@ const Devices: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Device Management</h1>
@@ -141,13 +141,13 @@ const Devices: React.FC = () => {
 
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
-                  <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg">
                     <MapPin size={16} className="text-slate-400 dark:text-slate-500" />
                   </div>
                   <span className="text-sm">{device.location}</span>
                 </div>
                 <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
-                  <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg">
                     <Info size={16} className="text-slate-400 dark:text-slate-500" />
                   </div>
                   <span className="text-sm">IP: {device.ip_address || 'N/A'}</span>
@@ -159,7 +159,7 @@ const Devices: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-[10px] font-bold text-slate-400 dark:text-slate-500 flex justify-between uppercase tracking-widest">
+            <div className="px-8 py-4 bg-white dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-[10px] font-bold text-slate-400 dark:text-slate-500 flex justify-between uppercase tracking-widest">
               <span>Registered: {formatDate(device.created_at)}</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -175,7 +175,7 @@ const Devices: React.FC = () => {
           <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl">
+                <div className="p-3 bg-white dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl border border-slate-100 dark:border-transparent">
                   <Plus size={24} />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{editingDevice ? 'Edit Device' : 'Add New Device'}</h2>
@@ -188,7 +188,7 @@ const Devices: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.device_name}
                       onChange={e => setFormData({...formData, device_name: e.target.value})}
                     />
@@ -196,7 +196,7 @@ const Devices: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Type</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.device_type}
                       onChange={e => setFormData({...formData, device_type: e.target.value})}
                     >
@@ -216,7 +216,7 @@ const Devices: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.location}
                       onChange={e => setFormData({...formData, location: e.target.value})}
                     />
@@ -225,7 +225,7 @@ const Devices: React.FC = () => {
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">IP Address</label>
                     <input 
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.ip_address}
                       onChange={e => setFormData({...formData, ip_address: e.target.value})}
                     />
@@ -237,7 +237,7 @@ const Devices: React.FC = () => {
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.installation}
                     onChange={e => setFormData({...formData, installation: e.target.value})}
                   />
@@ -246,7 +246,7 @@ const Devices: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[120px] resize-none"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-blue-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[120px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>
@@ -256,7 +256,7 @@ const Devices: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-slate-800 transition-all"
                   >
                     Cancel
                   </button>

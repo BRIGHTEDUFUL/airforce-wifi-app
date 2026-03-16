@@ -71,7 +71,7 @@ const WiFi: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">WiFi Credentials</h1>
@@ -136,13 +136,13 @@ const WiFi: React.FC = () => {
 
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
-                  <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg">
                     <MapPin size={16} className="text-slate-400 dark:text-slate-500" />
                   </div>
                   <span className="text-sm">{net.location}</span>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 flex items-center justify-between group/pass">
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 flex items-center justify-between group/pass">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-1">Network Key</span>
                     <span className="font-mono text-xl tracking-[0.15em] text-slate-700 dark:text-slate-300">
@@ -172,7 +172,7 @@ const WiFi: React.FC = () => {
               </div>
             </div>
             {net.notes && (
-              <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-xs text-slate-500 dark:text-slate-400 italic font-medium">
+              <div className="px-8 py-4 bg-white dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-xs text-slate-500 dark:text-slate-400 italic font-medium">
                 <span className="font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mr-2 not-italic">Note:</span>
                 {net.notes}
               </div>
@@ -186,7 +186,7 @@ const WiFi: React.FC = () => {
           <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl">
+                <div className="p-3 bg-white dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl border border-slate-100 dark:border-transparent">
                   <Wifi size={24} />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{editingNetwork ? 'Edit WiFi Network' : 'Add WiFi Network'}</h2>
@@ -198,7 +198,7 @@ const WiFi: React.FC = () => {
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.ssid}
                     onChange={e => setFormData({...formData, ssid: e.target.value})}
                   />
@@ -209,7 +209,7 @@ const WiFi: React.FC = () => {
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
                     value={formData.password}
                     onChange={e => setFormData({...formData, password: e.target.value})}
                   />
@@ -221,7 +221,7 @@ const WiFi: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.location}
                       onChange={e => setFormData({...formData, location: e.target.value})}
                     />
@@ -229,7 +229,7 @@ const WiFi: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Security Type</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.security_type}
                       onChange={e => setFormData({...formData, security_type: e.target.value})}
                     >
@@ -244,7 +244,7 @@ const WiFi: React.FC = () => {
                   <input 
                     type="text" 
                     placeholder="e.g. Router-01, AP-North"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.assigned_devices}
                     onChange={e => setFormData({...formData, assigned_devices: e.target.value})}
                   />
@@ -253,7 +253,7 @@ const WiFi: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>
@@ -263,7 +263,7 @@ const WiFi: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-slate-800 transition-all"
                   >
                     Cancel
                   </button>

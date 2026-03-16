@@ -27,7 +27,7 @@ const Messages: React.FC = () => {
   );
 
   return (
-    <div className="flex h-full bg-command-light dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
+    <div className="flex h-full bg-white dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-700">
       {/* Mail Sidebar */}
       <div className="w-72 border-r border-slate-100 dark:border-command-dark-border bg-white dark:bg-command-dark-card flex flex-col">
         <div className="p-8">
@@ -46,7 +46,7 @@ const Messages: React.FC = () => {
                 "w-full flex items-center justify-between px-5 py-3.5 rounded-2xl transition-all text-sm font-bold",
                 activeFolder === folder.id 
                   ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue" 
-                  : "text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300"
+                  : "text-slate-400 dark:text-slate-500 hover:bg-white dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300"
               )}
             >
               <div className="flex items-center gap-4">
@@ -56,7 +56,7 @@ const Messages: React.FC = () => {
               {folder.count > 0 && (
                 <span className={cn(
                   "px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest",
-                  activeFolder === folder.id ? "bg-command-blue text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
+                  activeFolder === folder.id ? "bg-command-blue text-white" : "bg-white border border-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
                 )}>
                   {folder.count}
                 </span>
@@ -67,23 +67,23 @@ const Messages: React.FC = () => {
       </div>
 
       {/* Message List */}
-      <div className="flex-1 flex flex-col min-w-0 bg-command-light dark:bg-command-dark-bg">
-        <header className="h-24 border-b border-slate-50 dark:border-command-dark-border flex items-center px-8 gap-6 bg-white dark:bg-command-dark-card">
+      <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-command-dark-bg">
+        <header className="h-24 border-b border-slate-100 dark:border-command-dark-border flex items-center px-8 gap-6 bg-white dark:bg-command-dark-card">
           <div className="relative flex-1 max-w-md group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-command-blue transition-colors" size={18} />
             <input 
               type="text" 
               placeholder="Search messages..." 
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-transparent rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-medium text-slate-900 dark:text-white"
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900/50 border border-transparent rounded-2xl outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-medium text-slate-900 dark:text-white"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-3 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 transition-all">
+            <button className="p-3 bg-white dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 transition-all border border-slate-100 dark:border-transparent">
               <Clock size={18} />
             </button>
-            <button className="p-3 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 transition-all">
+            <button className="p-3 bg-white dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl text-slate-400 dark:text-slate-500 transition-all border border-slate-100 dark:border-transparent">
               <Star size={18} />
             </button>
           </div>
@@ -103,7 +103,7 @@ const Messages: React.FC = () => {
                   {msg.unread && (
                     <div className="absolute left-6 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-command-blue" />
                   )}
-                  <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center text-slate-400 dark:text-slate-500 shrink-0 group-hover:bg-command-blue/5 dark:group-hover:bg-command-blue/20 group-hover:text-command-blue transition-colors">
+                  <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-900/50 flex items-center justify-center text-slate-400 dark:text-slate-500 shrink-0 group-hover:bg-command-blue/5 dark:group-hover:bg-command-blue/20 group-hover:text-command-blue transition-colors">
                     <User size={24} />
                   </div>
                   <div className="flex-1 min-w-0 space-y-1.5">

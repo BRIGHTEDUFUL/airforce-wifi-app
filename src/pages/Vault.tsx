@@ -102,7 +102,7 @@ const Vault: React.FC = () => {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Vault</h1>
@@ -136,7 +136,7 @@ const Vault: React.FC = () => {
             <div className="p-8 flex-1 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="p-4 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition-transform">
+                  <div className="p-4 bg-white dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition-transform border border-slate-100 dark:border-transparent">
                     <Key size={24} />
                   </div>
                   <div>
@@ -188,7 +188,7 @@ const Vault: React.FC = () => {
                     </span>
                     <button 
                       onClick={() => setShowPasswords(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
-                      className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+                      className="p-2 hover:bg-white dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
                     >
                       {showPasswords[item.id] ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -198,7 +198,7 @@ const Vault: React.FC = () => {
                         setCopiedId(item.id);
                         setTimeout(() => setCopiedId(null), 2000);
                       }}
-                      className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-all"
+                      className="p-2 hover:bg-white dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-all"
                     >
                       {copiedId === item.id ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
                     </button>
@@ -207,7 +207,7 @@ const Vault: React.FC = () => {
               </div>
             </div>
             {item.notes && (
-              <div className="md:w-64 p-8 bg-slate-50 dark:bg-black/20 md:border-l border-slate-100 dark:border-command-dark-border flex flex-col justify-center">
+              <div className="md:w-64 p-8 bg-white dark:bg-black/20 md:border-l border-slate-100 dark:border-command-dark-border flex flex-col justify-center">
                 <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3">Notes</span>
                 <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed line-clamp-4">{item.notes}</p>
               </div>
@@ -221,7 +221,7 @@ const Vault: React.FC = () => {
           <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl">
+                <div className="p-3 bg-white dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl border border-slate-100 dark:border-transparent">
                   <Key size={24} />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{editingItem ? 'Edit Credential' : 'Add New Credential'}</h2>
@@ -234,7 +234,7 @@ const Vault: React.FC = () => {
                     required
                     type="text" 
                     placeholder="e.g. AWS Console, Internal DB"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                     value={formData.service_name}
                     onChange={e => setFormData({...formData, service_name: e.target.value})}
                   />
@@ -246,7 +246,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
                       value={formData.username}
                       onChange={e => setFormData({...formData, username: e.target.value})}
                     />
@@ -256,7 +256,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
                       value={formData.password}
                       onChange={e => setFormData({...formData, password: e.target.value})}
                     />
@@ -267,7 +267,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Category</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.category}
                       onChange={e => setFormData({...formData, category: e.target.value})}
                     >
@@ -281,7 +281,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Assign Device</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
                       value={formData.device_id}
                       onChange={e => setFormData({...formData, device_id: e.target.value})}
                     >
@@ -296,7 +296,7 @@ const Vault: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
+                    className="w-full p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:border-amber-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>
@@ -306,7 +306,7 @@ const Vault: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-slate-800 transition-all"
                   >
                     Cancel
                   </button>

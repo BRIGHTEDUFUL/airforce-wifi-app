@@ -55,7 +55,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-command-light text-slate-900 transition-colors">
+    <div className="flex h-screen bg-white text-slate-900 transition-colors">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 

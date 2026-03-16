@@ -69,7 +69,7 @@ const UserManagement: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">User Management</h1>
@@ -88,7 +88,7 @@ const UserManagement: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900/50 text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">
+              <tr className="bg-white dark:bg-slate-900/50 text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">
                 <th className="px-8 py-6">User</th>
                 <th className="px-8 py-6">Email</th>
                 <th className="px-8 py-6">Role</th>
@@ -98,7 +98,7 @@ const UserManagement: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-50 dark:divide-command-dark-border">
               {users.map((u) => (
-                <tr key={u.id} className="text-sm hover:bg-slate-50/50 dark:hover:bg-white/5 transition-all group">
+                <tr key={u.id} className="text-sm hover:bg-white dark:hover:bg-white/5 transition-all group">
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-2xl bg-command-blue/5 dark:bg-command-blue/10 flex items-center justify-center text-command-blue group-hover:scale-110 transition-transform">
@@ -120,7 +120,7 @@ const UserManagement: React.FC = () => {
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                      <div className="p-1.5 bg-white dark:bg-slate-900/50 rounded-lg">
                         {getRoleIcon(u.role)}
                       </div>
                       <span className="font-bold text-slate-700 dark:text-slate-300">{u.role}</span>
@@ -163,7 +163,7 @@ const UserManagement: React.FC = () => {
                     required
                     type="text" 
                     placeholder="Enter full name"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
                     value={formData.name}
                     onChange={e => setFormData({...formData, name: e.target.value})}
                   />
@@ -175,7 +175,7 @@ const UserManagement: React.FC = () => {
                     required
                     type="email" 
                     placeholder="user@example.com"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
                     value={formData.email}
                     onChange={e => setFormData({...formData, email: e.target.value})}
                   />
@@ -184,7 +184,7 @@ const UserManagement: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Role</label>
                   <select 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 appearance-none"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200 appearance-none"
                     value={formData.role}
                     onChange={e => setFormData({...formData, role: e.target.value as any})}
                   >
@@ -200,7 +200,7 @@ const UserManagement: React.FC = () => {
                     required
                     type="password" 
                     placeholder="••••••••"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
+                    className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 outline-none transition-all font-medium text-slate-700 dark:text-slate-200"
                     value={formData.password}
                     onChange={e => setFormData({...formData, password: e.target.value})}
                   />
@@ -210,7 +210,7 @@ const UserManagement: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-command-dark-border text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-white/5 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-command-dark-border text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-white/5 transition-all"
                   >
                     Cancel
                   </button>

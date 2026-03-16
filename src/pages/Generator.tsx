@@ -83,7 +83,7 @@ const Generator: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 bg-command-light dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-8 space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Generator</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium">Generate secure, compliant passwords and assign them to infrastructure.</p>
@@ -97,7 +97,7 @@ const Generator: React.FC = () => {
                 onClick={() => setMode('random')}
                 className={cn(
                   "flex-1 py-5 font-bold text-sm flex items-center justify-center gap-3 transition-all",
-                  mode === 'random' ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue border-b-2 border-command-blue" : "text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5"
+                  mode === 'random' ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue border-b-2 border-command-blue" : "text-slate-400 dark:text-slate-500 hover:bg-white dark:hover:bg-white/5"
                 )}
               >
                 <Zap size={18} />
@@ -107,7 +107,7 @@ const Generator: React.FC = () => {
                 onClick={() => setMode('structured')}
                 className={cn(
                   "flex-1 py-5 font-bold text-sm flex items-center justify-center gap-3 transition-all",
-                  mode === 'structured' ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue border-b-2 border-command-blue" : "text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5"
+                  mode === 'structured' ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue border-b-2 border-command-blue" : "text-slate-400 dark:text-slate-500 hover:bg-white dark:hover:bg-white/5"
                 )}
               >
                 <Layout size={18} />
@@ -116,7 +116,7 @@ const Generator: React.FC = () => {
             </div>
 
             <div className="p-10 space-y-10">
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border flex flex-col items-center gap-6">
+              <div className="bg-white dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border flex flex-col items-center gap-6">
                 <div className="w-full text-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3 block">Generated Password</span>
                   <div className="text-4xl font-mono font-bold tracking-widest break-all min-h-[48px] text-slate-900 dark:text-white">
@@ -135,7 +135,7 @@ const Generator: React.FC = () => {
                   <button 
                     disabled={!password}
                     onClick={copyToClipboard}
-                    className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-command-dark-border hover:bg-slate-50 dark:hover:bg-white/5 px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-slate-700 dark:text-slate-300"
+                    className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-command-dark-border hover:bg-white dark:hover:bg-white/5 px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-slate-700 dark:text-slate-300"
                   >
                     {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                     {copied ? 'Copied!' : 'Copy'}
@@ -152,7 +152,7 @@ const Generator: React.FC = () => {
                         Security Settings
                       </h4>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50/50 dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-white dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Symbols</span>
                           <input 
                             type="checkbox" 
@@ -161,7 +161,7 @@ const Generator: React.FC = () => {
                             onChange={e => setIncludeSymbols(e.target.checked)}
                           />
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50/50 dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-white dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Numbers</span>
                           <input 
                             type="checkbox" 
@@ -198,7 +198,7 @@ const Generator: React.FC = () => {
                       <input 
                         type="text" 
                         placeholder="e.g. DC, NY, BASE"
-                        className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all uppercase font-bold text-sm text-slate-700 dark:text-slate-200"
+                        className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all uppercase font-bold text-sm text-slate-700 dark:text-slate-200"
                         value={location}
                         onChange={e => setLocation(e.target.value)}
                       />
@@ -209,7 +209,7 @@ const Generator: React.FC = () => {
                       <input 
                         type="text" 
                         placeholder="e.g. ADMIN, WIFI, DB"
-                        className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all uppercase font-bold text-sm text-slate-700 dark:text-slate-200"
+                        className="w-full p-4 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all uppercase font-bold text-sm text-slate-700 dark:text-slate-200"
                         value={role}
                         onChange={e => setRole(e.target.value)}
                       />
@@ -236,7 +236,7 @@ const Generator: React.FC = () => {
                 <div className="relative group">
                   <Server className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-command-blue transition-colors" size={16} />
                   <select 
-                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200 appearance-none"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200 appearance-none"
                     value={selectedDevice}
                     onChange={e => setSelectedDevice(e.target.value)}
                   >
@@ -253,7 +253,7 @@ const Generator: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="e.g. AWS Root, Admin Panel"
-                  className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200"
+                  className="w-full px-5 py-3.5 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200"
                   value={serviceName}
                   onChange={e => setServiceName(e.target.value)}
                 />
@@ -263,7 +263,7 @@ const Generator: React.FC = () => {
                 <label className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] ml-1">Username</label>
                 <input 
                   type="text" 
-                  className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200"
+                  className="w-full px-5 py-3.5 bg-white dark:bg-slate-900/50 rounded-2xl border border-transparent outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-bold text-slate-700 dark:text-slate-200"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                 />
