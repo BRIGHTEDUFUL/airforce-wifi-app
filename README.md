@@ -1,16 +1,10 @@
-# Air Force Key Manager
+# GAF HQ WiFi Management System
 
-Internal credential management system.
+Internal credential management system for Ghana Air Force HQ.
 
-## Local Development
+---
 
-```bash
-npm install
-npm run dev
-# → http://localhost:3000
-```
-
-## Default Credentials
+## Default Login Credentials
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -20,9 +14,9 @@ npm run dev
 
 ---
 
-## Deploy on Ubuntu (Docker)
+## Deploy on Fresh Ubuntu Server (Docker)
 
-### 1. Install Docker & Docker Compose
+### Step 1 — Install Docker
 
 ```bash
 sudo apt-get update
@@ -37,45 +31,94 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 
-### 2. Clone and run
+Verify:
 
 ```bash
-git clone <your-repo-url> airforce-wifi-app
+docker --version
+docker compose version
+```
+
+---
+
+### Step 2 — Install Git and Clone the Repo
+
+```bash
+sudo apt-get install -y git
+git clone https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
 cd airforce-wifi-app
+```
+
+---
+
+### Step 3 — Build and Start
+
+```bash
 docker compose up -d --build
 ```
 
-That's it. No `.env` file needed — a strong `JWT_SECRET` is auto-generated on first start and persisted in the Docker volume so tokens stay valid across restarts.
+No `.env` file needed. A strong JWT secret is auto-generated on first boot and saved to the Docker volume so it persists across restarts.
 
-App is now running at `http://<your-server-ip>:3000`
+---
 
-### Useful commands
+### Step 4 — Verify
 
 ```bash
-# View logs
+docker compose ps
+docker compose logs -f
+```
+
+Expected output:
+
+```
+Generated JWT_SECRET and saved to /app/data/.secret
+Seeded user: admin@airforce.mil / adminpassword [Administrator]
+Seeded user: operator@airforce.mil / operatorpass [Operator]
+Seeded user: viewer@airforce.mil / viewerpass [Viewer]
+Air Force Key Manager running at http://localhost:3000
+```
+
+App is live at: `http://<your-server-ip>:3000`
+
+---
+
+### Useful Commands
+
+```bash
+# View live logs
 docker compose logs -f
 
-# Stop
+# Stop the app
 docker compose down
 
-# Rebuild after code changes
+# Restart
+docker compose restart
+
+# Pull latest code and rebuild
+git pull
 docker compose up -d --build
 
-# The SQLite database persists in a Docker volume (survives container restarts)
-docker volume ls   # → lists db_data volume
+# List volumes (DB and secret persist here)
+docker volume ls
+docker volume inspect airforce-wifi-app_db_data
 ```
 
-### Optional: Run behind Nginx (recommended for production)
+> `docker compose down` does NOT delete data. Use `docker compose down -v` only if you want to wipe the database.
+
+---
+
+### Optional — Nginx Reverse Proxy (Port 80)
 
 ```bash
 sudo apt-get install -y nginx
+sudo nano /etc/nginx/sites-available/airforce
 ```
 
-`/etc/nginx/sites-available/airforce`:
+Paste the following (replace `your-server-ip-or-domain`):
+
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name your-server-ip-or-domain;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -88,7 +131,21 @@ server {
 }
 ```
 
+Enable and reload:
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/airforce /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
+```
+
+App is now accessible on port 80 with no port number in the URL.
+
+---
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+# → http://localhost:3000
 ```
