@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  LayoutDashboard, 
-  Shield, 
-  Wifi, 
-  Key, 
-  FileText, 
-  History, 
-  BarChart3, 
-  Zap, 
-  Users, 
-  LogOut, 
-  ChevronLeft, 
-  ChevronRight,
-  Moon,
-  Sun,
-  Mail,
-  Menu,
-  X
+  LayoutDashboard, Shield, Wifi, Key, FileText, History, BarChart3, 
+  Zap, Users, LogOut, ChevronLeft, ChevronRight, Moon, Sun, Monitor,
+  Mail, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 import { usePermissions } from '../hooks/usePermissions';
 import { cn } from '../lib/utils';
 import { APP_CREST_URL, APP_NAME } from '../constants';
@@ -26,14 +13,13 @@ import { APP_CREST_URL, APP_NAME } from '../constants';
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  darkMode: boolean;
-  setDarkMode: (val: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, setDarkMode }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { theme, isDark, setTheme } = useTheme();
   const { isAdmin, isOperator, canManageUsers, canViewAudit } = usePermissions();
 
   const roleBadge = isAdmin
@@ -64,10 +50,23 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
     setMobileOpen(false);
   };
 
+  // Three-way theme toggle: light → system → dark → light
+  const cycleTheme = () => {
+    if (theme === 'light') setTheme('system');
+    else if (theme === 'system') setTheme('dark');
+    else setTheme('light');
+  };
+
+  const themeIcon = theme === 'dark' ? <Moon size={18} className="group-hover:-rotate-12 transition-transform duration-700" />
+    : theme === 'light' ? <Sun size={18} className="group-hover:rotate-90 transition-transform duration-700" />
+    : <Monitor size={18} className="group-hover:scale-110 transition-transform duration-300" />;
+
+  const themeLabel = theme === 'dark' ? 'Dark Mode' : theme === 'light' ? 'Light Mode' : 'System Theme';
+
   const sidebarContent = (isMobile = false) => (
     <div className={cn(
-      "flex flex-col h-full transition-all duration-300 border-r relative z-20 shadow-2xl",
-      darkMode
+      "flex flex-col h-full transition-all duration-[250ms] border-r relative z-20 shadow-2xl",
+      isDark
         ? "bg-command-dark-card border-command-dark-border text-slate-300"
         : "bg-white border-slate-200 text-slate-600",
       !isMobile && (collapsed ? "w-20" : "w-64"),
@@ -75,8 +74,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
     )}>
       {/* Header */}
       <div className={cn(
-        "p-6 flex flex-col items-center gap-4 border-b transition-colors",
-        darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
+        "p-6 flex flex-col items-center gap-4 border-b transition-colors duration-[250ms]",
+        isDark ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
         <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-900 p-2 border border-white/10 shadow-inner group cursor-pointer">
           <div className="absolute inset-0 bg-command-blue/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -89,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         </div>
         {(!collapsed || isMobile) && (
           <div className="text-center animate-in fade-in slide-in-from-top-2 duration-500">
-            <h2 className={cn("text-sm font-bold tracking-tight", darkMode ? "text-white" : "text-slate-900")}>{APP_NAME} Management</h2>
+            <h2 className={cn("text-sm font-bold tracking-tight", isDark ? "text-white" : "text-slate-900")}>{APP_NAME} Management</h2>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghana Air Force HQ</p>
           </div>
         )}
@@ -113,13 +112,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
                 "flex items-center gap-3 w-full p-3 rounded-xl transition-all group relative overflow-hidden",
                 activeTab === item.id
                   ? "bg-command-blue text-white shadow-lg shadow-blue-600/30"
-                  : cn("hover:bg-slate-50 text-slate-500 hover:text-slate-900", darkMode && "hover:bg-white/5 text-slate-400 hover:text-slate-200")
+                  : cn("hover:bg-slate-50 text-slate-500 hover:text-slate-900", isDark && "hover:bg-white/5 text-slate-400 hover:text-slate-200")
               )}
             >
               {activeTab === item.id && (
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
               )}
-              <item.icon size={20} className={cn("relative z-10 transition-transform group-hover:scale-110", activeTab === item.id ? "text-white" : darkMode ? "text-slate-400 group-hover:text-slate-200" : "text-slate-400 group-hover:text-slate-700")} />
+              <item.icon size={20} className={cn(
+                "relative z-10 transition-transform group-hover:scale-110",
+                activeTab === item.id ? "text-white" : isDark ? "text-slate-400 group-hover:text-slate-200" : "text-slate-400 group-hover:text-slate-700"
+              )} />
               {(!collapsed || isMobile) && <span className="font-bold text-sm relative z-10 tracking-tight">{item.label}</span>}
               {activeTab === item.id && (!collapsed || isMobile) && (
                 <div className="ml-auto relative z-10">
@@ -134,7 +136,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
       {/* Footer */}
       <div className={cn(
         "p-4 space-y-3 border-t transition-colors",
-        darkMode ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
+        isDark ? "border-command-dark-border bg-black/20" : "border-slate-100 bg-white"
       )}>
         {(!collapsed || isMobile) && (
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">System Controls</p>
@@ -143,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         {(!collapsed || isMobile) && (
           <div className={cn(
             "rounded-2xl p-3 border mb-4 group transition-all cursor-pointer relative overflow-hidden",
-            darkMode ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-white border-slate-100 hover:bg-slate-50"
+            isDark ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-white border-slate-100 hover:bg-slate-50"
           )}>
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="flex items-center gap-3 relative z-10">
@@ -151,7 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className={cn("text-xs font-bold truncate", darkMode ? "text-white" : "text-slate-900")}>{user?.email}</span>
+                <span className={cn("text-xs font-bold truncate", isDark ? "text-white" : "text-slate-900")}>{user?.email}</span>
                 <div className="flex items-center gap-1 mt-0.5">
                   <div className={cn("px-1.5 py-0.5 rounded border text-[8px] font-black uppercase tracking-tighter", roleBadge.cls)}>
                     {roleBadge.label}
@@ -163,16 +165,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
         )}
 
         <div className="space-y-1">
+          {/* Three-way theme toggle */}
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={cycleTheme}
             className={cn(
               "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
-              darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
+              isDark ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
               (collapsed && !isMobile) && "justify-center"
             )}
           >
-            {darkMode ? <Sun size={18} className="group-hover:rotate-90 transition-transform duration-700" /> : <Moon size={18} className="group-hover:-rotate-12 transition-transform duration-700" />}
-            {(!collapsed || isMobile) && <span className="text-sm font-bold tracking-tight">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
+            {themeIcon}
+            {(!collapsed || isMobile) && <span className="text-sm font-bold tracking-tight">{themeLabel}</span>}
           </button>
 
           {!isMobile && (
@@ -180,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
               onClick={() => setCollapsed(!collapsed)}
               className={cn(
                 "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
-                darkMode ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
+                isDark ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
                 collapsed && "justify-center"
               )}
             >
@@ -209,17 +212,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, darkMode, se
       {/* Mobile top bar */}
       <div className={cn(
         "md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 border-b shadow-sm",
-        darkMode ? "bg-command-dark-card border-command-dark-border" : "bg-white border-slate-200"
+        isDark ? "bg-command-dark-card border-command-dark-border" : "bg-white border-slate-200"
       )}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-blue-400 to-blue-900 p-1">
             <img src={APP_CREST_URL} alt="Crest" className="w-full h-full object-contain" />
           </div>
-          <span className={cn("text-sm font-bold tracking-tight", darkMode ? "text-white" : "text-slate-900")}>{APP_NAME}</span>
+          <span className={cn("text-sm font-bold tracking-tight", isDark ? "text-white" : "text-slate-900")}>{APP_NAME}</span>
         </div>
         <button
           onClick={() => setMobileOpen(true)}
-          className={cn("p-2 rounded-xl transition-all", darkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")}
+          className={cn("p-2 rounded-xl transition-all", isDark ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")}
         >
           <Menu size={22} />
         </button>

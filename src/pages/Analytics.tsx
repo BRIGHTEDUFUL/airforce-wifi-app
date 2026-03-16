@@ -5,14 +5,12 @@ import {
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
 } from 'recharts';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 
-interface AnalyticsProps {
-  darkMode?: boolean;
-}
-
-const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
+const Analytics: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const { token } = useAuth();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     fetch('/api/stats', {
@@ -25,11 +23,11 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
   if (!stats) return <div className="p-8 dark:text-white">Loading analytics...</div>;
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
-  const chartTextColor = darkMode ? '#94a3b8' : '#64748b';
-  const chartGridColor = darkMode ? '#1e293b' : '#e2e8f0';
-  const chartTooltipBg = darkMode ? '#0f172a' : '#ffffff';
-  const chartTooltipBorder = darkMode ? '#1e293b' : '#f1f5f9';
-  const chartTooltipLabel = darkMode ? '#f8fafc' : '#0f172a';
+  const chartTextColor = isDark ? '#94a3b8' : '#64748b';
+  const chartGridColor = isDark ? '#1e293b' : '#e2e8f0';
+  const chartTooltipBg = isDark ? '#0f172a' : '#ffffff';
+  const chartTooltipBorder = isDark ? '#1e293b' : '#f1f5f9';
+  const chartTooltipLabel = isDark ? '#f8fafc' : '#0f172a';
 
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
@@ -102,7 +100,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ darkMode }) => {
                   tick={{fontSize: 11, fill: chartTextColor, fontWeight: 600}} 
                 />
                 <Tooltip 
-                  cursor={{fill: darkMode ? '#ffffff05' : '#f8fafc'}}
+                  cursor={{fill: isDark ? '#ffffff05' : '#f8fafc'}}
                   contentStyle={{ backgroundColor: chartTooltipBg, border: `1px solid ${chartTooltipBorder}`, borderRadius: '1rem', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="value" fill="#10b981" radius={[0, 8, 8, 0]} barSize={24} />

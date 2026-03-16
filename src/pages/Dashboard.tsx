@@ -6,8 +6,6 @@ import {
   AlertTriangle, 
   Clock, 
   RefreshCw, 
-  Moon, 
-  Sun,
   Fingerprint,
   Activity,
   Plus,
@@ -19,15 +17,15 @@ import {
   Mail
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 import { cn } from '../lib/utils';
 
 interface DashboardProps {
-  setActiveTab: (tab: string) => void;
-  darkMode: boolean;
-  setDarkMode: (val: boolean) => void;
+  setActiveTab?: (tab: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMode }) => {
+const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
+  const { isDark, theme, setTheme } = useTheme();
   const [stats, setStats] = useState<any>(null);
   const { token, user } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -85,12 +83,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, darkMode, setDarkMo
             <RefreshCw size={16} className={cn(isRefreshing && "animate-spin")} />
             {isRefreshing ? 'Refreshing...' : 'Refresh'}
           </button>
-          <button 
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2.5 bg-command-blue text-white rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-600 transition-all"
-          >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+
         </div>
       </header>
 

@@ -6,6 +6,16 @@
     <title>GAF HQ WiFi Management System</title>
     <meta name="description" content="Ghana Air Force HQ — Secure WiFi & Credential Management Portal" />
     <meta name="robots" content="noindex, nofollow" />
+    <!-- Prevent flash of wrong theme on load -->
+    <script>
+      (function() {
+        var saved = localStorage.getItem('afkm_theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark) || saved === 'system' && prefersDark) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
