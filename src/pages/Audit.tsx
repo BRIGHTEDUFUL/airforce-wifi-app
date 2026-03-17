@@ -6,6 +6,7 @@ import { cn, formatDate } from '../lib/utils';
 const Audit: React.FC = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
+  const [moduleFilter, setModuleFilter] = useState('All');
   const { token } = useAuth();
 
   useEffect(() => {
@@ -16,12 +17,17 @@ const Audit: React.FC = () => {
       .then(data => setLogs(data));
   }, [token]);
 
-  const filteredLogs = logs.filter(log => 
-    log.user_name.toLowerCase().includes(search.toLowerCase()) ||
-    log.action.toLowerCase().includes(search.toLowerCase()) ||
-    log.module.toLowerCase().includes(search.toLowerCase()) ||
-    log.details?.toLowerCase().includes(search.toLowerCase())
-  );
+  const modules = ['All', ...Array.from(new Set(logs.map(l => l.module)))];
+
+  const filteredLogs = logs.filter(log => {
+    const matchSearch =
+      log.user_name.toLowerCase().includes(search.toLowerCase()) ||
+      log.action.toLowerCase().includes(search.toLowerCase()) ||
+      log.module.toLowerCase().includes(search.toLowerCase()) ||
+      log.details?.toLowerCase().includes(search.toLowerCase());
+    const matchModule = moduleFilter === 'All' || log.module === moduleFilter;
+    return matchSearch && matchModule;
+  });
 
   const handleExportCSV = () => {
     const headers = ['Timestamp', 'User', 'Action', 'Module', 'Details'];
@@ -67,10 +73,16 @@ const Audit: React.FC = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="px-6 py-3 bg-surface-2 border border-theme rounded-2xl flex items-center gap-2 text-sm font-bold text-theme-2 hover:bg-surface transition-all">
-            <Filter size={16} />
-            All Modules
-          </button>
+          <div className="relative">
+            <Filter size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-3 pointer-events-none" />
+            <select
+              value={moduleFilter}
+              onChange={e => setModuleFilter(e.target.value)}
+              className="pl-10 pr-6 py-3 bg-surface-2 border border-theme rounded-2xl text-sm font-bold text-theme-2 outline-none focus:border-command-blue/20 transition-all appearance-none cursor-pointer"
+            >
+              {modules.map(m => <option key={m}>{m}</option>)}
+            </select>
+          </div>
         </div>
 
         <div className="overflow-x-auto">

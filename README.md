@@ -1,151 +1,152 @@
 # GAF HQ WiFi Management System
 
-Internal credential management system for Ghana Air Force HQ.
+Internal credential and network management portal for Ghana Air Force Headquarters.
+
+## Stack
+
+- Frontend: React 19 + TypeScript + Tailwind CSS v4
+- Backend: Express.js + SQLite (better-sqlite3)
+- Auth: JWT (8h expiry), bcrypt password hashing
+- Vault: AES-256-CBC encrypted passwords
+
+## Default Login
+
+```
+Email:    admin@airforce.mil
+Password: Admin@GAF2026!
+```
+
+**Change this password immediately after first login.**
 
 ---
 
-## Default Login Credentials
+## Option A — Bare Node + nginx (Ubuntu)
 
-| Role | Email | Password |
-|------|-------|----------|
-| Administrator | `admin@airforce.mil` | `adminpassword` |
-| Operator | `operator@airforce.mil` | `operatorpass` |
-| Viewer | `viewer@airforce.mil` | `viewerpass` |
-
----
-
-## Deploy on Fresh Ubuntu Server (Docker)
-
-### Step 1 — Install Docker
+### 1. Install dependencies
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs nginx
+sudo npm install -g pm2
 ```
 
-Verify:
+### 2. Clone and build
 
 ```bash
-docker --version
-docker compose version
+cd /var/www
+sudo git clone https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
+sudo chown -R $USER:$USER /var/www/airforce-wifi-app
+cd /var/www/airforce-wifi-app
+npm install
+npm run build
+mkdir -p data
 ```
 
----
-
-### Step 2 — Install Git and Clone the Repo
+### 3. Start with PM2
 
 ```bash
-sudo apt-get install -y git
-git clone https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
-cd airforce-wifi-app
+NODE_ENV=production pm2 start "npx tsx server.ts" --name gaf-wifi
+pm2 save
+pm2 startup   # run the printed command to enable auto-start on reboot
 ```
 
----
-
-### Step 3 — Build and Start
+### 4. Configure nginx
 
 ```bash
-docker compose up -d --build
+sudo nano /etc/nginx/sites-available/gaf-wifi
 ```
-
-No `.env` file needed. A strong JWT secret is auto-generated on first boot and saved to the Docker volume so it persists across restarts.
-
----
-
-### Step 4 — Verify
-
-```bash
-docker compose ps
-docker compose logs -f
-```
-
-Expected output:
-
-```
-Generated JWT_SECRET and saved to /app/data/.secret
-Seeded user: admin@airforce.mil / adminpassword [Administrator]
-Seeded user: operator@airforce.mil / operatorpass [Operator]
-Seeded user: viewer@airforce.mil / viewerpass [Viewer]
-Air Force Key Manager running at http://localhost:3000
-```
-
-App is live at: `http://<your-server-ip>:3000`
-
----
-
-### Useful Commands
-
-```bash
-# View live logs
-docker compose logs -f
-
-# Stop the app
-docker compose down
-
-# Restart
-docker compose restart
-
-# Pull latest code and rebuild
-git pull
-docker compose up -d --build
-
-# List volumes (DB and secret persist here)
-docker volume ls
-docker volume inspect airforce-wifi-app_db_data
-```
-
-> `docker compose down` does NOT delete data. Use `docker compose down -v` only if you want to wipe the database.
-
----
-
-### Optional — Nginx Reverse Proxy (Port 80)
-
-```bash
-sudo apt-get install -y nginx
-sudo nano /etc/nginx/sites-available/airforce
-```
-
-Paste the following (replace `your-server-ip-or-domain`):
 
 ```nginx
 server {
     listen 80;
-    server_name your-server-ip-or-domain;
+    server_name _;
+    client_max_body_size 10M;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass         http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_cache_bypass $http_upgrade;
     }
 }
 ```
 
-Enable and reload:
-
 ```bash
-sudo ln -s /etc/nginx/sites-available/airforce /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/gaf-wifi /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-App is now accessible on port 80 with no port number in the URL.
+### 5. Open firewall
+
+```bash
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw enable
+```
+
+### Update
+
+```bash
+cd /var/www/airforce-wifi-app
+git pull origin main
+npm install
+npm run build
+pm2 restart gaf-wifi
+```
 
 ---
 
-## Local Development
+## Option B — Docker + nginx
+
+### Requirements
+
+- Docker + Docker Compose installed on Ubuntu
+
+### Deploy
 
 ```bash
-npm install
-npm run dev
-# → http://localhost:3000
+git clone https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
+cd airforce-wifi-app
+docker compose up -d --build
 ```
+
+### Update
+
+```bash
+git pull origin main
+docker compose up -d --build
+```
+
+### Open firewall
+
+```bash
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw enable
+```
+
+---
+
+## Data Persistence
+
+Both deployment options auto-create on first boot:
+
+- `data/database.db` — SQLite database
+- `data/.secret` — JWT signing secret (persists tokens across restarts)
+
+Neither file is committed to git. Do not delete them in production.
+
+---
+
+## Roles
+
+| Role          | Permissions                                      |
+|---------------|--------------------------------------------------|
+| Administrator | Full access — users, delete, audit logs          |
+| Operator      | Read + write, no delete, no user management      |
+| Viewer        | Read only, passwords hidden                      |
