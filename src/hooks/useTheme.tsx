@@ -9,28 +9,31 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'system',
+  theme: 'light',
   isDark: false,
   setTheme: () => {},
 });
 
+function applyTheme(isDark: boolean) {
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('afkm_theme') as ThemeMode | null;
-    // migrate old boolean key
-    if (!saved) {
-      const oldDark = localStorage.getItem('afkm_dark');
-      if (oldDark === 'true') return 'dark';
-      return 'light'; // default to light
-    }
-    return saved;
+    if (saved === 'dark' || saved === 'light' || saved === 'system') return saved;
+    // No saved value — default to light regardless of OS
+    return 'light';
   });
 
   const [systemDark, setSystemDark] = useState(
     () => window.matchMedia('(prefers-color-scheme: dark)').matches
   );
 
-  // Listen for OS preference changes
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
@@ -38,29 +41,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  // light = always light, dark = always dark, system = follow OS
   const isDark = theme === 'dark' || (theme === 'system' && systemDark);
 
-  // Apply to <html> element
   useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    applyTheme(isDark);
   }, [isDark]);
 
   const setTheme = (mode: ThemeMode) => {
+    const newIsDark = mode === 'dark' || (mode === 'system' && systemDark);
+    // Apply immediately — don't wait for re-render
+    applyTheme(newIsDark);
     setThemeState(mode);
     localStorage.setItem('afkm_theme', mode);
     localStorage.removeItem('afkm_dark');
-    // Apply immediately to avoid any delay
-    const newIsDark = mode === 'dark' || (mode === 'system' && systemDark);
-    if (newIsDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   return (
