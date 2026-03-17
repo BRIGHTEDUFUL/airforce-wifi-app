@@ -141,7 +141,7 @@ const Notes: React.FC = () => {
                   {note.is_pinned === 1 && <Pin size={16} className="text-command-blue fill-command-blue" />}
                   <h3 className="font-bold text-xl text-theme leading-tight">{note.title}</h3>
                 </div>
-                <span className="text-[10px] font-black px-3 py-1 bg-slate-100 /50 rounded-full text-theme-3 uppercase tracking-widest border border-theme">
+                <span className="text-[10px] font-black px-3 py-1 bg-surface-2 rounded-full text-theme-3 uppercase tracking-widest border border-theme">
                   {note.category}
                 </span>
               </div>
@@ -153,21 +153,21 @@ const Notes: React.FC = () => {
                 <div className="flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                   {canEdit && (
                     <button onClick={() => togglePin(note)}
-                      className={cn("p-2 hover:bg-white  rounded-xl transition-all", note.is_pinned === 1 ? "text-command-blue" : "text-theme-3")}
+                      className={cn("p-2 hover:bg-surface-2 rounded-xl transition-all", note.is_pinned === 1 ? "text-command-blue" : "text-theme-3")}
                       title={note.is_pinned === 1 ? "Unpin" : "Pin"}>
                       <Pin size={16} className={note.is_pinned === 1 ? "fill-command-blue" : ""} />
                     </button>
                   )}
                   {canEdit && (
                     <button onClick={() => handleOpenModal(note)}
-                      className="p-2 hover:bg-white  rounded-xl text-theme-3 hover:text-command-blue transition-all"
+                      className="p-2 hover:bg-surface-2 rounded-xl text-theme-3 hover:text-command-blue transition-all"
                       title="Edit">
                       <Edit2 size={16} />
                     </button>
                   )}
                   {canEdit && (
                     <button onClick={() => toggleArchive(note)}
-                      className="p-2 hover:bg-white  rounded-xl text-theme-3 hover:text-amber-600 transition-all"
+                      className="p-2 hover:bg-surface-2 rounded-xl text-theme-3 hover:text-amber-600 transition-all"
                       title="Archive">
                       <Archive size={16} />
                     </button>
@@ -257,7 +257,7 @@ const Notes: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-theme text-theme-2 font-bold hover:bg-white  transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-theme text-theme-2 font-bold hover:bg-surface-2 transition-all"
                   >
                     Cancel
                   </button>

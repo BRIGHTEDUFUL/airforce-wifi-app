@@ -5,9 +5,9 @@ import { usePermissions } from '../hooks/usePermissions';
 import { cn, formatDate } from '../lib/utils';
 
 const ROLE_CONFIG = {
-  Administrator: { icon: ShieldAlert, color: 'text-rose-500', bg: 'bg-rose-50 ', border: 'border-rose-200 ', label: 'Admin' },
-  Operator:      { icon: ShieldCheck, color: 'text-blue-500', bg: 'bg-blue-50 ', border: 'border-blue-200 ', label: 'Operator' },
-  Viewer:        { icon: ShieldQuestion, color: 'text-theme-3', bg: 'bg-slate-100 ', border: 'border-slate-200 ', label: 'Viewer' },
+  Administrator: { icon: ShieldAlert, color: 'text-rose-500', bg: 'bg-rose-500/10', border: 'border-rose-500/20', label: 'Admin' },
+  Operator:      { icon: ShieldCheck, color: 'text-blue-500', bg: 'bg-blue-500/10', border: 'border-blue-500/20', label: 'Operator' },
+  Viewer:        { icon: ShieldQuestion, color: 'text-theme-3', bg: 'bg-surface-2', border: 'border-theme', label: 'Viewer' },
 };
 
 const UserManagement: React.FC = () => {
@@ -168,10 +168,10 @@ const UserManagement: React.FC = () => {
                             <option>Operator</option>
                             <option>Viewer</option>
                           </select>
-                          <button onClick={() => handleRoleUpdate(u.id)} className="p-2 bg-emerald-50  text-emerald-600 rounded-xl hover:bg-emerald-100 transition-all">
+                          <button onClick={() => handleRoleUpdate(u.id)} className="p-2 bg-emerald-500/10 text-emerald-600 rounded-xl hover:bg-emerald-500/20 transition-all">
                             <Check size={16} />
                           </button>
-                          <button onClick={() => setEditingRoleId(null)} className="p-2 bg-slate-100  text-slate-500 rounded-xl hover:bg-slate-200 transition-all">
+                          <button onClick={() => setEditingRoleId(null)} className="p-2 bg-surface-2 text-theme-2 rounded-xl hover:bg-surface transition-all">
                             <X size={16} />
                           </button>
                         </div>
@@ -184,7 +184,7 @@ const UserManagement: React.FC = () => {
                           {canManageUsers && u.id !== currentUser?.id && (
                             <button
                               onClick={() => { setEditingRoleId(u.id); setEditingRole(u.role); }}
-                              className="p-1.5 opacity-0 group-hover:opacity-100 hover:bg-slate-100  rounded-lg text-slate-400 hover:text-slate-600  transition-all"
+                              className="p-1.5 opacity-0 group-hover:opacity-100 hover:bg-surface-2 rounded-lg text-theme-3 hover:text-theme-2 transition-all"
                               title="Change role"
                             >
                               <Edit2 size={13} />
@@ -260,7 +260,7 @@ const UserManagement: React.FC = () => {
                 </div>
                 <div className="flex gap-4 pt-4">
                   <button type="button" onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-theme text-theme-2 font-bold hover:bg-slate-50  transition-all">
+                    className="flex-1 px-6 py-4 rounded-2xl border border-theme text-theme-2 font-bold hover:bg-surface-2 transition-all">
                     Cancel
                   </button>
                   <button type="submit"

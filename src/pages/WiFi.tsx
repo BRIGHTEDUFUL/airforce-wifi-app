@@ -100,7 +100,7 @@ const WiFi: React.FC = () => {
             <div className="p-5 md:p-8 flex-1 space-y-4 md:space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
-                  <div className="p-4 bg-emerald-50  text-emerald-600  rounded-2xl group-hover:scale-110 transition-transform">
+                  <div className="p-4 bg-emerald-500/10 text-emerald-600 rounded-2xl group-hover:scale-110 transition-transform">
                     <Wifi size={28} />
                   </div>
                   <div>
@@ -118,7 +118,7 @@ const WiFi: React.FC = () => {
                         setFormData({ ...net });
                         setIsModalOpen(true);
                       }}
-                      className="p-2 hover:bg-emerald-50  rounded-xl text-slate-400 hover:text-emerald-600  transition-colors"
+                      className="p-2 hover:bg-emerald-500/10 rounded-xl text-theme-3 hover:text-emerald-600 transition-colors"
                       title="Edit"
                     >
                       <Edit2 size={18} />
@@ -126,7 +126,7 @@ const WiFi: React.FC = () => {
                     {canDelete && (
                       <button 
                         onClick={() => handleDelete(net.id)}
-                        className="p-2 hover:bg-rose-50  rounded-xl text-slate-400 hover:text-rose-600  transition-colors"
+                        className="p-2 hover:bg-rose-500/10 rounded-xl text-theme-3 hover:text-rose-600 transition-colors"
                         title="Delete"
                       >
                         <Trash2 size={18} />
@@ -154,13 +154,13 @@ const WiFi: React.FC = () => {
                   <div className="flex gap-2">
                     <button 
                       onClick={() => togglePassword(net.id)}
-                      className="p-3 hover:bg-surface-2 rounded-xl text-slate-400 hover:text-slate-600  transition-all shadow-sm"
+                      className="p-3 hover:bg-surface-2 rounded-xl text-theme-3 hover:text-theme-2 transition-all shadow-sm"
                     >
                       {showPasswords[net.id] ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                     <button 
                       onClick={() => copyToClipboard(net.password, net.id)}
-                      className="p-3 hover:bg-surface-2 rounded-xl text-slate-400 hover:text-emerald-600  transition-all shadow-sm"
+                      className="p-3 hover:bg-surface-2 rounded-xl text-theme-3 hover:text-emerald-600 transition-all shadow-sm"
                     >
                       {copiedId === net.id ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} />}
                     </button>

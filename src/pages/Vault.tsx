@@ -157,7 +157,7 @@ const Vault: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   {item.device_name && (
-                    <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-50  text-blue-600  rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100 ">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-500/20">
                       <Server size={12} />
                       {item.device_name}
                     </div>
@@ -166,14 +166,14 @@ const Vault: React.FC = () => {
                     <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                       <button 
                         onClick={() => handleOpenModal(item)}
-                        className="p-2 hover:bg-amber-50  rounded-xl text-slate-400 hover:text-amber-600  transition-colors"
+                        className="p-2 hover:bg-amber-500/10 rounded-xl text-theme-3 hover:text-amber-600 transition-colors"
                         title="Edit"
                       >
                         <Edit2 size={18} />
                       </button>
                       <button 
                         onClick={() => handleDelete(item.id)}
-                        className="p-2 hover:bg-rose-50  rounded-xl text-slate-400 hover:text-rose-600  transition-colors"
+                        className="p-2 hover:bg-rose-500/10 rounded-xl text-theme-3 hover:text-rose-600 transition-colors"
                         title="Delete"
                       >
                         <Trash2 size={18} />
@@ -196,7 +196,7 @@ const Vault: React.FC = () => {
                     </span>
                     <button 
                       onClick={() => setShowPasswords(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
-                      className="p-2 hover:bg-surface-2 rounded-lg text-slate-400 hover:text-slate-600  transition-all"
+                      className="p-2 hover:bg-surface-2 rounded-lg text-theme-3 hover:text-theme-2 transition-all"
                     >
                       {showPasswords[item.id] ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -206,7 +206,7 @@ const Vault: React.FC = () => {
                         setCopiedId(item.id);
                         setTimeout(() => setCopiedId(null), 2000);
                       }}
-                      className="p-2 hover:bg-surface-2 rounded-lg text-slate-400 hover:text-amber-600  transition-all"
+                      className="p-2 hover:bg-surface-2 rounded-lg text-theme-3 hover:text-amber-600 transition-all"
                     >
                       {copiedId === item.id ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
                     </button>
@@ -242,7 +242,7 @@ const Vault: React.FC = () => {
                     required
                     type="text" 
                     placeholder="e.g. AWS Console, Internal DB"
-                    className="w-full p-4 bg-surface-2 rounded-2xl border border-slate-200  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme"
                     value={formData.service_name}
                     onChange={e => setFormData({...formData, service_name: e.target.value})}
                   />
@@ -254,7 +254,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-surface-2 rounded-2xl border border-slate-200  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme"
                       value={formData.username}
                       onChange={e => setFormData({...formData, username: e.target.value})}
                     />
@@ -264,7 +264,7 @@ const Vault: React.FC = () => {
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-theme tracking-widest"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-mono text-theme tracking-widest"
                       value={formData.password}
                       onChange={e => setFormData({...formData, password: e.target.value})}
                     />
@@ -275,7 +275,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Category</label>
                     <select 
-                      className="w-full p-4 bg-surface-2 rounded-2xl border border-slate-200  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme appearance-none"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme appearance-none"
                       value={formData.category}
                       onChange={e => setFormData({...formData, category: e.target.value})}
                     >
@@ -289,7 +289,7 @@ const Vault: React.FC = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Assign Device</label>
                     <select 
-                      className="w-full p-4 bg-surface-2 rounded-2xl border border-slate-200  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme appearance-none"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme appearance-none"
                       value={formData.device_id}
                       onChange={e => setFormData({...formData, device_id: e.target.value})}
                     >
@@ -304,7 +304,7 @@ const Vault: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-surface-2 rounded-2xl border border-slate-200  focus:border-amber-200  focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme min-h-[100px] resize-none"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-theme focus:border-amber-200 focus:ring-4 focus:ring-amber-500/5 outline-none transition-all font-medium text-theme min-h-[100px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>

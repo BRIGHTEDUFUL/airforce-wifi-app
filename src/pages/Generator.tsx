@@ -97,7 +97,7 @@ const Generator: React.FC = () => {
                 onClick={() => setMode('random')}
                 className={cn(
                   "flex-1 py-5 font-bold text-sm flex items-center justify-center gap-3 transition-all",
-                  mode === 'random' ? "bg-command-blue/5  text-command-blue border-b-2 border-command-blue" : "text-theme-3 hover:bg-white "
+                  mode === 'random' ? "bg-command-blue/5 text-command-blue border-b-2 border-command-blue" : "text-theme-3 hover:bg-surface-2"
                 )}
               >
                 <Zap size={18} />
@@ -107,7 +107,7 @@ const Generator: React.FC = () => {
                 onClick={() => setMode('structured')}
                 className={cn(
                   "flex-1 py-5 font-bold text-sm flex items-center justify-center gap-3 transition-all",
-                  mode === 'structured' ? "bg-command-blue/5  text-command-blue border-b-2 border-command-blue" : "text-theme-3 hover:bg-white "
+                  mode === 'structured' ? "bg-command-blue/5 text-command-blue border-b-2 border-command-blue" : "text-theme-3 hover:bg-surface-2"
                 )}
               >
                 <Layout size={18} />
@@ -135,7 +135,7 @@ const Generator: React.FC = () => {
                   <button 
                     disabled={!password}
                     onClick={copyToClipboard}
-                    className="bg-surface-2 border border-theme hover:bg-white  px-6 md:px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-theme"
+                    className="bg-surface-2 border border-theme hover:bg-surface px-6 md:px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-theme"
                   >
                     {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                     {copied ? 'Copied!' : 'Copy'}
@@ -223,7 +223,7 @@ const Generator: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
+          <div className="bg-surface p-5 md:p-8 rounded-[2.5rem] border border-theme shadow-sm">
             <h3 className="font-bold text-theme flex items-center gap-3 mb-8">
               <div className="p-2 bg-command-blue/10  rounded-xl">
                 <Save size={18} className="text-command-blue" />

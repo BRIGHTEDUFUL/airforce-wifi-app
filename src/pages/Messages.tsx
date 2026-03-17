@@ -94,7 +94,7 @@ const Messages: React.FC = () => {
     <div className="flex h-full bg-theme overflow-hidden animate-in fade-in duration-500">
 
       {/* ── Left: Folder Nav ── */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-theme bg-surface shrink-0">
+      <aside className="hidden lg:flex flex-col w-56 xl:w-64 border-r border-theme bg-surface shrink-0">
         <div className="p-6">
           <button
             onClick={() => setShowCompose(true)}
@@ -113,8 +113,8 @@ const Messages: React.FC = () => {
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all",
                 activeFolder === f.id
-                  ? "bg-command-blue/5  text-command-blue"
-                  : "text-theme-2 hover:bg-slate-50  hover:text-slate-800 "
+                  ? "bg-command-blue/5 text-command-blue"
+                  : "text-theme-2 hover:bg-surface-2 hover:text-theme"
               )}
             >
               <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ const Messages: React.FC = () => {
                   "text-[10px] font-black px-2 py-0.5 rounded-full",
                   activeFolder === f.id
                     ? "bg-command-blue text-white"
-                    : "bg-slate-100  text-theme-2"
+                    : "bg-surface-2 text-theme-2"
                 )}>
                   {f.count}
                 </span>
@@ -211,8 +211,8 @@ const Messages: React.FC = () => {
               className={cn(
                 "w-full text-left px-5 py-4 transition-all group relative",
                 selectedId === msg.id
-                  ? "bg-command-blue/5 "
-                  : "hover:bg-slate-50 "
+                  ? "bg-command-blue/5"
+                  : "hover:bg-surface-2"
               )}
             >
               {msg.unread && (
@@ -281,16 +281,16 @@ const Messages: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-amber-400 hover:bg-amber-50  transition-all">
+                  <button className="p-2.5 rounded-xl text-theme-3 hover:text-amber-400 hover:bg-amber-500/10 transition-all">
                     <Star size={18} className={selected.starred ? "fill-amber-400 text-amber-400" : ""} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600  hover:bg-slate-100  transition-all">
+                  <button className="p-2.5 rounded-xl text-theme-3 hover:text-theme-2 hover:bg-surface-2 transition-all">
                     <Archive size={18} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50  transition-all">
+                  <button className="p-2.5 rounded-xl text-theme-3 hover:text-rose-500 hover:bg-rose-500/10 transition-all">
                     <Trash2 size={18} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600  hover:bg-slate-100  transition-all">
+                  <button className="p-2.5 rounded-xl text-theme-3 hover:text-theme-2 hover:bg-surface-2 transition-all">
                     <MoreHorizontal size={18} />
                   </button>
                 </div>
@@ -363,7 +363,7 @@ const Messages: React.FC = () => {
               <input placeholder="Subject" className="w-full px-4 py-3 bg-surface-2 border border-theme rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/30 transition-all" />
               <textarea placeholder="Write your message..." rows={6} className="w-full px-4 py-3 bg-surface-2 border border-theme rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/30 transition-all resize-none" />
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setShowCompose(false)} className="flex-1 py-3 rounded-xl border border-theme text-theme-2 font-bold text-sm hover:bg-slate-50  transition-all">
+                <button onClick={() => setShowCompose(false)} className="flex-1 py-3 rounded-xl border border-theme text-theme-2 font-bold text-sm hover:bg-surface-2 transition-all">
                   Cancel
                 </button>
                 <button className="flex-1 py-3 rounded-xl bg-command-blue hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-lg shadow-command-blue/20 flex items-center justify-center gap-2">

@@ -96,9 +96,9 @@ const Audit: React.FC = () => {
                   <td className="px-4 md:px-8 py-4 md:py-6">
                     <span className={cn(
                       "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                      log.action.includes('Delete') ? "bg-rose-50  text-rose-600  border border-rose-100 " :
-                      log.action.includes('Add') || log.action.includes('Create') ? "bg-emerald-50  text-emerald-600  border border-emerald-100 " :
-                      "bg-blue-50  text-blue-600  border border-blue-100 "
+                      log.action.includes('Delete') ? "bg-rose-500/10 text-rose-600 border border-rose-500/20" :
+                      log.action.includes('Add') || log.action.includes('Create') ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" :
+                      "bg-blue-500/10 text-blue-600 border border-blue-500/20"
                     )}>
                       {log.action}
                     </span>
