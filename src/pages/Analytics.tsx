@@ -212,28 +212,31 @@ const Analytics: React.FC = () => {
           <div className="space-y-3">
             <div className="flex justify-between text-sm mb-1">
               <span className="font-bold text-theme">Database Storage</span>
-              <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">1.2 MB / 100 MB</span>
+              <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">{stats.dbSizeMB} MB used</span>
             </div>
-            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
-              <div className="h-full bg-command-blue rounded-full w-[1.2%]"></div>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm mb-1">
-              <span className="font-bold text-theme">API Response Time</span>
-              <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest">45ms (Optimal)</span>
-            </div>
-            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 rounded-full w-[15%]"></div>
+            <div className="w-full h-2.5 bg-surface-2 rounded-full overflow-hidden">
+              <div className="h-full bg-command-blue rounded-full transition-all duration-700"
+                style={{ width: `${Math.min((stats.dbSizeMB / 100) * 100, 100)}%` }} />
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex justify-between text-sm mb-1">
-              <span className="font-bold text-theme">Encryption Load</span>
-              <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">Low</span>
+              <span className="font-bold text-theme">Total Audit Events</span>
+              <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest">{stats.recentLogs.length > 0 ? 'Active' : 'No events'}</span>
             </div>
-            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
-              <div className="h-full bg-amber-500 rounded-full w-[8%]"></div>
+            <div className="w-full h-2.5 bg-surface-2 rounded-full overflow-hidden">
+              <div className="h-full bg-emerald-500 rounded-full transition-all duration-700"
+                style={{ width: stats.recentLogs.length > 0 ? '100%' : '0%' }} />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="font-bold text-theme">Unread Alerts</span>
+              <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">{stats.alerts.length} pending</span>
+            </div>
+            <div className="w-full h-2.5 bg-surface-2 rounded-full overflow-hidden">
+              <div className="h-full bg-amber-500 rounded-full transition-all duration-700"
+                style={{ width: stats.alerts.length > 0 ? `${Math.min(stats.alerts.length * 20, 100)}%` : '0%' }} />
             </div>
           </div>
         </div>

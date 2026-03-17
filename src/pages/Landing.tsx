@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Shield, Lock, Zap, Wifi, Globe, Server, ChevronRight, Fingerprint, Activity } from 'lucide-react';
+import { Shield, Lock, ChevronRight, Fingerprint, Activity } from 'lucide-react';
 import { APP_CREST_URL, APP_FULL_NAME } from '../constants';
 
 interface LandingProps {
@@ -135,7 +135,9 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
         </div>
         <div className="text-center sm:text-right">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Terminal ID</p>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AF-DX-2026-03-15</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            AF-DX-{new Date().getFullYear()}-{String(new Date().getMonth() + 1).padStart(2,'0')}-{String(new Date().getDate()).padStart(2,'0')}
+          </p>
         </div>
       </div>
     </div>

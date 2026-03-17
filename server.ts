@@ -141,6 +141,14 @@ async function startServer() {
     const recentLogs = db.prepare('SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT 10').all();
     const alerts = db.prepare('SELECT * FROM messages WHERE is_read = 0 ORDER BY created_at DESC').all();
 
+    // Real DB file size
+    const dbPath = process.env.NODE_ENV === 'production'
+      ? '/app/data/database.db'
+      : path.join(__dirname, 'database.db');
+    let dbSizeBytes = 0;
+    try { dbSizeBytes = fs.statSync(dbPath).size; } catch {}
+    const dbSizeMB = (dbSizeBytes / (1024 * 1024)).toFixed(2);
+
     res.json({
       totalDevices: devicesCount.count,
       totalWifi: wifiCount.count,
@@ -151,7 +159,8 @@ async function startServer() {
       moduleActivity,
       dailyActivity,
       recentLogs,
-      alerts
+      alerts,
+      dbSizeMB: parseFloat(dbSizeMB),
     });
   });
 
