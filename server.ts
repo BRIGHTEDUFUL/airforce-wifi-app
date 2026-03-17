@@ -49,13 +49,19 @@ function encrypt(text: string) {
 }
 
 function decrypt(text: string) {
-  const textParts = text.split(':');
-  const iv = Buffer.from(textParts.shift()!, 'hex');
-  const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  return decrypted.toString();
+  try {
+    const textParts = text.split(':');
+    if (textParts.length < 2) return text; // not encrypted, return as-is
+    const iv = Buffer.from(textParts.shift()!, 'hex');
+    if (iv.length !== IV_LENGTH) return text; // invalid iv, return as-is
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+  } catch {
+    return text; // fallback: return raw value rather than crashing
+  }
 }
 
 async function startServer() {
