@@ -118,7 +118,7 @@ const Devices: React.FC = () => {
                   </div>
                 </div>
                 {canCreate && (
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                  <div className="flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                     <button 
                       onClick={() => {
                         setEditingDevice(device);
@@ -175,7 +175,7 @@ const Devices: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
           <div className="bg-surface rounded-[2.5rem] border border-theme w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
-            <div className="p-10 space-y-8">
+            <div className="p-6 md:p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-blue-500/10 text-blue-600 rounded-2xl">
                   <Plus size={24} />

@@ -111,7 +111,7 @@ const WiFi: React.FC = () => {
                   </div>
                 </div>
                 {canCreate && (
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                  <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                     <button 
                       onClick={() => {
                         setEditingNetwork(net);
@@ -147,7 +147,7 @@ const WiFi: React.FC = () => {
                 <div className="bg-surface-2 p-6 rounded-[1.5rem] border border-slate-100  flex items-center justify-between group/pass">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-1">Network Key</span>
-                    <span className="font-mono text-xl tracking-[0.15em] text-theme">
+                    <span className="font-mono text-base md:text-xl tracking-[0.1em] md:tracking-[0.15em] text-theme break-all">
                       {showPasswords[net.id] ? net.password : '••••••••••••'}
                     </span>
                   </div>
@@ -186,7 +186,7 @@ const WiFi: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
           <div className="bg-surface rounded-[2.5rem] border border-theme w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
-            <div className="p-10 space-y-8">
+            <div className="p-6 md:p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-emerald-500/10 text-emerald-600  rounded-2xl border border-theme">
                   <Wifi size={24} />

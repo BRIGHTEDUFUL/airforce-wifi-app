@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Shield, Wifi, Key, Users, Activity, PieChart as PieIcon, UserCheck } from 'lucide-react';
+import { BarChart3, Shield, Activity, UserCheck } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
@@ -162,7 +162,7 @@ const Analytics: React.FC = () => {
                   <span className="font-bold text-theme">{user.name}</span>
                   <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">{user.value} actions</span>
                 </div>
-                <div className="w-full h-2 bg-slate-100  rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-surface-2 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-indigo-500 rounded-full transition-all duration-1000" 
                     style={{ width: `${(user.value / stats.topUsers[0].value) * 100}%` }}
@@ -214,7 +214,7 @@ const Analytics: React.FC = () => {
               <span className="font-bold text-theme">Database Storage</span>
               <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">1.2 MB / 100 MB</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100  rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
               <div className="h-full bg-command-blue rounded-full w-[1.2%]"></div>
             </div>
           </div>
@@ -223,7 +223,7 @@ const Analytics: React.FC = () => {
               <span className="font-bold text-theme">API Response Time</span>
               <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest">45ms (Optimal)</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100  rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
               <div className="h-full bg-emerald-500 rounded-full w-[15%]"></div>
             </div>
           </div>
@@ -232,7 +232,7 @@ const Analytics: React.FC = () => {
               <span className="font-bold text-theme">Encryption Load</span>
               <span className="text-theme-3 font-black text-[10px] uppercase tracking-widest">Low</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100  rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-surface-2  rounded-full overflow-hidden">
               <div className="h-full bg-amber-500 rounded-full w-[8%]"></div>
             </div>
           </div>

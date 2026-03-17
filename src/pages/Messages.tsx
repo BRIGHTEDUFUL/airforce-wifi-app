@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Search, Trash2, Archive, Star, Clock, User, Shield, Send, Inbox, ChevronRight, AlertCircle, X, Reply, Forward, MoreHorizontal } from 'lucide-react';
+import { Mail, Search, Trash2, Archive, Star, Shield, Send, Inbox, ChevronLeft, AlertCircle, X, Reply, Forward, MoreHorizontal } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 const messages = [
@@ -78,6 +78,7 @@ const Messages: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(1);
   const [showCompose, setShowCompose] = useState(false);
+  const [mobileView, setMobileView] = useState<'list' | 'detail'>('list');
 
   const filtered = messages.filter(m => {
     if (activeFolder === 'starred') return m.starred;
@@ -146,7 +147,7 @@ const Messages: React.FC = () => {
       </aside>
 
       {/* ── Middle: Message List ── */}
-      <div className="flex flex-col w-full lg:w-80 xl:w-96 border-r border-theme shrink-0 bg-theme">
+      <div className={cn("flex flex-col w-full lg:w-80 xl:w-96 border-r border-theme shrink-0 bg-theme", mobileView === 'detail' && "hidden lg:flex")}>
         {/* Header */}
         <div className="px-5 pt-6 pb-4 border-b border-theme space-y-4">
           <div className="flex items-center justify-between">
@@ -206,7 +207,7 @@ const Messages: React.FC = () => {
           ) : filtered.map(msg => (
             <button
               key={msg.id}
-              onClick={() => setSelectedId(msg.id)}
+              onClick={() => { setSelectedId(msg.id); setMobileView('detail'); }}
               className={cn(
                 "w-full text-left px-5 py-4 transition-all group relative",
                 selectedId === msg.id
@@ -253,22 +254,30 @@ const Messages: React.FC = () => {
       </div>
 
       {/* ── Right: Message Detail ── */}
-      <div className="flex-1 flex flex-col min-w-0 bg-theme">
+      <div className={cn("flex-1 flex flex-col min-w-0 bg-theme", mobileView === 'list' && "hidden lg:flex")}>
         {selected ? (
           <>
             {/* Detail Header */}
-            <div className="px-8 py-6 bg-surface border-b border-theme">
+            <div className="px-5 md:px-8 py-6 bg-surface border-b border-theme">
               <div className="flex items-start justify-between gap-4 mb-6">
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-xl font-black text-theme mb-2 leading-tight">{selected.subject}</h2>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {selected.priority && (
-                      <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-500 bg-rose-50  px-3 py-1 rounded-full border border-rose-100 ">
-                        <AlertCircle size={11} />
-                        Priority
-                      </span>
-                    )}
-                    <span className="text-[10px] font-bold text-theme-3 uppercase tracking-widest">{selected.date} · {selected.time}</span>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <button
+                    onClick={() => setMobileView('list')}
+                    className="lg:hidden p-2 rounded-xl text-theme-2 hover:bg-surface-2 transition-all shrink-0"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-lg md:text-xl font-black text-theme mb-2 leading-tight">{selected.subject}</h2>
+                    <div className="flex flex-wrap items-center gap-3">
+                      {selected.priority && (
+                        <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-500 bg-rose-50  px-3 py-1 rounded-full border border-rose-100 ">
+                          <AlertCircle size={11} />
+                          Priority
+                        </span>
+                      )}
+                      <span className="text-[10px] font-bold text-theme-3 uppercase tracking-widest">{selected.date} · {selected.time}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -296,12 +305,11 @@ const Messages: React.FC = () => {
                   <p className="font-black text-theme text-sm">{selected.sender}</p>
                   <p className="text-[11px] text-theme-3 font-medium">system@airforce.mil · To: admin@airforce.mil</p>
                 </div>
-                <ChevronRight size={16} className="text-slate-300  shrink-0" />
               </div>
             </div>
 
             {/* Body */}
-            <div className="flex-1 overflow-y-auto p-8">
+            <div className="flex-1 overflow-y-auto p-5 md:p-8">
               <div className="max-w-2xl">
                 <div className="bg-surface rounded-3xl border border-theme p-8 shadow-sm">
                   <p className="text-sm text-theme leading-relaxed font-medium whitespace-pre-line">
@@ -312,7 +320,7 @@ const Messages: React.FC = () => {
             </div>
 
             {/* Reply bar */}
-            <div className="px-8 py-5 bg-surface border-t border-theme">
+            <div className="px-5 md:px-8 py-5 bg-surface border-t border-theme">
               <div className="flex items-center gap-3 max-w-2xl">
                 <div className="flex-1 flex items-center gap-3 px-5 py-3 bg-surface-2 border border-theme rounded-2xl cursor-text hover:border-command-blue/30 transition-all">
                   <Reply size={16} className="text-slate-400 shrink-0" />

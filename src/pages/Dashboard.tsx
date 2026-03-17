@@ -11,13 +11,11 @@ import {
   Plus,
   History,
   Lock,
-  ChevronRight,
   Monitor,
   Zap,
   Mail
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { useTheme } from '../hooks/useTheme';
 import { cn } from '../lib/utils';
 
 interface DashboardProps {
@@ -25,7 +23,6 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
-  const { isDark, theme, setTheme } = useTheme();
   const [stats, setStats] = useState<any>(null);
   const { token, user } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -151,7 +148,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
           { label: 'Expiring Soon', value: stats.alerts.filter((a: any) => a.title.includes('Expiry')).length, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10' },
           { label: 'Expired', value: 0, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-500/10' },
         ].map((card, i) => (
-          <div key={i} className="bg-surface p-8 rounded-[2rem] border border-theme shadow-sm space-y-6 hover:shadow-lg transition-all">
+          <div key={i} className="bg-surface p-6 md:p-8 rounded-[2rem] border border-theme shadow-sm space-y-6 hover:shadow-lg transition-all">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-black text-theme-3 uppercase tracking-[0.2em]">{card.label}</p>
               <div className={cn("p-3 rounded-2xl", card.bg, card.color)}>

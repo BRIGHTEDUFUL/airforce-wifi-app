@@ -87,7 +87,40 @@ const UserManagement: React.FC = () => {
       </div>
 
       <div className="bg-surface rounded-[2.5rem] border border-theme shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card list */}
+        <div className="md:hidden divide-y divide-theme">
+          {users.map((u) => {
+            const cfg = ROLE_CONFIG[u.role as keyof typeof ROLE_CONFIG] || ROLE_CONFIG.Viewer;
+            return (
+              <div key={u.id} className="p-5 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', cfg.bg)}>
+                    <User size={18} className={cfg.color} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-theme text-sm truncate">{u.name}</p>
+                    <p className="text-[11px] text-theme-3 truncate">{u.email}</p>
+                    <div className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border text-[10px] font-black uppercase tracking-widest mt-1', cfg.bg, cfg.border, cfg.color)}>
+                      <cfg.icon size={11} />
+                      {cfg.label}
+                    </div>
+                  </div>
+                </div>
+                {canManageUsers && (
+                  <button
+                    disabled={u.id === currentUser?.id}
+                    onClick={() => handleDelete(u.id)}
+                    className="p-2.5 hover:bg-rose-50 rounded-xl text-theme-3 hover:text-rose-500 transition-all disabled:opacity-20 disabled:cursor-not-allowed shrink-0"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-2/50 text-[10px] uppercase tracking-[0.2em] font-black text-theme-3">
@@ -103,7 +136,7 @@ const UserManagement: React.FC = () => {
                 const cfg = ROLE_CONFIG[u.role as keyof typeof ROLE_CONFIG] || ROLE_CONFIG.Viewer;
                 const isEditingThis = editingRoleId === u.id;
                 return (
-                  <tr key={u.id} className="text-sm hover:bg-slate-50  transition-all group">
+                  <tr key={u.id} className="text-sm hover:bg-surface-2 transition-all group">
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
                         <div className={cn('w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform', cfg.bg)}>
@@ -185,7 +218,7 @@ const UserManagement: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40  backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
           <div className="bg-surface rounded-[2.5rem] border border-theme w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
-            <div className="p-10 space-y-8">
+            <div className="p-6 md:p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-command-blue/5  text-command-blue rounded-2xl">
                   <Users size={24} />

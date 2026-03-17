@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, FileText, Pin, Archive, Search, Tag, MoreVertical, Trash2, Edit2 } from 'lucide-react';
+import { Plus, FileText, Pin, Archive, Search, Trash2, Edit2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { usePermissions } from '../hooks/usePermissions';
 import { cn, formatDate } from '../lib/utils';
@@ -150,7 +150,7 @@ const Notes: React.FC = () => {
               </p>
               <div className="pt-6 border-t border-theme flex justify-between items-center">
                 <span className="text-[10px] text-theme-3 uppercase font-black tracking-widest">{formatDate(note.created_at)}</span>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                <div className="flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                   {canEdit && (
                     <button onClick={() => togglePin(note)}
                       className={cn("p-2 hover:bg-white  rounded-xl transition-all", note.is_pinned === 1 ? "text-command-blue" : "text-theme-3")}
@@ -189,7 +189,7 @@ const Notes: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
           <div className="bg-surface rounded-[2.5rem] border border-theme w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
-            <div className="p-10 space-y-8">
+            <div className="p-6 md:p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-command-blue/5  text-command-blue rounded-2xl">
                   <FileText size={24} />

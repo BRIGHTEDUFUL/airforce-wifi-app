@@ -115,7 +115,7 @@ const Generator: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-10 space-y-10">
+            <div className="p-6 md:p-10 space-y-10">
               <div className="bg-surface-2/50 p-8 rounded-[2rem] border border-theme flex flex-col items-center gap-6">
                 <div className="w-full text-center">
                   <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-3 block">Generated Password</span>
@@ -272,7 +272,7 @@ const Generator: React.FC = () => {
               <button 
                 type="submit"
                 disabled={!password || isSaving}
-                className="w-full py-4 bg-slate-900  hover:bg-slate-800  text-white rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all disabled:opacity-50 mt-6 shadow-lg shadow-slate-900/10"
+                className="w-full py-4 bg-command-blue hover:bg-blue-700 text-white rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all disabled:opacity-50 mt-6 shadow-lg shadow-command-blue/20"
               >
                 {isSaving ? (
                   <RefreshCw size={18} className="animate-spin" />

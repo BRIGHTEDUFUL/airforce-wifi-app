@@ -23,6 +23,25 @@ const Audit: React.FC = () => {
     log.details?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleExportCSV = () => {
+    const headers = ['Timestamp', 'User', 'Action', 'Module', 'Details'];
+    const rows = filteredLogs.map(log => [
+      formatDate(log.timestamp),
+      log.user_name,
+      log.action,
+      log.module,
+      log.details || ''
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `audit-logs-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-theme min-h-full animate-in fade-in duration-700">
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -30,7 +49,7 @@ const Audit: React.FC = () => {
           <h1 className="text-2xl md:text-3xl font-bold text-theme tracking-tight">Audit Logs</h1>
           <p className="text-theme-2 font-medium text-sm">Read-only history of all system actions and access.</p>
         </div>
-        <button className="bg-surface hover:bg-white  text-theme px-6 py-2.5 rounded-xl border border-theme flex items-center gap-2 transition-all shadow-sm font-bold text-sm w-full sm:w-auto justify-center">
+        <button onClick={handleExportCSV} className="bg-surface hover:bg-surface-2 text-theme px-6 py-2.5 rounded-xl border border-theme flex items-center gap-2 transition-all shadow-sm font-bold text-sm w-full sm:w-auto justify-center">
           <Download size={18} />
           Export CSV
         </button>
@@ -43,12 +62,12 @@ const Audit: React.FC = () => {
             <input 
               type="text" 
               placeholder="Filter logs by user, action, module or details..." 
-              className="w-full pl-12 pr-4 py-3 bg-surface-2 border border-slate-200  rounded-2xl outline-none focus:border-command-blue/20  focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-medium text-theme"
+              className="w-full pl-12 pr-4 py-3 bg-surface-2 border border-theme rounded-2xl outline-none focus:border-command-blue/20  focus:ring-4 focus:ring-command-blue/5 transition-all text-sm font-medium text-theme"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="px-6 py-3 bg-surface-2 border border-slate-200  rounded-2xl flex items-center gap-2 text-sm font-bold text-theme-2 hover:bg-white  transition-all">
+          <button className="px-6 py-3 bg-surface-2 border border-theme rounded-2xl flex items-center gap-2 text-sm font-bold text-theme-2 hover:bg-surface transition-all">
             <Filter size={16} />
             All Modules
           </button>
@@ -67,7 +86,7 @@ const Audit: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-theme">
               {filteredLogs.map((log) => (
-                <tr key={log.id} className="text-sm hover:bg-white  transition-all group">
+                <tr key={log.id} className="text-sm hover:bg-surface-2 transition-all group">
                   <td className="px-8 py-6 whitespace-nowrap text-theme-3 font-mono text-xs">
                     {formatDate(log.timestamp)}
                   </td>
