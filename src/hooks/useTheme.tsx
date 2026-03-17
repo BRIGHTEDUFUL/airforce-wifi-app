@@ -8,53 +8,72 @@ interface ThemeContextValue {
   setTheme: (mode: ThemeMode) => void;
 }
 
+const STORAGE_KEY = 'afkm_theme';
+
+/** Resolve whether dark should be active given a mode */
+function resolveIsDark(mode: ThemeMode): boolean {
+  if (mode === 'dark') return true;
+  if (mode === 'light') return false;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+/** Apply dark class to <html> immediately — no React re-render needed */
+function applyDark(dark: boolean) {
+  const root = document.documentElement;
+  if (dark) {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+}
+
+/** Read saved theme, fall back to 'light' */
+function getSavedTheme(): ThemeMode {
+  try {
+    const v = localStorage.getItem(STORAGE_KEY);
+    if (v === 'dark' || v === 'light' || v === 'system') return v;
+  } catch {}
+  return 'light';
+}
+
 const ThemeContext = createContext<ThemeContextValue>({
   theme: 'light',
   isDark: false,
   setTheme: () => {},
 });
 
-function applyTheme(isDark: boolean) {
-  if (isDark) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
-}
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() => {
-    const saved = localStorage.getItem('afkm_theme') as ThemeMode | null;
-    if (saved === 'dark' || saved === 'light' || saved === 'system') return saved;
-    // No saved value — default to light regardless of OS
-    return 'light';
-  });
+  const [theme, setThemeState] = useState<ThemeMode>(getSavedTheme);
+  const [isDark, setIsDark] = useState(() => resolveIsDark(getSavedTheme()));
 
-  const [systemDark, setSystemDark] = useState(
-    () => window.matchMedia('(prefers-color-scheme: dark)').matches
-  );
-
+  // Keep in sync with OS changes when in 'system' mode
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    const handler = () => {
+      if (theme === 'system') {
+        const dark = mq.matches;
+        setIsDark(dark);
+        applyDark(dark);
+      }
+    };
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
+  }, [theme]);
+
+  // Sync on mount in case flash script didn't run
+  useEffect(() => {
+    applyDark(isDark);
   }, []);
 
-  // light = always light, dark = always dark, system = follow OS
-  const isDark = theme === 'dark' || (theme === 'system' && systemDark);
-
-  useEffect(() => {
-    applyTheme(isDark);
-  }, [isDark]);
-
   const setTheme = (mode: ThemeMode) => {
-    const newIsDark = mode === 'dark' || (mode === 'system' && systemDark);
-    // Apply immediately — don't wait for re-render
-    applyTheme(newIsDark);
+    const dark = resolveIsDark(mode);
+    // 1. Apply to DOM immediately
+    applyDark(dark);
+    // 2. Persist
+    try { localStorage.setItem(STORAGE_KEY, mode); } catch {}
+    // 3. Update state
     setThemeState(mode);
-    localStorage.setItem('afkm_theme', mode);
-    localStorage.removeItem('afkm_dark');
+    setIsDark(dark);
   };
 
   return (

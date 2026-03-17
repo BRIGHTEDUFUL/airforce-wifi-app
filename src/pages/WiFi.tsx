@@ -73,11 +73,11 @@ const WiFi: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-theme min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">WiFi Credentials</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Secure storage for network access points.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-theme tracking-tight">WiFi Credentials</h1>
+          <p className="text-theme-2 font-medium text-sm">Secure storage for network access points.</p>
         </div>
         {canCreate && (
           <button 
@@ -96,16 +96,16 @@ const WiFi: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {networks.map((net) => (
-          <div key={net.id} className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all duration-300 group">
+          <div key={net.id} className="bg-surface rounded-[2.5rem] border border-theme shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 transition-all duration-300 group">
             <div className="p-8 flex-1 space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
-                  <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition-transform">
+                  <div className="p-4 bg-emerald-50  text-emerald-600  rounded-2xl group-hover:scale-110 transition-transform">
                     <Wifi size={28} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-2xl text-slate-900 dark:text-white">{net.ssid}</h3>
-                    <span className="text-[10px] font-black px-2.5 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-full uppercase tracking-widest mt-1 inline-block">
+                    <h3 className="font-bold text-2xl text-theme">{net.ssid}</h3>
+                    <span className="text-[10px] font-black px-2.5 py-1 bg-emerald-500/20 text-emerald-700 rounded-full uppercase tracking-widest mt-1 inline-block">
                       {net.security_type}
                     </span>
                   </div>
@@ -118,7 +118,7 @@ const WiFi: React.FC = () => {
                         setFormData({ ...net });
                         setIsModalOpen(true);
                       }}
-                      className="p-2 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-xl text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                      className="p-2 hover:bg-emerald-50  rounded-xl text-slate-400 hover:text-emerald-600  transition-colors"
                       title="Edit"
                     >
                       <Edit2 size={18} />
@@ -126,7 +126,7 @@ const WiFi: React.FC = () => {
                     {canDelete && (
                       <button 
                         onClick={() => handleDelete(net.id)}
-                        className="p-2 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+                        className="p-2 hover:bg-rose-50  rounded-xl text-slate-400 hover:text-rose-600  transition-colors"
                         title="Delete"
                       >
                         <Trash2 size={18} />
@@ -137,30 +137,30 @@ const WiFi: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
-                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg">
-                    <MapPin size={16} className="text-slate-400 dark:text-slate-500" />
+                <div className="flex items-center gap-3 text-theme-2 font-medium">
+                  <div className="p-2 bg-surface-2 rounded-lg">
+                    <MapPin size={16} className="text-theme-3" />
                   </div>
                   <span className="text-sm">{net.location}</span>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 flex items-center justify-between group/pass">
+                <div className="bg-surface-2 p-6 rounded-[1.5rem] border border-slate-100  flex items-center justify-between group/pass">
                   <div className="flex flex-col">
-                    <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-1">Network Key</span>
-                    <span className="font-mono text-xl tracking-[0.15em] text-slate-700 dark:text-slate-300">
+                    <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-1">Network Key</span>
+                    <span className="font-mono text-xl tracking-[0.15em] text-theme">
                       {showPasswords[net.id] ? net.password : '••••••••••••'}
                     </span>
                   </div>
                   <div className="flex gap-2">
                     <button 
                       onClick={() => togglePassword(net.id)}
-                      className="p-3 hover:bg-white dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all shadow-sm"
+                      className="p-3 hover:bg-surface-2 rounded-xl text-slate-400 hover:text-slate-600  transition-all shadow-sm"
                     >
                       {showPasswords[net.id] ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                     <button 
                       onClick={() => copyToClipboard(net.password, net.id)}
-                      className="p-3 hover:bg-white dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all shadow-sm"
+                      className="p-3 hover:bg-surface-2 rounded-xl text-slate-400 hover:text-emerald-600  transition-all shadow-sm"
                     >
                       {copiedId === net.id ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} />}
                     </button>
@@ -168,14 +168,14 @@ const WiFi: React.FC = () => {
                 </div>
 
                 <div className="pt-4">
-                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-[0.2em]">Assigned Assets</p>
-                  <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">{net.assigned_devices || 'None specified'}</p>
+                  <p className="text-[10px] font-black text-theme-3 mb-2 uppercase tracking-[0.2em]">Assigned Assets</p>
+                  <p className="text-sm text-theme font-medium">{net.assigned_devices || 'None specified'}</p>
                 </div>
               </div>
             </div>
             {net.notes && (
-              <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-200 dark:border-command-dark-border text-xs text-slate-500 dark:text-slate-400 italic font-medium">
-                <span className="font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mr-2 not-italic">Note:</span>
+              <div className="px-8 py-4 bg-surface-2 border-t border-theme text-xs text-theme-2 italic font-medium">
+                <span className="font-bold text-theme-3 uppercase tracking-widest mr-2 not-italic">Note:</span>
                 {net.notes}
               </div>
             )}
@@ -185,33 +185,33 @@ const WiFi: React.FC = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+          <div className="bg-surface rounded-[2.5rem] border border-theme w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-white dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl border border-slate-100 dark:border-transparent">
+                <div className="p-3 bg-emerald-500/10 text-emerald-600  rounded-2xl border border-theme">
                   <Wifi size={24} />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{editingNetwork ? 'Edit WiFi Network' : 'Add WiFi Network'}</h2>
+                <h2 className="text-2xl font-bold text-theme tracking-tight">{editingNetwork ? 'Edit WiFi Network' : 'Add WiFi Network'}</h2>
               </div>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">SSID (Network Name)</label>
+                  <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">SSID (Network Name)</label>
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-theme"
                     value={formData.ssid}
                     onChange={e => setFormData({...formData, ssid: e.target.value})}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Password</label>
+                  <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Password</label>
                   <input 
                     required
                     type="text" 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-mono text-slate-700 dark:text-white tracking-widest"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-mono text-theme tracking-widest"
                     value={formData.password}
                     onChange={e => setFormData({...formData, password: e.target.value})}
                   />
@@ -219,19 +219,19 @@ const WiFi: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Location</label>
+                    <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Location</label>
                     <input 
                       required
                       type="text" 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-theme"
                       value={formData.location}
                       onChange={e => setFormData({...formData, location: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Security Type</label>
+                    <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Security Type</label>
                     <select 
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white appearance-none"
+                      className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-theme appearance-none"
                       value={formData.security_type}
                       onChange={e => setFormData({...formData, security_type: e.target.value})}
                     >
@@ -242,20 +242,20 @@ const WiFi: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Assigned Devices</label>
+                  <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Assigned Devices</label>
                   <input 
                     type="text" 
                     placeholder="e.g. Router-01, AP-North"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-theme"
                     value={formData.assigned_devices}
                     onChange={e => setFormData({...formData, assigned_devices: e.target.value})}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest ml-1">Notes</label>
+                  <label className="text-[10px] font-black uppercase text-theme-3 tracking-widest ml-1">Notes</label>
                   <textarea 
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-transparent dark:border-slate-800 focus:border-emerald-200 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-slate-700 dark:text-white min-h-[100px] resize-none"
+                    className="w-full p-4 bg-surface-2 rounded-2xl border border-transparent  focus:border-emerald-200  focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all font-medium text-theme min-h-[100px] resize-none"
                     value={formData.notes}
                     onChange={e => setFormData({...formData, notes: e.target.value})}
                   ></textarea>
@@ -265,7 +265,7 @@ const WiFi: React.FC = () => {
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold hover:bg-white dark:hover:bg-slate-800 transition-all"
+                    className="flex-1 px-6 py-4 rounded-2xl border border-theme text-theme-2 font-bold hover:bg-surface-2 transition-all"
                   >
                     Cancel
                   </button>
@@ -286,3 +286,4 @@ const WiFi: React.FC = () => {
 };
 
 export default WiFi;
+

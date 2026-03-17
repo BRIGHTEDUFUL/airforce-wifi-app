@@ -90,10 +90,10 @@ const Messages: React.FC = () => {
   const unreadCount = messages.filter(m => m.folder === 'inbox' && m.unread).length;
 
   return (
-    <div className="flex h-full bg-slate-50 dark:bg-command-dark-bg overflow-hidden animate-in fade-in duration-500">
+    <div className="flex h-full bg-theme overflow-hidden animate-in fade-in duration-500">
 
       {/* ── Left: Folder Nav ── */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-slate-200 dark:border-command-dark-border bg-white dark:bg-command-dark-card shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 border-r border-theme bg-surface shrink-0">
         <div className="p-6">
           <button
             onClick={() => setShowCompose(true)}
@@ -112,8 +112,8 @@ const Messages: React.FC = () => {
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all",
                 activeFolder === f.id
-                  ? "bg-command-blue/5 dark:bg-command-blue/10 text-command-blue"
-                  : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-command-blue/5  text-command-blue"
+                  : "text-theme-2 hover:bg-slate-50  hover:text-slate-800 "
               )}
             >
               <div className="flex items-center gap-3">
@@ -125,7 +125,7 @@ const Messages: React.FC = () => {
                   "text-[10px] font-black px-2 py-0.5 rounded-full",
                   activeFolder === f.id
                     ? "bg-command-blue text-white"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                    : "bg-slate-100  text-theme-2"
                 )}>
                   {f.count}
                 </span>
@@ -134,26 +134,26 @@ const Messages: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-6 border-t border-slate-200 dark:border-command-dark-border">
-          <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-white/5">
+        <div className="p-6 border-t border-theme">
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-surface-2">
             <div className="w-8 h-8 rounded-full bg-command-blue flex items-center justify-center text-white text-xs font-black">SA</div>
             <div>
-              <p className="text-xs font-bold text-slate-800 dark:text-slate-200">System Admin</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">admin@airforce.mil</p>
+              <p className="text-xs font-bold text-theme">System Admin</p>
+              <p className="text-[10px] text-theme-3 font-medium">admin@airforce.mil</p>
             </div>
           </div>
         </div>
       </aside>
 
       {/* ── Middle: Message List ── */}
-      <div className="flex flex-col w-full lg:w-80 xl:w-96 border-r border-slate-200 dark:border-command-dark-border shrink-0 bg-slate-50 dark:bg-command-dark-bg">
+      <div className="flex flex-col w-full lg:w-80 xl:w-96 border-r border-theme shrink-0 bg-theme">
         {/* Header */}
-        <div className="px-5 pt-6 pb-4 border-b border-slate-200 dark:border-command-dark-border space-y-4">
+        <div className="px-5 pt-6 pb-4 border-b border-theme space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize">{activeFolder}</h1>
+              <h1 className="text-lg font-black text-theme capitalize">{activeFolder}</h1>
               {unreadCount > 0 && activeFolder === 'inbox' && (
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{unreadCount} unread</p>
+                <p className="text-[10px] font-bold text-theme-3 uppercase tracking-widest">{unreadCount} unread</p>
               )}
             </div>
             {/* Mobile compose */}
@@ -171,13 +171,13 @@ const Messages: React.FC = () => {
               placeholder="Search..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-transparent rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 outline-none focus:border-command-blue/20 focus:bg-white dark:focus:bg-white/10 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-surface-2 border border-transparent rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/20  transition-all"
             />
           </div>
         </div>
 
         {/* Mobile folder tabs */}
-        <div className="lg:hidden flex gap-1 px-4 py-3 border-b border-slate-200 dark:border-command-dark-border overflow-x-auto">
+        <div className="lg:hidden flex gap-1 px-4 py-3 border-b border-theme overflow-x-auto">
           {folders.map(f => (
             <button
               key={f.id}
@@ -186,7 +186,7 @@ const Messages: React.FC = () => {
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all",
                 activeFolder === f.id
                   ? "bg-command-blue text-white"
-                  : "text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-white/5"
+                  : "text-theme-2 bg-surface-2"
               )}
             >
               <f.icon size={12} />
@@ -197,9 +197,9 @@ const Messages: React.FC = () => {
         </div>
 
         {/* List */}
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-50 dark:divide-command-dark-border">
+        <div className="flex-1 overflow-y-auto divide-y divide-theme">
           {filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-slate-400 dark:text-slate-600 p-8">
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-theme-3 p-8">
               <Mail size={40} strokeWidth={1.5} />
               <p className="text-sm font-bold uppercase tracking-widest">No messages</p>
             </div>
@@ -210,8 +210,8 @@ const Messages: React.FC = () => {
               className={cn(
                 "w-full text-left px-5 py-4 transition-all group relative",
                 selectedId === msg.id
-                  ? "bg-command-blue/5 dark:bg-command-blue/10"
-                  : "hover:bg-slate-50 dark:hover:bg-white/5"
+                  ? "bg-command-blue/5 "
+                  : "hover:bg-slate-50 "
               )}
             >
               {msg.unread && (
@@ -223,20 +223,20 @@ const Messages: React.FC = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <span className={cn("text-sm truncate", msg.unread ? "font-black text-slate-900 dark:text-white" : "font-semibold text-slate-600 dark:text-slate-400")}>
+                    <span className={cn("text-sm truncate", msg.unread ? "font-black text-theme" : "font-semibold text-theme-2")}>
                       {msg.sender}
                     </span>
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 shrink-0 ml-2">{msg.time}</span>
+                    <span className="text-[10px] font-bold text-theme-3 shrink-0 ml-2">{msg.time}</span>
                   </div>
-                  <p className={cn("text-xs truncate mb-1", msg.unread ? "font-bold text-slate-800 dark:text-slate-200" : "font-medium text-slate-600 dark:text-slate-400")}>
+                  <p className={cn("text-xs truncate mb-1", msg.unread ? "font-bold text-theme" : "font-medium text-theme-2")}>
                     {msg.subject}
                   </p>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate font-medium leading-relaxed">
+                  <p className="text-[11px] text-theme-3 truncate font-medium leading-relaxed">
                     {msg.preview}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     {msg.priority && (
-                      <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-full">
+                      <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-rose-500 bg-rose-50  px-2 py-0.5 rounded-full">
                         <AlertCircle size={9} />
                         Priority
                       </span>
@@ -253,58 +253,58 @@ const Messages: React.FC = () => {
       </div>
 
       {/* ── Right: Message Detail ── */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-command-dark-bg">
+      <div className="flex-1 flex flex-col min-w-0 bg-theme">
         {selected ? (
           <>
             {/* Detail Header */}
-            <div className="px-8 py-6 bg-white dark:bg-command-dark-card border-b border-slate-200 dark:border-command-dark-border">
+            <div className="px-8 py-6 bg-surface border-b border-theme">
               <div className="flex items-start justify-between gap-4 mb-6">
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight">{selected.subject}</h2>
+                  <h2 className="text-xl font-black text-theme mb-2 leading-tight">{selected.subject}</h2>
                   <div className="flex flex-wrap items-center gap-3">
                     {selected.priority && (
-                      <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-3 py-1 rounded-full border border-rose-100 dark:border-rose-500/20">
+                      <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-500 bg-rose-50  px-3 py-1 rounded-full border border-rose-100 ">
                         <AlertCircle size={11} />
                         Priority
                       </span>
                     )}
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{selected.date} · {selected.time}</span>
+                    <span className="text-[10px] font-bold text-theme-3 uppercase tracking-widest">{selected.date} · {selected.time}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-all">
+                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-amber-400 hover:bg-amber-50  transition-all">
                     <Star size={18} className={selected.starred ? "fill-amber-400 text-amber-400" : ""} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
+                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600  hover:bg-slate-100  transition-all">
                     <Archive size={18} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all">
+                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50  transition-all">
                     <Trash2 size={18} />
                   </button>
-                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
+                  <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-600  hover:bg-slate-100  transition-all">
                     <MoreHorizontal size={18} />
                   </button>
                 </div>
               </div>
 
               {/* Sender info */}
-              <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-white/5 rounded-2xl">
+              <div className="flex items-center gap-4 p-4 bg-surface-2 rounded-2xl">
                 <div className={cn("w-12 h-12 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0", selected.color)}>
                   {selected.initials}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-900 dark:text-white text-sm">{selected.sender}</p>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">system@airforce.mil · To: admin@airforce.mil</p>
+                  <p className="font-black text-theme text-sm">{selected.sender}</p>
+                  <p className="text-[11px] text-theme-3 font-medium">system@airforce.mil · To: admin@airforce.mil</p>
                 </div>
-                <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 shrink-0" />
+                <ChevronRight size={16} className="text-slate-300  shrink-0" />
               </div>
             </div>
 
             {/* Body */}
             <div className="flex-1 overflow-y-auto p-8">
               <div className="max-w-2xl">
-                <div className="bg-white dark:bg-command-dark-card rounded-3xl border border-slate-200 dark:border-command-dark-border p-8 shadow-sm">
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium whitespace-pre-line">
+                <div className="bg-surface rounded-3xl border border-theme p-8 shadow-sm">
+                  <p className="text-sm text-theme leading-relaxed font-medium whitespace-pre-line">
                     {selected.body}
                   </p>
                 </div>
@@ -312,11 +312,11 @@ const Messages: React.FC = () => {
             </div>
 
             {/* Reply bar */}
-            <div className="px-8 py-5 bg-white dark:bg-command-dark-card border-t border-slate-200 dark:border-command-dark-border">
+            <div className="px-8 py-5 bg-surface border-t border-theme">
               <div className="flex items-center gap-3 max-w-2xl">
-                <div className="flex-1 flex items-center gap-3 px-5 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-command-dark-border rounded-2xl cursor-text hover:border-command-blue/30 transition-all">
+                <div className="flex-1 flex items-center gap-3 px-5 py-3 bg-surface-2 border border-theme rounded-2xl cursor-text hover:border-command-blue/30 transition-all">
                   <Reply size={16} className="text-slate-400 shrink-0" />
-                  <span className="text-sm text-slate-400 dark:text-slate-500 font-medium">Reply to {selected.sender}...</span>
+                  <span className="text-sm text-theme-3 font-medium">Reply to {selected.sender}...</span>
                 </div>
                 <button className="flex items-center gap-2 px-5 py-3 bg-command-blue hover:bg-blue-700 text-white rounded-2xl font-bold text-sm transition-all shadow-lg shadow-command-blue/20">
                   <Forward size={16} />
@@ -327,12 +327,12 @@ const Messages: React.FC = () => {
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center p-8">
-            <div className="w-24 h-24 bg-command-blue/5 dark:bg-command-blue/10 rounded-[2rem] flex items-center justify-center">
+            <div className="w-24 h-24 bg-command-blue/5  rounded-[2rem] flex items-center justify-center">
               <Shield size={40} className="text-command-blue/40" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-black text-slate-700 dark:text-slate-300">Select a message</h3>
-              <p className="text-sm text-slate-400 dark:text-slate-500 font-medium max-w-xs leading-relaxed">
+              <h3 className="text-lg font-black text-theme">Select a message</h3>
+              <p className="text-sm text-theme-3 font-medium max-w-xs leading-relaxed">
                 All communications are encrypted end-to-end using military-grade protocols.
               </p>
             </div>
@@ -343,19 +343,19 @@ const Messages: React.FC = () => {
       {/* ── Compose Modal ── */}
       {showCompose && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-white dark:bg-command-dark-card rounded-[2rem] border border-slate-200 dark:border-command-dark-border shadow-2xl animate-in slide-in-from-bottom-4 duration-300 overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-command-dark-border">
-              <h3 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-widest">New Message</h3>
-              <button onClick={() => setShowCompose(false)} className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
+          <div className="w-full max-w-lg bg-surface rounded-[2rem] border border-theme shadow-2xl animate-in slide-in-from-bottom-4 duration-300 overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-theme">
+              <h3 className="font-black text-theme text-sm uppercase tracking-widest">New Message</h3>
+              <button onClick={() => setShowCompose(false)} className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100  transition-all">
                 <X size={18} />
               </button>
             </div>
             <div className="p-6 space-y-4">
-              <input placeholder="To" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-command-dark-border rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 outline-none focus:border-command-blue/30 transition-all" />
-              <input placeholder="Subject" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-command-dark-border rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 outline-none focus:border-command-blue/30 transition-all" />
-              <textarea placeholder="Write your message..." rows={6} className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-command-dark-border rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 outline-none focus:border-command-blue/30 transition-all resize-none" />
+              <input placeholder="To" className="w-full px-4 py-3 bg-surface-2 border border-theme rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/30 transition-all" />
+              <input placeholder="Subject" className="w-full px-4 py-3 bg-surface-2 border border-theme rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/30 transition-all" />
+              <textarea placeholder="Write your message..." rows={6} className="w-full px-4 py-3 bg-surface-2 border border-theme rounded-xl text-sm font-medium text-theme outline-none focus:border-command-blue/30 transition-all resize-none" />
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setShowCompose(false)} className="flex-1 py-3 rounded-xl border border-slate-200 dark:border-command-dark-border text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                <button onClick={() => setShowCompose(false)} className="flex-1 py-3 rounded-xl border border-theme text-theme-2 font-bold text-sm hover:bg-slate-50  transition-all">
                   Cancel
                 </button>
                 <button className="flex-1 py-3 rounded-xl bg-command-blue hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-lg shadow-command-blue/20 flex items-center justify-center gap-2">
@@ -372,3 +372,4 @@ const Messages: React.FC = () => {
 };
 
 export default Messages;
+

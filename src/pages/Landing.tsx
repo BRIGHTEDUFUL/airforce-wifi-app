@@ -9,11 +9,11 @@ interface LandingProps {
 
 const Landing: React.FC<LandingProps> = ({ onEnter }) => {
   return (
-    <div className="min-h-screen bg-white text-slate-900 selection:bg-blue-500/10 relative flex flex-col items-center justify-center px-4 py-16 gap-8">
+    <div className="min-h-screen bg-theme text-theme selection:bg-blue-500/10 relative flex flex-col items-center justify-center px-4 py-16 gap-8">
       {/* Background Grid & Effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 dark:opacity-5" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent" />
         
         {/* Animated Scanning Line */}
         <motion.div 
@@ -67,10 +67,10 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             transition={{ delay: 0.2 }}
             className="space-y-4"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-slate-900 uppercase leading-none">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-theme uppercase leading-none">
               WiFi <span className="text-blue-600">Portal</span>
             </h1>
-            <p className="text-xl md:text-2xl font-bold text-slate-400 uppercase tracking-[0.2em]">
+            <p className="text-xl md:text-2xl font-bold text-theme-2 uppercase tracking-[0.2em]">
               Secure Access Management
             </p>
           </motion.div>
@@ -79,7 +79,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex items-center justify-center gap-8 py-6 border-y border-slate-100"
+            className="flex items-center justify-center gap-8 py-6 border-y border-theme"
           >
             {[
               { label: 'Network', value: 'GAF-HQ-SECURE' },
@@ -87,7 +87,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
               { label: 'Support', value: 'IT Desk' }
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{item.label}</p>
+                <p className="text-[10px] font-black text-theme-3 uppercase tracking-widest mb-1">{item.label}</p>
                 <p className="text-xs font-bold text-blue-600 uppercase tracking-wider">{item.value}</p>
               </div>
             ))}
@@ -143,3 +143,4 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
 };
 
 export default Landing;
+
