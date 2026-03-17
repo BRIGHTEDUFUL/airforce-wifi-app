@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Mail, Search, Trash2, Archive, Star, Shield, Send, Inbox,
+  Mail, Search, Trash2, Shield, Send, Inbox,
   ChevronLeft, AlertCircle, X, Reply, Forward, MoreHorizontal,
   RefreshCw, CheckCheck, Bell
 } from 'lucide-react';
@@ -42,21 +42,22 @@ const Messages: React.FC = () => {
   const { token, user } = useAuth();
   const { isAdmin, isOperator } = usePermissions();
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await fetch('/api/messages', { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       setMessages(data);
-      if (data.length > 0 && !selectedId) setSelectedId(data[0].id);
+      // Only auto-select first message if nothing is selected yet
+      setSelectedId(prev => (prev === null && data.length > 0) ? data[0].id : prev);
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [token]);
 
-  useEffect(() => { fetchMessages(); }, [token]);
+  useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
   const markRead = async (id: number) => {
     await fetch(`/api/messages/${id}/read`, { method: 'PUT', headers: { Authorization: `Bearer ${token}` } });

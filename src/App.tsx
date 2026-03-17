@@ -44,8 +44,10 @@ function AppContent() {
   return (
     <div className="flex h-screen bg-theme text-theme transition-colors duration-200">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="flex-1 overflow-y-auto pt-14 md:pt-0 bg-theme">
-        {renderContent()}
+      <main className="flex-1 min-h-0 flex flex-col pt-14 md:pt-0 bg-theme overflow-hidden">
+        <div className={activeTab === 'messages' ? 'flex-1 min-h-0 overflow-hidden' : 'flex-1 overflow-y-auto'}>
+          {renderContent()}
+        </div>
       </main>
     </div>
   );
