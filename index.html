@@ -14,10 +14,16 @@
     <script>
       (function() {
         var saved = localStorage.getItem('afkm_theme');
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'dark' || (saved === 'system' && prefersDark)) {
+        // If no preference saved, or saved as 'system', default to light
+        if (saved === 'dark') {
           document.documentElement.classList.add('dark');
+        } else if (saved === 'system') {
+          // system follows OS
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
         }
+        // 'light' or null = no dark class (light mode)
       })();
     </script>
   </head>

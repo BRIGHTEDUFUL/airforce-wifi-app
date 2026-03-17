@@ -21,9 +21,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!saved) {
       const oldDark = localStorage.getItem('afkm_dark');
       if (oldDark === 'true') return 'dark';
-      if (oldDark === 'false') return 'light';
+      return 'light'; // default to light
     }
-    return saved ?? 'light';
+    return saved;
   });
 
   const [systemDark, setSystemDark] = useState(
@@ -53,8 +53,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setTheme = (mode: ThemeMode) => {
     setThemeState(mode);
     localStorage.setItem('afkm_theme', mode);
-    // clean up old key
     localStorage.removeItem('afkm_dark');
+    // Apply immediately to avoid any delay
+    const newIsDark = mode === 'dark' || (mode === 'system' && systemDark);
+    if (newIsDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
 
   return (
