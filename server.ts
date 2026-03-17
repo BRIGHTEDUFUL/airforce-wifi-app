@@ -285,6 +285,29 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  // --- Messages Routes ---
+  app.get('/api/messages', authenticateToken, (req, res) => {
+    const msgs = db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all();
+    res.json(msgs);
+  });
+
+  app.post('/api/messages', authenticateToken, authorizeRoles('Administrator', 'Operator'), (req, res) => {
+    const { type, title, content } = req.body;
+    const result = db.prepare('INSERT INTO messages (type, title, content) VALUES (?, ?, ?)').run(type, title, content);
+    logAudit((req as any).user.id, (req as any).user.name, 'Sent Message', 'Messages', title);
+    res.json({ id: result.lastInsertRowid });
+  });
+
+  app.put('/api/messages/:id/read', authenticateToken, (req, res) => {
+    db.prepare('UPDATE messages SET is_read = 1 WHERE id = ?').run(req.params.id);
+    res.json({ success: true });
+  });
+
+  app.delete('/api/messages/:id', authenticateToken, authorizeRoles('Administrator'), (req, res) => {
+    db.prepare('DELETE FROM messages WHERE id = ?').run(req.params.id);
+    res.json({ success: true });
+  });
+
   // --- Audit Logs ---
   app.get('/api/audit', authenticateToken, authorizeRoles('Administrator'), (req, res) => {
     const logs = db.prepare('SELECT * FROM audit_logs ORDER BY timestamp DESC').all();
