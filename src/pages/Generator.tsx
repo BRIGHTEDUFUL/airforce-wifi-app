@@ -83,7 +83,7 @@ const Generator: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Password Generator</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Generate secure, compliant passwords and assign them to infrastructure.</p>
@@ -91,7 +91,7 @@ const Generator: React.FC = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         <div className="xl:col-span-2 space-y-8">
-          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm overflow-hidden">
             <div className="flex border-b border-slate-50 dark:border-command-dark-border">
               <button 
                 onClick={() => setMode('random')}
@@ -116,7 +116,7 @@ const Generator: React.FC = () => {
             </div>
 
             <div className="p-10 space-y-10">
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border flex flex-col items-center gap-6">
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-[2rem] border border-slate-200 dark:border-command-dark-border flex flex-col items-center gap-6">
                 <div className="w-full text-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] mb-3 block">Generated Password</span>
                   <div className="text-4xl font-mono font-bold tracking-widest break-all min-h-[48px] text-slate-900 dark:text-white">
@@ -152,7 +152,7 @@ const Generator: React.FC = () => {
                         Security Settings
                       </h4>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Symbols</span>
                           <input 
                             type="checkbox" 
@@ -161,7 +161,7 @@ const Generator: React.FC = () => {
                             onChange={e => setIncludeSymbols(e.target.checked)}
                           />
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
+                        <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 dark:border-command-dark-border bg-slate-50 dark:bg-slate-900/30">
                           <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Include Numbers</span>
                           <input 
                             type="checkbox" 
@@ -223,7 +223,7 @@ const Generator: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+          <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
             <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-3 mb-8">
               <div className="p-2 bg-command-blue/10 dark:bg-command-blue/20 rounded-xl">
                 <Save size={18} className="text-command-blue" />

@@ -165,18 +165,48 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
         )}
 
         <div className="space-y-1">
-          {/* Three-way theme toggle */}
-          <button
-            onClick={cycleTheme}
-            className={cn(
-              "flex items-center gap-3 w-full p-3 rounded-xl transition-all group",
-              isDark ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
-              (collapsed && !isMobile) && "justify-center"
-            )}
-          >
-            {themeIcon}
-            {(!collapsed || isMobile) && <span className="text-sm font-bold tracking-tight">{themeLabel}</span>}
-          </button>
+          {/* Theme toggle pill */}
+          {(!collapsed || isMobile) ? (
+            <div className={cn(
+              "flex items-center rounded-xl p-1 mb-1",
+              isDark ? "bg-white/5" : "bg-slate-100"
+            )}>
+              <button
+                onClick={() => setTheme('light')}
+                className={cn(
+                  "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all",
+                  !isDark
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-500 hover:text-slate-300"
+                )}
+              >
+                <Sun size={13} />
+                Light
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                className={cn(
+                  "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all",
+                  isDark
+                    ? "bg-command-blue text-white shadow-sm"
+                    : "text-slate-400 hover:text-slate-700"
+                )}
+              >
+                <Moon size={13} />
+                Dark
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={cycleTheme}
+              className={cn(
+                "flex items-center gap-3 w-full p-3 rounded-xl transition-all group justify-center",
+                isDark ? "text-slate-400 hover:text-slate-200 hover:bg-white/5" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+              )}
+            >
+              {themeIcon}
+            </button>
+          )}
 
           {!isMobile && (
             <button

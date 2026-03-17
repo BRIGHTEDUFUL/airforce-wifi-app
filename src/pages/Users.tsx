@@ -59,7 +59,7 @@ const UserManagement: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">User Management</h1>
@@ -86,7 +86,7 @@ const UserManagement: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -184,7 +184,7 @@ const UserManagement: React.FC = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-command-blue/5 dark:bg-command-blue/10 text-command-blue rounded-2xl">

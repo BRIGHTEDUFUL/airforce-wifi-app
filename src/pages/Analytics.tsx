@@ -30,14 +30,14 @@ const Analytics: React.FC = () => {
   const chartTooltipLabel = isDark ? '#f8fafc' : '#0f172a';
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header>
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">System Analytics</h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Detailed metrics and data distribution across all modules.</p>
       </header>
 
       {/* Top Row: Activity Trend */}
-      <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+      <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
           <div className="p-2 bg-command-blue/10 dark:bg-command-blue/20 rounded-xl">
             <Activity size={18} className="text-command-blue" />
@@ -79,7 +79,7 @@ const Analytics: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Device Distribution */}
-        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
             <div className="p-2 bg-white dark:bg-emerald-500/10 rounded-xl border border-slate-100 dark:border-transparent">
               <Shield size={18} className="text-emerald-600 dark:text-emerald-400" />
@@ -110,7 +110,7 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* Vault Categories */}
-        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
             <div className="p-2 bg-white dark:bg-amber-500/10 rounded-xl border border-slate-100 dark:border-transparent">
               <Key size={18} className="text-amber-600 dark:text-amber-400" />
@@ -148,7 +148,7 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* User Activity Leaderboard */}
-        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
             <div className="p-2 bg-white dark:bg-indigo-500/10 rounded-xl border border-slate-100 dark:border-transparent">
               <UserCheck size={18} className="text-indigo-600 dark:text-indigo-400" />
@@ -175,7 +175,7 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* Module Activity Radar */}
-        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+        <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
             <div className="p-2 bg-white dark:bg-rose-500/10 rounded-xl border border-slate-100 dark:border-transparent">
               <BarChart3 size={18} className="text-rose-600 dark:text-rose-400" />
@@ -206,7 +206,7 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* System Health Metrics */}
-      <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm">
+      <div className="bg-white dark:bg-command-dark-card p-8 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8">System Health & Resource Metrics</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="space-y-3">

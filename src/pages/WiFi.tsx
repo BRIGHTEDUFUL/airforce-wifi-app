@@ -73,7 +73,7 @@ const WiFi: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">WiFi Credentials</h1>
@@ -96,7 +96,7 @@ const WiFi: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {networks.map((net) => (
-          <div key={net.id} className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all duration-300 group">
+          <div key={net.id} className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all duration-300 group">
             <div className="p-8 flex-1 space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
@@ -174,7 +174,7 @@ const WiFi: React.FC = () => {
               </div>
             </div>
             {net.notes && (
-              <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-100 dark:border-command-dark-border text-xs text-slate-500 dark:text-slate-400 italic font-medium">
+              <div className="px-8 py-4 bg-slate-50 dark:bg-black/20 border-t border-slate-200 dark:border-command-dark-border text-xs text-slate-500 dark:text-slate-400 italic font-medium">
                 <span className="font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mr-2 not-italic">Note:</span>
                 {net.notes}
               </div>
@@ -185,7 +185,7 @@ const WiFi: React.FC = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+          <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
             <div className="p-10 space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-white dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl border border-slate-100 dark:border-transparent">

@@ -56,7 +56,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
   }, [token]);
 
   if (!stats) return (
-    <div className="flex items-center justify-center h-full bg-white dark:bg-command-dark-bg transition-colors">
+    <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-command-dark-bg transition-colors">
       <div className="flex flex-col items-center gap-4">
         <RefreshCw className="w-8 h-8 text-command-blue animate-spin" />
         <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Loading WiFi Portal...</p>
@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
   );
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700 transition-colors">
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -126,7 +126,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
           { label: 'Authorization', status: 'Admin', icon: Fingerprint, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
           { label: 'Monitoring', status: `${stats.recentLogs.length} events`, icon: Activity, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
         ].map((card, i) => (
-          <div key={i} className="bg-white dark:bg-command-dark-card p-6 rounded-3xl border border-slate-100 dark:border-command-dark-border shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+          <div key={i} className="bg-white dark:bg-command-dark-card p-6 rounded-3xl border border-slate-200 dark:border-command-dark-border shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
             <div className="flex items-center gap-4">
               <div className={cn("p-4 rounded-2xl", card.bg, card.color)}>
                 <card.icon size={24} />
@@ -151,7 +151,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
           { label: 'Expiring Soon', value: stats.alerts.filter((a: any) => a.title.includes('Expiry')).length, icon: Clock, color: 'text-amber-500', bg: 'bg-slate-50 dark:bg-amber-500/10' },
           { label: 'Expired', value: 0, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-slate-50 dark:bg-rose-500/10' },
         ].map((card, i) => (
-          <div key={i} className="bg-white dark:bg-command-dark-card p-8 rounded-[2rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-6 hover:shadow-lg transition-all">
+          <div key={i} className="bg-white dark:bg-command-dark-card p-8 rounded-[2rem] border border-slate-200 dark:border-command-dark-border shadow-sm space-y-6 hover:shadow-lg transition-all">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{card.label}</p>
               <div className={cn("p-3 rounded-2xl", card.bg, card.color)}>
@@ -170,7 +170,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white dark:bg-command-dark-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm space-y-6 md:space-y-8">
+      <div className="bg-white dark:bg-command-dark-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm space-y-6 md:space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-slate-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl border border-slate-100 dark:border-transparent">
@@ -193,7 +193,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
             <button 
               key={i} 
               onClick={() => setActiveTab(action.id)}
-              className="flex flex-col items-center text-center gap-2 md:gap-3 p-4 md:p-6 rounded-2xl border border-slate-100 dark:border-command-dark-border hover:border-blue-200 dark:hover:border-blue-500/50 hover:bg-white dark:hover:bg-blue-500/5 transition-all group"
+              className="flex flex-col items-center text-center gap-2 md:gap-3 p-4 md:p-6 rounded-2xl border border-slate-200 dark:border-command-dark-border hover:border-blue-200 dark:hover:border-blue-500/50 hover:bg-white dark:hover:bg-blue-500/5 transition-all group"
             >
               <div className={cn("p-3 md:p-4 rounded-2xl transition-all group-hover:scale-110 group-hover:shadow-lg", action.bg, action.color)}>
                 <action.icon size={20} />

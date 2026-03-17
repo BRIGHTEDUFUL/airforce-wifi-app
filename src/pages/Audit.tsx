@@ -24,7 +24,7 @@ const Audit: React.FC = () => {
   );
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-white dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 dark:bg-command-dark-bg min-h-full animate-in fade-in duration-700">
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Audit Logs</h1>
@@ -36,8 +36,8 @@ const Audit: React.FC = () => {
         </button>
       </header>
 
-      <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 dark:border-command-dark-border flex flex-col sm:flex-row gap-6">
+      <div className="bg-white dark:bg-command-dark-card rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-200 dark:border-command-dark-border flex flex-col sm:flex-row gap-6">
           <div className="relative flex-1 group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-command-blue transition-colors" size={18} />
             <input 

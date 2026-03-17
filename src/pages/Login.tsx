@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-command-dark-bg flex items-center justify-center p-6 animate-in fade-in duration-700 transition-colors">
       <div className="w-full max-w-md space-y-10">
         <div className="text-center space-y-6">
           {onBack && (
@@ -76,7 +76,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-command-dark-card p-10 rounded-[2.5rem] border border-slate-100 dark:border-command-dark-border shadow-2xl shadow-command-blue/5">
+        <div className="bg-white dark:bg-command-dark-card p-10 rounded-[2.5rem] border border-slate-200 dark:border-command-dark-border shadow-2xl shadow-command-blue/5">
           <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
               <div className="p-5 rounded-2xl bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-900/30 flex items-center gap-4 text-rose-600 dark:text-rose-400 text-sm font-bold animate-in slide-in-from-top-2">
