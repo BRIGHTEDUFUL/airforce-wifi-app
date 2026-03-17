@@ -67,7 +67,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             transition={{ delay: 0.2 }}
             className="space-y-4"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-theme uppercase leading-none">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-theme uppercase leading-none">
               WiFi <span className="text-blue-600">Portal</span>
             </h1>
             <p className="text-xl md:text-2xl font-bold text-theme-2 uppercase tracking-[0.2em]">
@@ -79,7 +79,7 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex items-center justify-center gap-8 py-6 border-y border-theme"
+            className="flex items-center justify-center gap-4 sm:gap-8 py-6 border-y border-theme"
           >
             {[
               { label: 'Network', value: 'GAF-HQ-SECURE' },
@@ -87,8 +87,8 @@ const Landing: React.FC<LandingProps> = ({ onEnter }) => {
               { label: 'Support', value: 'IT Desk' }
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <p className="text-[10px] font-black text-theme-3 uppercase tracking-widest mb-1">{item.label}</p>
-                <p className="text-xs font-bold text-blue-600 uppercase tracking-wider">{item.value}</p>
+                <p className="text-[9px] sm:text-[10px] font-black text-theme-3 uppercase tracking-widest mb-1">{item.label}</p>
+                <p className="text-[10px] sm:text-xs font-bold text-blue-600 uppercase tracking-wider">{item.value}</p>
               </div>
             ))}
           </motion.div>

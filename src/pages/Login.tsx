@@ -40,7 +40,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
         <div className="text-center space-y-6">
           {onBack && (
             <button onClick={onBack}
-              className="absolute top-10 left-10 flex items-center gap-3 text-theme-2 hover:text-command-blue transition-all group">
+              className="flex items-center gap-3 text-theme-2 hover:text-command-blue transition-all group mb-4">
               <div className="p-2 bg-surface rounded-xl shadow-sm group-hover:shadow-md transition-all border border-theme">
                 <ArrowLeft size={20} />
               </div>
@@ -63,7 +63,7 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="bg-surface p-10 rounded-[2.5rem] border border-theme shadow-2xl shadow-command-blue/5">
+        <div className="bg-surface p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-2xl shadow-command-blue/5">
           <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
               <div className="p-5 rounded-2xl bg-rose-50 border border-rose-100 flex items-center gap-4 text-rose-600 text-sm font-bold animate-in slide-in-from-top-2">

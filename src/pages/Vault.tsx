@@ -138,10 +138,10 @@ const Vault: React.FC = () => {
           Passwords are hidden for your role. Contact an Administrator or Operator to view credentials.
         </div>
       )}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
         {filteredItems.map((item) => (
-          <div key={item.id} className="bg-surface rounded-[2.5rem] border border-theme shadow-sm overflow-hidden flex flex-col md:flex-row gap-8 hover:shadow-xl hover:border-amber-200 transition-all duration-300 group">
-            <div className="p-8 flex-1 space-y-6">
+          <div key={item.id} className="bg-surface rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-amber-200 transition-all duration-300 group">
+            <div className="p-5 md:p-8 flex-1 space-y-4 md:space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-amber-500/10 text-amber-600  rounded-2xl group-hover:scale-110 transition-transform border border-theme">
@@ -215,9 +215,9 @@ const Vault: React.FC = () => {
               </div>
             </div>
             {item.notes && (
-              <div className="md:w-64 p-8 bg-surface-2 md:border-l border-theme flex flex-col justify-center">
-                <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-3">Notes</span>
-                <p className="text-xs text-theme-2 font-medium leading-relaxed line-clamp-4">{item.notes}</p>
+              <div className="p-5 md:p-6 bg-surface-2 border-t border-theme">
+                <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-2 block">Notes</span>
+                <p className="text-xs text-theme-2 font-medium leading-relaxed line-clamp-3">{item.notes}</p>
               </div>
             )}
           </div>

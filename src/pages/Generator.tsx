@@ -116,18 +116,18 @@ const Generator: React.FC = () => {
             </div>
 
             <div className="p-6 md:p-10 space-y-10">
-              <div className="bg-surface-2/50 p-8 rounded-[2rem] border border-theme flex flex-col items-center gap-6">
+              <div className="bg-surface-2/50 p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-theme flex flex-col items-center gap-5 md:gap-6">
                 <div className="w-full text-center">
                   <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-3 block">Generated Password</span>
-                  <div className="text-4xl font-mono font-bold tracking-widest break-all min-h-[48px] text-theme">
+                  <div className="text-2xl md:text-4xl font-mono font-bold tracking-widest break-all min-h-[40px] md:min-h-[48px] text-theme px-2">
                     {password || '••••••••••••'}
                   </div>
                 </div>
                 
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-3 justify-center">
                   <button 
                     onClick={handleGenerate}
-                    className="bg-command-blue hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-command-blue/20"
+                    className="bg-command-blue hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-command-blue/20"
                   >
                     <RefreshCw size={18} />
                     Generate
@@ -135,7 +135,7 @@ const Generator: React.FC = () => {
                   <button 
                     disabled={!password}
                     onClick={copyToClipboard}
-                    className="bg-surface-2 border border-theme hover:bg-white  px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-theme"
+                    className="bg-surface-2 border border-theme hover:bg-white  px-6 md:px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all disabled:opacity-50 text-theme"
                   >
                     {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                     {copied ? 'Copied!' : 'Copy'}

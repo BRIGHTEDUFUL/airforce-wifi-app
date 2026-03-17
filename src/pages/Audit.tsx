@@ -77,23 +77,23 @@ const Audit: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-2/50 text-[10px] uppercase tracking-[0.2em] font-black text-theme-3">
-                <th className="px-8 py-6">Timestamp</th>
-                <th className="px-8 py-6">User</th>
-                <th className="px-8 py-6">Action</th>
-                <th className="px-8 py-6">Module</th>
-                <th className="px-8 py-6">Details</th>
+                <th className="px-4 md:px-8 py-4 md:py-6">Timestamp</th>
+                <th className="px-4 md:px-8 py-4 md:py-6">User</th>
+                <th className="px-4 md:px-8 py-4 md:py-6">Action</th>
+                <th className="px-4 md:px-8 py-4 md:py-6">Module</th>
+                <th className="px-4 md:px-8 py-4 md:py-6">Details</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-theme">
               {filteredLogs.map((log) => (
                 <tr key={log.id} className="text-sm hover:bg-surface-2 transition-all group">
-                  <td className="px-8 py-6 whitespace-nowrap text-theme-3 font-mono text-xs">
+                  <td className="px-4 md:px-8 py-4 md:py-6 whitespace-nowrap text-theme-3 font-mono text-xs">
                     {formatDate(log.timestamp)}
                   </td>
-                  <td className="px-8 py-6 font-bold text-theme">
+                  <td className="px-4 md:px-8 py-4 md:py-6 font-bold text-theme">
                     {log.user_name}
                   </td>
-                  <td className="px-8 py-6">
+                  <td className="px-4 md:px-8 py-4 md:py-6">
                     <span className={cn(
                       "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
                       log.action.includes('Delete') ? "bg-rose-50  text-rose-600  border border-rose-100 " :
@@ -103,10 +103,10 @@ const Audit: React.FC = () => {
                       {log.action}
                     </span>
                   </td>
-                  <td className="px-8 py-6 text-theme-2 font-medium">
+                  <td className="px-4 md:px-8 py-4 md:py-6 text-theme-2 font-medium">
                     {log.module}
                   </td>
-                  <td className="px-8 py-6 text-theme-3 font-medium italic max-w-xs truncate">
+                  <td className="px-4 md:px-8 py-4 md:py-6 text-theme-3 font-medium italic max-w-xs truncate">
                     {log.details || '-'}
                   </td>
                 </tr>

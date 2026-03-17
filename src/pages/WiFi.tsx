@@ -94,10 +94,10 @@ const WiFi: React.FC = () => {
         )}
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         {networks.map((net) => (
-          <div key={net.id} className="bg-surface rounded-[2.5rem] border border-theme shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 transition-all duration-300 group">
-            <div className="p-8 flex-1 space-y-6">
+          <div key={net.id} className="bg-surface rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-emerald-200 transition-all duration-300 group">
+            <div className="p-5 md:p-8 flex-1 space-y-4 md:space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-emerald-50  text-emerald-600  rounded-2xl group-hover:scale-110 transition-transform">
@@ -144,7 +144,7 @@ const WiFi: React.FC = () => {
                   <span className="text-sm">{net.location}</span>
                 </div>
 
-                <div className="bg-surface-2 p-6 rounded-[1.5rem] border border-slate-100  flex items-center justify-between group/pass">
+                <div className="bg-surface-2 p-4 md:p-6 rounded-[1.5rem] border border-theme flex items-center justify-between gap-2 group/pass">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-theme-3 tracking-[0.2em] mb-1">Network Key</span>
                     <span className="font-mono text-base md:text-xl tracking-[0.1em] md:tracking-[0.15em] text-theme break-all">
@@ -174,7 +174,7 @@ const WiFi: React.FC = () => {
               </div>
             </div>
             {net.notes && (
-              <div className="px-8 py-4 bg-surface-2 border-t border-theme text-xs text-theme-2 italic font-medium">
+              <div className="px-5 md:px-8 py-4 bg-surface-2 border-t border-theme text-xs text-theme-2 italic font-medium">
                 <span className="font-bold text-theme-3 uppercase tracking-widest mr-2 not-italic">Note:</span>
                 {net.notes}
               </div>

@@ -101,10 +101,10 @@ const Devices: React.FC = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {filteredDevices.map((device) => (
-          <div key={device.id} className="bg-surface rounded-[2rem] border border-theme shadow-sm overflow-hidden group hover:shadow-xl hover:border-blue-200 transition-all duration-300">
-            <div className="p-8 space-y-6">
+          <div key={device.id} className="bg-surface rounded-[1.5rem] md:rounded-[2rem] border border-theme shadow-sm overflow-hidden group hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+            <div className="p-5 md:p-8 space-y-4 md:space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-blue-500/10 text-blue-600 rounded-2xl group-hover:scale-110 transition-transform">
@@ -155,13 +155,13 @@ const Devices: React.FC = () => {
                   <span className="text-sm">IP: {device.ip_address || 'N/A'}</span>
                 </div>
                 
-                <div className="pt-6 border-t border-slate-50 ">
+                <div className="pt-4 md:pt-6 border-t border-theme">
                   <p className="text-[10px] font-black text-theme-3 mb-2 uppercase tracking-[0.2em]">Installation Details</p>
-                  <p className="text-sm text-slate-700  font-medium leading-relaxed">{device.installation}</p>
+                  <p className="text-sm text-theme-2 font-medium leading-relaxed">{device.installation}</p>
                 </div>
               </div>
             </div>
-            <div className="px-8 py-4 bg-surface-2 border-t border-theme text-[10px] font-bold text-theme-3 flex justify-between uppercase tracking-widest">
+            <div className="px-5 md:px-8 py-4 bg-surface-2 border-t border-theme text-[10px] font-bold text-theme-3 flex justify-between uppercase tracking-widest">
               <span>Registered: {formatDate(device.created_at)}</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />

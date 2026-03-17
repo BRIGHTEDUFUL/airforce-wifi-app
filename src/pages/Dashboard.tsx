@@ -22,7 +22,7 @@ interface DashboardProps {
   setActiveTab?: (tab: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
+const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const [stats, setStats] = useState<any>(null);
   const { token, user } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -117,7 +117,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
       </div>
 
       {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
         {[
           { label: 'Authentication', status: 'Active', icon: Shield, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
           { label: 'Authorization', status: 'Admin', icon: Fingerprint, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -141,7 +141,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
       </div>
 
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {[
           { label: 'Total Devices', value: stats.totalDevices, icon: Monitor, color: 'text-blue-500', bg: 'bg-blue-500/10' },
           { label: 'Active Credentials', value: stats.totalCredentials, icon: Key, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
@@ -156,7 +156,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-5xl font-bold text-theme tracking-tighter">{card.value}</p>
+              <p className="text-4xl md:text-5xl font-bold text-theme tracking-tighter">{card.value}</p>
               <div className="flex items-center gap-2 text-[10px] font-bold text-theme-3 uppercase">
                 <Activity size={12} />
                 {card.label === 'Total Devices' ? 'Registered' : card.label === 'Active Credentials' ? 'In use' : card.label === 'Expiring Soon' ? 'Within 7 days' : 'Need rotation'}
@@ -189,7 +189,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab = () => {} }) => {
           ].map((action, i) => (
             <button 
               key={i} 
-              onClick={() => setActiveTab(action.id)}
+              onClick={() => setActiveTab?.(action.id)}
               className="flex flex-col items-center text-center gap-2 md:gap-3 p-4 md:p-6 rounded-2xl border border-theme hover:border-blue-200 hover:bg-surface-2 transition-all group"
             >
               <div className={cn("p-3 md:p-4 rounded-2xl transition-all group-hover:scale-110 group-hover:shadow-lg", action.bg, action.color)}>

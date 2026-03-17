@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, Shield, Activity, UserCheck } from 'lucide-react';
+import { BarChart3, Shield, Activity, UserCheck, Key } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
@@ -37,14 +37,14 @@ const Analytics: React.FC = () => {
       </header>
 
       {/* Top Row: Activity Trend */}
-      <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-        <h3 className="text-lg font-bold text-theme mb-8 flex items-center gap-3">
+      <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+        <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8 flex items-center gap-3">
           <div className="p-2 bg-command-blue/10  rounded-xl">
             <Activity size={18} className="text-command-blue" />
           </div>
           Daily System Activity (Last 7 Days)
         </h3>
-        <div className="h-[300px] w-full">
+        <div className="h-[220px] md:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={stats.dailyActivity.length > 0 ? stats.dailyActivity : [{name: 'No Data', value: 0}]}>
               <defs>
@@ -79,14 +79,14 @@ const Analytics: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Device Distribution */}
-        <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-          <h3 className="text-lg font-bold text-theme mb-8 flex items-center gap-3">
+        <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+          <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8 flex items-center gap-3">
             <div className="p-2 bg-emerald-500/10 rounded-xl border border-theme">
               <Shield size={18} className="text-emerald-600 " />
             </div>
             Device Type Distribution
           </h3>
-          <div className="h-[250px] w-full">
+          <div className="h-[200px] md:h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.deviceTypes} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={chartGridColor} />
@@ -110,14 +110,14 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* Vault Categories */}
-        <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-          <h3 className="text-lg font-bold text-theme mb-8 flex items-center gap-3">
+        <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+          <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8 flex items-center gap-3">
             <div className="p-2 bg-amber-500/10 rounded-xl border border-theme">
               <Key size={18} className="text-amber-600 " />
             </div>
             Credential Categories
           </h3>
-          <div className="h-[250px] w-full">
+          <div className="h-[200px] md:h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -148,8 +148,8 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* User Activity Leaderboard */}
-        <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-          <h3 className="text-lg font-bold text-theme mb-8 flex items-center gap-3">
+        <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+          <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8 flex items-center gap-3">
             <div className="p-2 bg-indigo-500/10 rounded-xl border border-theme">
               <UserCheck size={18} className="text-indigo-600 " />
             </div>
@@ -175,14 +175,14 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* Module Activity Radar */}
-        <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-          <h3 className="text-lg font-bold text-theme mb-8 flex items-center gap-3">
+        <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+          <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8 flex items-center gap-3">
             <div className="p-2 bg-rose-500/10 rounded-xl border border-theme">
               <BarChart3 size={18} className="text-rose-600 " />
             </div>
             Module Usage Intensity
           </h3>
-          <div className="h-[250px] w-full">
+          <div className="h-[200px] md:h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={stats.moduleActivity}>
                 <PolarGrid stroke={chartGridColor} />
@@ -206,9 +206,9 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* System Health Metrics */}
-      <div className="bg-surface p-8 rounded-[2.5rem] border border-theme shadow-sm">
-        <h3 className="text-lg font-bold text-theme mb-8">System Health & Resource Metrics</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="bg-surface p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm">
+        <h3 className="text-base md:text-lg font-bold text-theme mb-5 md:mb-8">System Health & Resource Metrics</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
           <div className="space-y-3">
             <div className="flex justify-between text-sm mb-1">
               <span className="font-bold text-theme">Database Storage</span>

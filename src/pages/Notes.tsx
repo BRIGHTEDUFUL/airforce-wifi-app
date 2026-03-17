@@ -132,10 +132,10 @@ const Notes: React.FC = () => {
         />
       </div>
 
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {filteredNotes.map((note) => (
-          <div key={note.id} className="break-inside-avoid bg-surface rounded-[2.5rem] border border-theme shadow-sm hover:shadow-xl hover:border-command-blue/20 transition-all duration-300 group">
-            <div className="p-8 space-y-6">
+          <div key={note.id} className="bg-surface rounded-[2rem] md:rounded-[2.5rem] border border-theme shadow-sm hover:shadow-xl hover:border-command-blue/20 transition-all duration-300 group">
+            <div className="p-5 md:p-8 space-y-4 md:space-y-6">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
                   {note.is_pinned === 1 && <Pin size={16} className="text-command-blue fill-command-blue" />}
@@ -148,7 +148,7 @@ const Notes: React.FC = () => {
               <p className="text-sm text-theme-2 font-medium whitespace-pre-wrap leading-relaxed">
                 {note.content}
               </p>
-              <div className="pt-6 border-t border-theme flex justify-between items-center">
+              <div className="pt-4 md:pt-6 border-t border-theme flex justify-between items-center">
                 <span className="text-[10px] text-theme-3 uppercase font-black tracking-widest">{formatDate(note.created_at)}</span>
                 <div className="flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                   {canEdit && (
