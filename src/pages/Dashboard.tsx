@@ -90,7 +90,10 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
           <div className="space-y-3 md:space-y-4">
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl md:text-4xl font-bold tracking-tight">
-                Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'}, {user?.name?.split(' ')[0] || 'User'}!
+                Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'},{' '}
+                {user?.name
+                  ? user.name.split(' ').slice(0, -1).join(' ') || user.name
+                  : 'Officer'}!
               </h2>
               <div className="px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center gap-2">
                 <Shield size={14} />
@@ -104,7 +107,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
           <div className="flex flex-row md:flex-col md:items-end items-center gap-4 md:gap-2">
             <div className="flex items-center gap-2 text-xl md:text-2xl font-bold tracking-tighter">
               <Clock size={20} className="text-blue-200" />
-              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
