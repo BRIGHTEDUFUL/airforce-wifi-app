@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // In production use /app/data so a Docker volume can persist the DB
 const dbDir = process.env.NODE_ENV === 'production'
-  ? '/app/data'
+  ? path.join(__dirname, 'data')
   : __dirname;
 
 const db = new Database(path.join(dbDir, 'database.db'));

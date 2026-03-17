@@ -20,7 +20,7 @@ function loadOrCreateSecret(): string {
   if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
 
   const secretFile = process.env.NODE_ENV === 'production'
-    ? '/app/data/.secret'
+    ? path.join(__dirname, 'data', '.secret')
     : path.join(__dirname, '.secret');
 
   if (fs.existsSync(secretFile)) {
@@ -142,9 +142,7 @@ async function startServer() {
     const alerts = db.prepare('SELECT * FROM messages WHERE is_read = 0 ORDER BY created_at DESC').all();
 
     // Real DB file size
-    const dbPath = process.env.NODE_ENV === 'production'
-      ? '/app/data/database.db'
-      : path.join(__dirname, 'database.db');
+    const dbPath = path.join(__dirname, process.env.NODE_ENV === 'production' ? 'data/database.db' : 'database.db');
     let dbSizeBytes = 0;
     try { dbSizeBytes = fs.statSync(dbPath).size; } catch {}
     const dbSizeMB = (dbSizeBytes / (1024 * 1024)).toFixed(2);
