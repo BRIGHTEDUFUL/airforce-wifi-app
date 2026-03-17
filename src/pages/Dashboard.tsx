@@ -91,9 +91,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl md:text-4xl font-bold tracking-tight">
                 Good {currentTime.getHours() < 12 ? 'morning' : currentTime.getHours() < 18 ? 'afternoon' : 'evening'},{' '}
-                {user?.name
-                  ? user.name.split(' ').slice(0, -1).join(' ') || user.name
-                  : 'Officer'}!
+                {user?.name?.split(' ')[0] || 'Officer'}!
               </h2>
               <div className="px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center gap-2">
                 <Shield size={14} />

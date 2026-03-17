@@ -123,9 +123,9 @@ export function initDb() {
 
   // Seed default users if not exist
   const seedUsers = [
-    { name: 'System Admin',    email: 'admin@airforce.mil',    role: 'Administrator', password: 'adminpassword' },
-    { name: 'Ops Officer',     email: 'operator@airforce.mil', role: 'Operator',      password: 'operatorpass' },
-    { name: 'Viewer Account',  email: 'viewer@airforce.mil',   role: 'Viewer',        password: 'viewerpass' },
+    { name: 'GAF Administrator', email: 'admin@airforce.mil',    role: 'Administrator', password: 'adminpassword' },
+    { name: 'Ops Officer',       email: 'operator@airforce.mil', role: 'Operator',      password: 'operatorpass' },
+    { name: 'Viewer Account',    email: 'viewer@airforce.mil',   role: 'Viewer',        password: 'viewerpass' },
   ];
 
   for (const u of seedUsers) {
