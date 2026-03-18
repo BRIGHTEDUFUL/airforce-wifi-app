@@ -1,8 +1,12 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -13,8 +17,8 @@ import db, { initDb } from './database.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-const PORT      = process.env.PORT || 3000;
-const JWT_EXPIRY = process.env.JWT_EXPIRY || '8h';
+const PORT       = Number(process.env.PORT) || 3000;
+const JWT_EXPIRY = (process.env.JWT_EXPIRY || '8h') as import('jsonwebtoken').SignOptions['expiresIn'];
 const IS_PROD   = process.env.NODE_ENV === 'production';
 
 // ─── JWT Secret ───────────────────────────────────────────────────────────────
@@ -62,14 +66,34 @@ function decrypt(text: string): string {
 // ─── App Setup ────────────────────────────────────────────────────────────────
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Trust nginx reverse proxy (required for correct IP forwarding)
+app.set('trust proxy', 1);
 
-// Request logger
-app.use((req, _res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  next();
-});
+// Security headers
+app.use(helmet({ contentSecurityPolicy: false }));
+
+// Gzip compression
+app.use(compression());
+
+// HTTP request logging
+app.use(morgan(IS_PROD ? 'combined' : 'dev'));
+
+// CORS — restrict to known origins in production
+const allowedOrigins = [
+  'http://192.168.11.10',
+  'http://localhost:5173',
+  ...(process.env.BASE_URL ? [process.env.BASE_URL] : []),
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, same-origin)
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+}));
+
+app.use(express.json());
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 const authenticateToken = (req: any, res: any, next: any) => {
@@ -94,6 +118,11 @@ const logAudit = (userId: number, userName: string, action: string, module: stri
     'INSERT INTO audit_logs (user_id, user_name, action, module, details) VALUES (?, ?, ?, ?, ?)'
   ).run(userId, userName, action, module, details ?? null);
 };
+
+// ─── Health Check ─────────────────────────────────────────────────────────────
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() });
+});
 
 // ─── Auth Routes ──────────────────────────────────────────────────────────────
 app.post('/api/auth/login', (req, res) => {
