@@ -12,7 +12,7 @@ const Vault: React.FC = () => {
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { canCreate, canDelete, canViewPasswords } = usePermissions();
 
   const [formData, setFormData] = useState({
@@ -25,18 +25,14 @@ const Vault: React.FC = () => {
   });
 
   const fetchVault = () => {
-    fetch('/api/vault', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/vault')
       .then(res => res.json())
       .then(data => setItems(data))
       .catch(err => console.error('Failed to fetch vault:', err));
   };
 
   const fetchDevices = () => {
-    fetch('/api/devices', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/devices')
       .then(res => res.json())
       .then(data => setDevices(data))
       .catch(err => console.error('Failed to fetch devices:', err));
@@ -45,7 +41,7 @@ const Vault: React.FC = () => {
   useEffect(() => {
     fetchVault();
     fetchDevices();
-  }, [token]);
+  }, []);
 
   const handleOpenModal = (item: any = null) => {
     if (item) {
@@ -70,12 +66,8 @@ const Vault: React.FC = () => {
     const url = editingItem ? `/api/vault/${editingItem.id}` : '/api/vault';
     const method = editingItem ? 'PUT' : 'POST';
 
-    fetch(url, {
+    apiFetch(url, {
       method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify({
         ...formData,
         device_id: formData.device_id ? parseInt(formData.device_id) : null
@@ -89,11 +81,7 @@ const Vault: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (!window.confirm('Are you sure you want to delete this credential? This action cannot be undone.')) return;
-    
-    fetch(`/api/vault/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    }).then(() => fetchVault());
+    apiFetch(`/api/vault/${id}`, { method: 'DELETE' }).then(() => fetchVault());
   };
 
   const filteredItems = items.filter(item => 

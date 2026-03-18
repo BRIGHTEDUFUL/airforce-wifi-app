@@ -9,7 +9,7 @@ const Devices: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDevice, setEditingDevice] = useState<any>(null);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { canCreate, canEdit, canDelete } = usePermissions();
 
   const [formData, setFormData] = useState({
@@ -22,28 +22,22 @@ const Devices: React.FC = () => {
   });
 
   const fetchDevices = () => {
-    fetch('/api/devices', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/devices')
       .then(res => res.json())
       .then(data => setDevices(data));
   };
 
   useEffect(() => {
     fetchDevices();
-  }, [token]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const method = editingDevice ? 'PUT' : 'POST';
     const url = editingDevice ? `/api/devices/${editingDevice.id}` : '/api/devices';
 
-    fetch(url, {
+    apiFetch(url, {
       method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify(formData)
     }).then(() => {
       fetchDevices();
@@ -55,10 +49,7 @@ const Devices: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (window.confirm('Are you sure you want to delete this device?')) {
-      fetch(`/api/devices/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).then(() => fetchDevices());
+      apiFetch(`/api/devices/${id}`, { method: 'DELETE' }).then(() => fetchDevices());
     }
   };
 

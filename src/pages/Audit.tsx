@@ -7,15 +7,13 @@ const Audit: React.FC = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [moduleFilter, setModuleFilter] = useState('All');
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
 
   useEffect(() => {
-    fetch('/api/audit', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/audit')
       .then(res => res.json())
       .then(data => setLogs(data));
-  }, [token]);
+  }, []);
 
   const modules = ['All', ...Array.from(new Set(logs.map(l => l.module)))];
 

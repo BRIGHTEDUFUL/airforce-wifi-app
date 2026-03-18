@@ -9,16 +9,14 @@ import { useTheme } from '../hooks/useTheme';
 
 const Analytics: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { isDark } = useTheme();
 
   useEffect(() => {
-    fetch('/api/stats', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/stats')
       .then(res => res.json())
       .then(data => setStats(data));
-  }, [token]);
+  }, []);
 
   if (!stats) return <div className="p-8 ">Loading analytics...</div>;
 

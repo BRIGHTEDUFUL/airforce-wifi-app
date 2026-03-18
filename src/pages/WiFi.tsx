@@ -10,7 +10,7 @@ const WiFi: React.FC = () => {
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNetwork, setEditingNetwork] = useState<any>(null);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { canCreate, canDelete } = usePermissions();
 
   const [formData, setFormData] = useState({
@@ -23,16 +23,14 @@ const WiFi: React.FC = () => {
   });
 
   const fetchWifi = () => {
-    fetch('/api/wifi', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/wifi')
       .then(res => res.json())
       .then(data => setNetworks(data));
   };
 
   useEffect(() => {
     fetchWifi();
-  }, [token]);
+  }, []);
 
   const togglePassword = (id: number) => {
     setShowPasswords(prev => ({ ...prev, [id]: !prev[id] }));
@@ -49,12 +47,8 @@ const WiFi: React.FC = () => {
     const method = editingNetwork ? 'PUT' : 'POST';
     const url = editingNetwork ? `/api/wifi/${editingNetwork.id}` : '/api/wifi';
 
-    fetch(url, {
+    apiFetch(url, {
       method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify(formData)
     }).then(() => {
       fetchWifi();
@@ -66,10 +60,7 @@ const WiFi: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (!window.confirm('Are you sure you want to delete this network?')) return;
-    fetch(`/api/wifi/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    }).then(() => fetchWifi());
+    apiFetch(`/api/wifi/${id}`, { method: 'DELETE' }).then(() => fetchWifi());
   };
 
   return (

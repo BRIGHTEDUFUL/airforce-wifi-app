@@ -9,7 +9,7 @@ const Notes: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<any>(null);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { canCreate, canEdit, canDelete } = usePermissions();
 
   const [formData, setFormData] = useState({
@@ -21,9 +21,7 @@ const Notes: React.FC = () => {
   });
 
   const fetchNotes = () => {
-    fetch('/api/notes', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/notes')
       .then(res => res.json())
       .then(data => setNotes(data))
       .catch(err => console.error('Failed to fetch notes:', err));
@@ -31,7 +29,7 @@ const Notes: React.FC = () => {
 
   useEffect(() => {
     fetchNotes();
-  }, [token]);
+  }, []);
 
   const handleOpenModal = (note: any = null) => {
     if (note) {
@@ -55,12 +53,8 @@ const Notes: React.FC = () => {
     const url = editingNote ? `/api/notes/${editingNote.id}` : '/api/notes';
     const method = editingNote ? 'PUT' : 'POST';
 
-    fetch(url, {
+    apiFetch(url, {
       method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify(formData)
     }).then(() => {
       fetchNotes();
@@ -71,30 +65,19 @@ const Notes: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (!window.confirm('Are you sure you want to delete this note?')) return;
-    fetch(`/api/notes/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    }).then(() => fetchNotes());
+    apiFetch(`/api/notes/${id}`, { method: 'DELETE' }).then(() => fetchNotes());
   };
 
   const togglePin = (note: any) => {
-    fetch(`/api/notes/${note.id}`, {
+    apiFetch(`/api/notes/${note.id}`, {
       method: 'PUT',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify({ ...note, is_pinned: note.is_pinned === 1 ? 0 : 1 })
     }).then(() => fetchNotes());
   };
 
   const toggleArchive = (note: any) => {
-    fetch(`/api/notes/${note.id}`, {
+    apiFetch(`/api/notes/${note.id}`, {
       method: 'PUT',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
       body: JSON.stringify({ ...note, is_archived: note.is_archived === 1 ? 0 : 1 })
     }).then(() => fetchNotes());
   };

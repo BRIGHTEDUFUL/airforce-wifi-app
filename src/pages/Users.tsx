@@ -15,24 +15,23 @@ const UserManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
   const [editingRole, setEditingRole] = useState('');
-  const { token, user: currentUser } = useAuth();
+  const { apiFetch, user: currentUser } = useAuth();
   const { canManageUsers } = usePermissions();
 
   const [formData, setFormData] = useState({ name: '', email: '', role: 'Viewer', password: '' });
 
   const fetchUsers = () => {
-    fetch('/api/users', { headers: { 'Authorization': `Bearer ${token}` } })
+    apiFetch('/api/users')
       .then(res => res.json())
       .then(data => setUsers(data));
   };
 
-  useEffect(() => { fetchUsers(); }, [token]);
+  useEffect(() => { fetchUsers(); }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('/api/users', {
+    apiFetch('/api/users', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify(formData)
     }).then(res => {
       if (res.ok) { fetchUsers(); setIsModalOpen(false); setFormData({ name: '', email: '', role: 'Viewer', password: '' }); }
@@ -43,15 +42,13 @@ const UserManagement: React.FC = () => {
   const handleDelete = (id: number) => {
     if (id === currentUser?.id) { alert('You cannot delete your own account.'); return; }
     if (window.confirm('Delete this user?')) {
-      fetch(`/api/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } })
-        .then(() => fetchUsers());
+      apiFetch(`/api/users/${id}`, { method: 'DELETE' }).then(() => fetchUsers());
     }
   };
 
   const handleRoleUpdate = (id: number) => {
-    fetch(`/api/users/${id}`, {
+    apiFetch(`/api/users/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ role: editingRole })
     }).then(res => {
       if (res.ok) { fetchUsers(); setEditingRoleId(null); }
