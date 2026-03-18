@@ -78,16 +78,23 @@ app.use(compression());
 // HTTP request logging
 app.use(morgan(IS_PROD ? 'combined' : 'dev'));
 
-// CORS — restrict to known origins in production
+// CORS — nginx handles external access; allow all same-network origins
+// All requests arrive via http://192.168.11.10 (nginx proxy), so origin is always that IP.
+// We also allow localhost for dev and any 192.168.x.x device accessing directly.
 const allowedOrigins = [
   'http://192.168.11.10',
   'http://localhost:5173',
+  'http://localhost:3000',
   ...(process.env.BASE_URL ? [process.env.BASE_URL] : []),
 ];
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, same-origin)
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    // Allow: no origin (curl, mobile apps, same-origin requests through nginx)
+    if (!origin) return callback(null, true);
+    // Allow: exact match
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // Allow: any device on 192.168.x.x subnet (local network access)
+    if (/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/.test(origin)) return callback(null, true);
     callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,

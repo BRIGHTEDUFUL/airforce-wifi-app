@@ -4,6 +4,7 @@ export default {
       name: 'airforce-app',
       script: 'server.ts',
       interpreter: 'tsx',
+      cwd: '/var/www/airforce-wifi-app',
       env_production: {
         NODE_ENV: 'production',
         PORT: 3000,
