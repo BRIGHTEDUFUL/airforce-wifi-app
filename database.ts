@@ -2,15 +2,21 @@ import Database from 'better-sqlite3';
 import bcrypt from 'bcryptjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// In production use /app/data so a Docker volume can persist the DB
-const dbDir = process.env.NODE_ENV === 'production'
-  ? path.join(__dirname, 'data')
-  : __dirname;
+// Always use data/ subfolder in production, root in dev
+const IS_PROD = process.env.NODE_ENV === 'production';
+const dbDir   = IS_PROD ? path.join(__dirname, 'data') : __dirname;
 
-const db = new Database(path.join(dbDir, 'database.db'));
+// Ensure data directory exists before opening DB
+if (IS_PROD) fs.mkdirSync(dbDir, { recursive: true });
+
+const dbPath = path.join(dbDir, 'database.db');
+console.log(`[db] Opening database at: ${dbPath}`);
+
+const db = new Database(dbPath);
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
