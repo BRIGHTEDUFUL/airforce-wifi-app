@@ -28,8 +28,11 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
       const data = await res.json();
       if (res.ok) { login(data.token, data.user); }
       else { setError(data.message || 'Login failed'); }
-    } catch {
-      setError('Network error. Please try again.');
+    } catch (err) {
+      const msg = err instanceof TypeError && err.message.includes('fetch')
+        ? 'Cannot reach server. Check that the app is running and nginx is configured.'
+        : 'Network error. Please try again.';
+      setError(msg);
     } finally {
       setIsLoading(false);
     }
