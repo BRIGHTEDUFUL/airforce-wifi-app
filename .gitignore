@@ -8,6 +8,10 @@ coverage/
 !.env.example
 .secret
 database.db
+# Ignore loose images at root but keep public/ assets
 *.jpeg
 *.jpg
 *.png
+!public/*.jpeg
+!public/*.jpg
+!public/*.png
