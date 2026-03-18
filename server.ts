@@ -100,7 +100,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 const authenticateToken = (req: any, res: any, next: any) => {
@@ -397,6 +397,10 @@ attachFrontend().then(() => {
     console.log(`   URL  : http://localhost:${PORT}\n`);
   });
 
+  // Keep connections alive longer — helps LAN devices stay connected
+  server.keepAliveTimeout = 65000;   // must be > nginx keepalive_timeout (65s)
+  server.headersTimeout   = 66000;   // must be > keepAliveTimeout
+
   // Graceful shutdown
   const shutdown = (signal: string) => {
     console.log(`\n[server] ${signal} — shutting down...`);
@@ -405,6 +409,10 @@ attachFrontend().then(() => {
   };
   process.on('SIGTERM', () => shutdown('SIGTERM'));
   process.on('SIGINT',  () => shutdown('SIGINT'));
+
+  // Catch unhandled errors — keep server alive
+  process.on('uncaughtException',  (err) => console.error('[server] Uncaught exception:', err));
+  process.on('unhandledRejection', (err) => console.error('[server] Unhandled rejection:', err));
 
 }).catch(err => {
   console.error('[server] Fatal startup error:', err);
