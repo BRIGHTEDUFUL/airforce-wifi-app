@@ -24,7 +24,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const [stats, setStats] = useState<any>(null);
-  const { token, user } = useAuth();
+  const { token, user, apiFetch } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -36,9 +36,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const fetchStats = async () => {
     setIsRefreshing(true);
     try {
-      const res = await fetch('/api/stats', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await apiFetch('/api/stats');
       const data = await res.json();
       setStats(data);
     } catch (error) {
@@ -50,6 +48,9 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
 
   useEffect(() => {
     fetchStats();
+    // Auto-refresh every 60s
+    const interval = setInterval(fetchStats, 60000);
+    return () => clearInterval(interval);
   }, [token]);
 
   if (!stats) return (

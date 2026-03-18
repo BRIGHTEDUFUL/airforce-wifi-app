@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Mail, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { APP_CREST_URL, APP_FULL_NAME } from '../constants';
 
@@ -10,6 +10,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -86,9 +87,14 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
               <label className="text-[10px] font-black uppercase text-theme-3 tracking-[0.2em] ml-1">Password</label>
               <div className="relative group">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-3 group-focus-within:text-command-blue transition-colors" size={20} />
-                <input required type="password" placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-4 input-theme rounded-2xl text-sm font-bold"
+                <input required type={showPassword ? 'text' : 'password'} placeholder="••••••••"
+                  autoComplete="current-password"
+                  className="w-full pl-12 pr-12 py-4 input-theme rounded-2xl text-sm font-bold"
                   value={password} onChange={e => setPassword(e.target.value)} />
+                <button type="button" onClick={() => setShowPassword(v => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-theme-3 hover:text-theme transition-colors">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
             <button type="submit" disabled={isLoading}
