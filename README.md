@@ -124,31 +124,11 @@ pm2 startup    # run the printed command to enable auto-start on reboot
 
 ### 4 — Configure nginx
 
-```bash
-sudo nano /etc/nginx/sites-available/gaf-wifi
-```
-
-```nginx
-server {
-    listen 80;
-    server_name _;
-    client_max_body_size 10M;
-
-    location / {
-        proxy_pass         http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header   Upgrade $http_upgrade;
-        proxy_set_header   Connection 'upgrade';
-        proxy_set_header   Host $host;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
+The config file is included in the repo — just copy it:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/gaf-wifi /etc/nginx/sites-enabled/
+sudo cp /var/www/airforce-wifi-app/nginx/gaf-wifi.conf /etc/nginx/sites-available/gaf-wifi
+sudo ln -s /etc/nginx/sites-available/gaf-wifi /etc/nginx/sites-enabled/gaf-wifi
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
