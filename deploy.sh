@@ -27,10 +27,10 @@ echo ""
 log "Updating system packages..."
 sudo apt-get update -qq
 
-# Build tools needed for native modules (better-sqlite3)
+# Build tools required for native Node modules (better-sqlite3)
 sudo apt-get install -y build-essential python3 curl git -qq
 
-# Install Node.js if not present or wrong version
+# Node.js
 if ! command -v node &>/dev/null || [[ "$(node -v)" != v${NODE_VERSION}* ]]; then
   log "Installing Node.js ${NODE_VERSION}..."
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
@@ -39,15 +39,15 @@ else
   log "Node.js $(node -v) already installed"
 fi
 
-# Install nginx
+# nginx
 if ! command -v nginx &>/dev/null; then
   log "Installing nginx..."
   sudo apt-get install -y nginx -qq
 else
-  log "nginx $(nginx -v 2>&1 | cut -d/ -f2) already installed"
+  log "nginx already installed"
 fi
 
-# Install PM2
+# PM2
 if ! command -v pm2 &>/dev/null; then
   log "Installing PM2..."
   sudo npm install -g pm2 --quiet
@@ -69,17 +69,14 @@ sudo chown -R "$USER:$USER" "$APP_DIR"
 cd "$APP_DIR"
 
 # ── 3. Directories ────────────────────────────────────────────────────────────
-log "Creating data and logs directories..."
 mkdir -p data logs
+log "Directories ready"
 
-# ── 4. Install dependencies — rebuild native modules for Linux ────────────────
-log "Installing npm dependencies (rebuilding native modules)..."
-# Remove any Windows-compiled node_modules to force clean Linux build
-rm -rf node_modules/better-sqlite3/build 2>/dev/null || true
+# ── 4. Clean install — wipe Windows node_modules, rebuild for Linux ───────────
+log "Installing npm dependencies (clean Linux build)..."
+rm -rf node_modules
 npm install 2>&1 | tail -5
-# Force rebuild better-sqlite3 for this platform
-npm rebuild better-sqlite3 2>&1 | tail -3
-log "Native modules rebuilt for Linux"
+log "Dependencies installed and native modules compiled for Linux"
 
 # ── 5. Build frontend ─────────────────────────────────────────────────────────
 log "Building frontend..."
@@ -90,7 +87,7 @@ log "Configuring nginx..."
 sudo cp "$APP_DIR/nginx/gaf-wifi.conf" "$NGINX_CONF"
 sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/gaf-wifi
 sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t || fail "nginx config test failed"
+sudo nginx -t || fail "nginx config test failed — check $NGINX_CONF"
 sudo systemctl enable nginx
 sudo systemctl restart nginx
 log "nginx running"
@@ -111,28 +108,29 @@ pm2 start ecosystem.config.js --env production
 pm2 save
 
 # Auto-start on reboot
-PM2_STARTUP=$(pm2 startup systemd -u "$USER" --hp "$HOME" 2>/dev/null | grep "sudo")
+PM2_STARTUP=$(pm2 startup systemd -u "$USER" --hp "$HOME" 2>/dev/null | grep "sudo" || true)
 [ -n "$PM2_STARTUP" ] && eval "$PM2_STARTUP" || true
 
-# ── 9. Wait for server + health check ────────────────────────────────────────
+# ── 9. Health check — wait up to 30s ─────────────────────────────────────────
 log "Waiting for server to start..."
+HTTP="000"
 for i in {1..15}; do
   HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
-  if [ "$HTTP" = "200" ]; then
-    log "Server is up (HTTP 200)"
-    break
-  fi
+  if [ "$HTTP" = "200" ]; then break; fi
   echo "   Waiting... ($i/15)"
   sleep 2
 done
 
 if [ "$HTTP" != "200" ]; then
-  warn "Server not responding after 30s. Showing PM2 logs:"
-  pm2 logs airforce-app --lines 20 --nostream
-  fail "Deployment failed — server did not start. Fix errors above and re-run deploy.sh"
+  warn "Server not responding. PM2 logs:"
+  echo ""
+  pm2 logs airforce-app --lines 30 --nostream
+  echo ""
+  fail "Server did not start. Fix errors above and re-run: bash deploy.sh"
 fi
+log "Server is up (HTTP 200)"
 
-# ── 10. Reset admin password ──────────────────────────────────────────────────
+# ── 10. Seed admin ────────────────────────────────────────────────────────────
 log "Seeding admin account..."
 npm run reset-admin
 

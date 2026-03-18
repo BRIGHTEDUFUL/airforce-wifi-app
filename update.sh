@@ -14,8 +14,8 @@ git fetch origin main
 git reset --hard origin/main
 
 log "Installing dependencies..."
-npm install 2>&1 | tail -3
-npm rebuild better-sqlite3 2>&1 | tail -2
+rm -rf node_modules
+npm install 2>&1 | tail -5
 
 log "Building frontend..."
 npm run build 2>&1 | tail -5

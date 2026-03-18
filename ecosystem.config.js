@@ -2,9 +2,11 @@ export default {
   apps: [
     {
       name: 'airforce-app',
-      script: 'server.ts',
-      interpreter: 'tsx',
+      // Use local tsx binary — avoids PATH issues with PM2
+      script: './node_modules/.bin/tsx',
+      args: 'server.ts',
       cwd: '/var/www/airforce-wifi-app',
+      interpreter: 'none',
       env_production: {
         NODE_ENV: 'production',
         PORT: 3000,
