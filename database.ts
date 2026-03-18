@@ -6,15 +6,18 @@ import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Always use data/ subfolder in production, root in dev
+// NODE_ENV may not be set yet if dotenv hasn't loaded — read it directly
+// ecosystem.config.js sets it via env_production, so it's available at process start
 const IS_PROD = process.env.NODE_ENV === 'production';
-const dbDir   = IS_PROD ? path.join(__dirname, 'data') : __dirname;
+const dbDir   = IS_PROD
+  ? path.join(__dirname, 'data')
+  : __dirname;
 
-// Ensure data directory exists before opening DB
-if (IS_PROD) fs.mkdirSync(dbDir, { recursive: true });
+// Ensure data directory exists
+fs.mkdirSync(dbDir, { recursive: true });
 
 const dbPath = path.join(dbDir, 'database.db');
-console.log(`[db] Opening database at: ${dbPath}`);
+console.log(`[db] Opening database at: ${dbPath} (${IS_PROD ? 'production' : 'development'})`);
 
 const db = new Database(dbPath);
 

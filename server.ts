@@ -2,7 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createServer as createViteServer } from 'vite';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -377,18 +376,26 @@ app.delete('/api/users/:id', authenticateToken, authorizeRoles('Administrator'),
 // ─── Static / SPA Fallback ────────────────────────────────────────────────────
 async function attachFrontend() {
   if (!IS_PROD) {
+    // Dynamically import vite only in dev — not available in production bundle
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({ server: { middlewareMode: true }, appType: 'spa' });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    if (!fs.existsSync(distPath)) {
+      console.error('[server] dist/ not found — run: npm run build');
+      process.exit(1);
+    }
     app.use(express.static(distPath));
     app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
 }
 
 // ─── Start ────────────────────────────────────────────────────────────────────
+// initDb first — creates tables and seeds admin before any request can arrive
+initDb();
+
 attachFrontend().then(() => {
-  initDb();
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀 GAF WiFi Management System`);
