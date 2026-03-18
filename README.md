@@ -112,10 +112,12 @@ npm run build
 mkdir -p data
 ```
 
+> No `.env` configuration needed — defaults are pre-configured for `192.168.11.10`.
+
 ### 3 — Start with PM2
 
 ```bash
-NODE_ENV=production pm2 start "npx tsx server.ts" --name gaf-wifi
+pm2 start ecosystem.config.js --env production
 pm2 save
 pm2 startup    # run the printed command to enable auto-start on reboot
 ```
