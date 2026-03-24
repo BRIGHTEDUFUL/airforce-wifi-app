@@ -1,0 +1,83 @@
+═══════════════════════════════════════════════════════════════
+  GAF WiFi Management System - Ubuntu Deployment
+═══════════════════════════════════════════════════════════════
+
+📦 REPOSITORY
+https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
+
+🚀 ONE-COMMAND DEPLOYMENT ON UBUNTU
+
+On your Ubuntu server (192.168.11.10):
+
+  git clone https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git
+  cd airforce-wifi-app
+  chmod +x deploy.sh
+  sudo ./deploy.sh
+
+That's it! Wait 2-3 minutes for installation to complete.
+
+═══════════════════════════════════════════════════════════════
+
+🌐 ACCESS
+
+URL:      http://192.168.11.10
+Email:    admin@airforce.mil
+Password: Admin@GAF2026!
+
+⚠️  CHANGE PASSWORD AFTER FIRST LOGIN!
+
+═══════════════════════════════════════════════════════════════
+
+✅ WHAT'S INCLUDED
+
+- Full-stack app (React + Express.js)
+- SQLite database (auto-created)
+- JWT authentication (auto-configured)
+- Nginx reverse proxy (port 80)
+- PM2 process manager
+- Auto-restart on reboot
+
+═══════════════════════════════════════════════════════════════
+
+📋 USEFUL COMMANDS
+
+Check status:     pm2 status
+View logs:        pm2 logs gaf-wifi-app
+Restart app:      pm2 restart gaf-wifi-app
+Update app:       ./update.sh
+Verify setup:     npm run verify
+Reset admin:      npm run reset-admin
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION
+
+- UBUNTU-DEPLOY.md  → Quick Ubuntu deployment guide
+- DEPLOYMENT.md     → Comprehensive deployment guide
+- ENV-STATUS.md     → Environment variable status
+- README.md         → Project overview
+
+═══════════════════════════════════════════════════════════════
+
+✅ GUARANTEED TO WORK
+
+The app runs exactly as it does on Windows. No changes needed.
+All environment variables are auto-configured.
+Database and secrets auto-generate on first run.
+
+═══════════════════════════════════════════════════════════════
+
+🔧 TROUBLESHOOTING
+
+If something doesn't work:
+
+1. Check logs:        pm2 logs gaf-wifi-app
+2. Check nginx:       sudo systemctl status nginx
+3. Check firewall:    sudo ufw status
+4. Verify setup:      npm run verify
+
+See UBUNTU-DEPLOY.md for detailed troubleshooting.
+
+═══════════════════════════════════════════════════════════════
+
+Ready to deploy! 🚀
