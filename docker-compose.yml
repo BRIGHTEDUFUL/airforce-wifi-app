@@ -1,16 +1,20 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gaf-wifi-app
     expose:
       - "3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
       - BASE_URL=http://192.168.11.10
-      # JWT_SECRET left blank — auto-generated and saved to /app/data/.secret
-      - JWT_SECRET=
       - JWT_EXPIRY=8h
+      # JWT_SECRET intentionally omitted — auto-generated on first start
+      # and persisted to /app/data/.secret via the volume below
     volumes:
+      # Persist database and JWT secret across container restarts/rebuilds
       - db_data:/app/data
     restart: unless-stopped
     healthcheck:
@@ -18,10 +22,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 45s
 
   nginx:
     image: nginx:alpine
+    container_name: gaf-wifi-nginx
     ports:
       - "0.0.0.0:80:80"
     volumes:
@@ -33,3 +38,4 @@ services:
 
 volumes:
   db_data:
+    driver: local

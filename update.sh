@@ -1,16 +1,16 @@
 #!/bin/bash
-# GAF WiFi — Update Script
-# Usage: sudo bash update.sh
+# GAF WiFi — Auto-Update Script
+# Called by cron every 5 minutes AND manually: sudo bash update.sh
 
 set -e
 
 APP_DIR="/var/www/airforce-wifi-app"
-STATIC_IP="192.168.11.10"
+LOG_FILE="/var/log/gaf-deploy.log"
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; NC='\033[0m'
-log()  { echo -e "${GREEN}[✓] $1${NC}"; }
-warn() { echo -e "${YELLOW}[!] $1${NC}"; }
-fail() { echo -e "${RED}[✗] $1${NC}"; exit 1; }
+log()  { echo -e "${GREEN}[✓] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [UPDATE] $1" >> "$LOG_FILE" 2>/dev/null || true; }
+warn() { echo -e "${YELLOW}[!] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [WARN] $1" >> "$LOG_FILE" 2>/dev/null || true; }
+fail() { echo -e "${RED}[✗] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [FAIL] $1" >> "$LOG_FILE" 2>/dev/null || true; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || fail "Run with: sudo bash update.sh"
 
@@ -20,19 +20,39 @@ else
   REAL_USER="root"
 fi
 
+# Read APP_DNS from .env
+APP_DNS="192.168.11.10"
+if [ -f "$APP_DIR/.env" ]; then
+  _DNS=$(grep -E '^APP_DNS=' "$APP_DIR/.env" | cut -d= -f2 | tr -d '"' | tr -d "'" | tr -d ' ')
+  [ -n "$_DNS" ] && APP_DNS="$_DNS"
+fi
+
 cd "$APP_DIR"
 
-log "Pulling latest code..."
-git fetch origin main
+# ── Check for new commits ─────────────────────────────────────────────────────
+git fetch origin main 2>/dev/null
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse origin/main)
+
+if [ "$LOCAL" = "$REMOTE" ]; then
+  # No changes — exit silently (cron runs this every 5 min)
+  exit 0
+fi
+
+log "New changes detected — updating from GitHub..."
+log "$(git log --oneline HEAD..origin/main | head -5)"
+
 git reset --hard origin/main
 chown -R "$REAL_USER:$REAL_USER" "$APP_DIR"
 
-# Restore .env if wiped by git reset (gitignored — never in repo)
+# Restore .env if wiped
 if [ ! -f "$APP_DIR/.env" ]; then
   warn ".env missing — recreating..."
   cat > "$APP_DIR/.env" << ENVEOF
 PORT=3000
-BASE_URL=http://${STATIC_IP}
+BASE_URL=http://${APP_DNS}
+APP_DNS=${APP_DNS}
+APP_DOMAIN=airforce.local
 JWT_SECRET=
 JWT_EXPIRY=8h
 GEMINI_API_KEY=
@@ -61,9 +81,9 @@ else
     npm run build
 BUILDEOF
 fi
-[ -d "$APP_DIR/dist" ] || fail "Build failed — dist/ not created"
+[ -d "$APP_DIR/dist" ] || fail "Build failed"
 
-# Reload nginx in case config changed
+# Reload nginx if config changed
 nginx -t 2>/dev/null && systemctl reload nginx && log "nginx reloaded" || warn "nginx reload skipped"
 
 log "Restarting app..."
@@ -73,13 +93,12 @@ else
   sudo -u "$REAL_USER" bash -c "pm2 restart airforce-app && pm2 save --force"
 fi
 
-log "Checking health..."
+# Health check
 HTTP="000"
 for i in $(seq 1 10); do
   sleep 3
   HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
   if [ "$HTTP" = "200" ]; then break; fi
-  echo "   Waiting... ($i/10)"
 done
 
 if [ "$HTTP" != "200" ]; then
@@ -91,5 +110,4 @@ if [ "$HTTP" != "200" ]; then
   fail "Server did not come back up after update"
 fi
 
-log "Update complete"
-echo "   URL: http://${STATIC_IP}"
+log "Update complete — app running at http://${APP_DNS}"

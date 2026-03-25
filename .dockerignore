@@ -1,15 +1,47 @@
+# ── Never copy into image ─────────────────────────────────────────────────────
+
+# Dependencies — rebuilt fresh inside container for Linux
 node_modules
+
+# Previous build output — rebuilt inside container
 dist
+
+# Git metadata
 .git
 .gitignore
 .gitattributes
-*.log
+
+# Local database and secrets — NEVER bake into image
 database.db
+data/
 .env
 .secret
+*.secret
+
+# Logs
+*.log
+logs/
+
+# Editor config
 .vscode
-nginx
+.idea
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Deploy/update scripts — not needed inside container
 deploy.sh
 update.sh
+ecosystem.config.js
+ecosystem.config.cjs
+
+# Documentation
 README.md
+DEPLOYMENT.md
+UBUNTU-DEPLOY.md
+ENV-STATUS.md
+QUICK-START.txt
+
+# Root-level loose images (public/ is kept — contains the crest)
 images.jpeg

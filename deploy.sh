@@ -1,7 +1,7 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
 # GAF WiFi Management System — Full Zero-Config Deployment
-# Fresh Ubuntu 20.04/22.04/24.04 | Node 20 | nginx | PM2
+# Ubuntu 20.04/22.04/24.04 | Node 20 | nginx | PM2
 #
 # Usage:  sudo bash deploy.sh
 # Re-run: sudo bash deploy.sh   (safe to run multiple times)
@@ -9,36 +9,57 @@
 
 set -e
 
-# ── Config ────────────────────────────────────────────────────────────────────
+# ── Hardcoded defaults (overridden by .env if it exists) ─────────────────────
 APP_DIR="/var/www/airforce-wifi-app"
 REPO="https://github.com/BRIGHTEDUFUL/airforce-wifi-app.git"
 NGINX_CONF="/etc/nginx/sites-available/gaf-wifi"
 NETPLAN_CONF="/etc/netplan/99-gaf-static.yaml"
-STATIC_IP="192.168.11.10"
-GATEWAY="192.168.11.1"
 NODE_VERSION="20"
+LOG_FILE="/var/log/gaf-deploy.log"
+
+# Default network config — will be overridden from .env below
+APP_DNS="192.168.11.10"
+APP_DOMAIN="airforce.local"
+GATEWAY="192.168.11.1"
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; NC='\033[0m'
-log()  { echo -e "${GREEN}[✓] $1${NC}"; }
-warn() { echo -e "${YELLOW}[!] $1${NC}"; }
-fail() { echo -e "${RED}[✗] $1${NC}"; exit 1; }
+log()  { echo -e "${GREEN}[✓] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [OK] $1" >> "$LOG_FILE" 2>/dev/null || true; }
+warn() { echo -e "${YELLOW}[!] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [WARN] $1" >> "$LOG_FILE" 2>/dev/null || true; }
+fail() { echo -e "${RED}[✗] $1${NC}"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [FAIL] $1" >> "$LOG_FILE" 2>/dev/null || true; exit 1; }
 
 # ── Must run as root ──────────────────────────────────────────────────────────
 [ "$(id -u)" -eq 0 ] || fail "Run with: sudo bash deploy.sh"
 
-# Detect real user — handle both: sudo bash deploy.sh  AND  bash deploy.sh as root
+# Detect real user
 if [ -n "${SUDO_USER:-}" ] && [ "${SUDO_USER}" != "root" ]; then
   REAL_USER="$SUDO_USER"
 else
-  # Running directly as root — use root's home
   REAL_USER="root"
 fi
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 
+# ── Read .env if it already exists on server ──────────────────────────────────
+if [ -f "$APP_DIR/.env" ]; then
+  # Source only the network vars we need
+  _DNS=$(grep -E '^APP_DNS=' "$APP_DIR/.env" | cut -d= -f2 | tr -d '"' | tr -d "'" | tr -d ' ')
+  _DOMAIN=$(grep -E '^APP_DOMAIN=' "$APP_DIR/.env" | cut -d= -f2 | tr -d '"' | tr -d "'" | tr -d ' ')
+  _GW=$(grep -E '^GATEWAY=' "$APP_DIR/.env" | cut -d= -f2 | tr -d '"' | tr -d "'" | tr -d ' ')
+  [ -n "$_DNS" ]    && APP_DNS="$_DNS"
+  [ -n "$_DOMAIN" ] && APP_DOMAIN="$_DOMAIN"
+  [ -n "$_GW" ]     && GATEWAY="$_GW"
+fi
+
+STATIC_IP="$APP_DNS"
+
+touch "$LOG_FILE" 2>/dev/null || true
+echo "" >> "$LOG_FILE" 2>/dev/null || true
+echo "════════════════════════════════════════════════════════" >> "$LOG_FILE" 2>/dev/null || true
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Deployment started by $REAL_USER" >> "$LOG_FILE" 2>/dev/null || true
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "   GAF WiFi Management System — Deployment"
-echo "   User: $REAL_USER | Home: $REAL_HOME | IP: $STATIC_IP"
+echo "   User: $REAL_USER | IP: $STATIC_IP | Domain: $APP_DOMAIN"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
@@ -52,9 +73,7 @@ apt-get install -y -qq \
 # ── 2. Node.js 20 ─────────────────────────────────────────────────────────────
 if ! command -v node &>/dev/null || [[ "$(node -v 2>/dev/null)" != v${NODE_VERSION}* ]]; then
   log "Installing Node.js ${NODE_VERSION}..."
-  # Remove any old nodejs first
   apt-get remove -y nodejs npm 2>/dev/null || true
-  # Use NodeSource setup script
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x -o /tmp/nodesource_setup.sh
   bash /tmp/nodesource_setup.sh
   apt-get install -y -qq nodejs
@@ -81,32 +100,29 @@ log "PM2 $(pm2 -v) ready"
 # ── 5. Static IP via netplan ──────────────────────────────────────────────────
 log "Configuring static IP ${STATIC_IP}..."
 
-# Detect primary ethernet interface (skip loopback, docker, virtual)
 IFACE=$(ip -o link show | awk -F': ' \
   '$2 !~ /^lo$/ && $2 !~ /^docker/ && $2 !~ /^br-/ && $2 !~ /^veth/ && $2 !~ /^virbr/ \
   { gsub(/@.*/, "", $2); print $2; exit }')
 
 if [ -z "$IFACE" ]; then
-  warn "Could not detect network interface — skipping static IP (configure manually)"
+  warn "Could not detect network interface — skipping static IP"
 else
   CURRENT_IP=$(ip -4 addr show "$IFACE" 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -1 || true)
 
   if [ "$CURRENT_IP" = "$STATIC_IP" ]; then
     log "Static IP ${STATIC_IP} already set on $IFACE"
   else
-    warn "Interface $IFACE has IP: ${CURRENT_IP:-none} — setting to ${STATIC_IP}"
+    warn "Setting $IFACE: ${CURRENT_IP:-none} → ${STATIC_IP}"
 
-    # Backup existing netplan configs that mention this interface
     for f in /etc/netplan/*.yaml /etc/netplan/*.yml; do
       if [ -f "$f" ] && [ "$f" != "$NETPLAN_CONF" ]; then
         if grep -q "$IFACE" "$f" 2>/dev/null; then
           cp "$f" "${f}.bak.$(date +%s)"
-          warn "Backed up existing netplan: $f"
+          warn "Backed up: $f"
         fi
       fi
     done
 
-    # Write our static IP config
     cat > "$NETPLAN_CONF" << NETEOF
 # GAF WiFi Server — Static IP (auto-generated by deploy.sh)
 network:
@@ -124,27 +140,26 @@ network:
         addresses: [8.8.8.8, 8.8.4.4]
 NETEOF
     chmod 600 "$NETPLAN_CONF"
-
-    # Apply — use || true so SSH drop doesn't abort the script
     netplan generate 2>/dev/null || true
-    netplan apply 2>/dev/null || true
+    netplan apply   2>/dev/null || true
     sleep 5
 
     NEW_IP=$(ip -4 addr show "$IFACE" 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -1 || true)
     if [ "$NEW_IP" = "$STATIC_IP" ]; then
       log "Static IP confirmed: ${STATIC_IP} on $IFACE"
     else
-      warn "IP is now: ${NEW_IP:-unknown}. If SSH dropped, reconnect to ${STATIC_IP} and re-run."
+      warn "IP is ${NEW_IP:-unknown} — may need reboot. Continuing..."
     fi
   fi
 fi
 
-# ── 6. App directory ──────────────────────────────────────────────────────────
+# ── 6. Clone or update repo ───────────────────────────────────────────────────
 mkdir -p /var/www
 if [ -d "$APP_DIR/.git" ]; then
-  log "Pulling latest code..."
+  log "Pulling latest code from GitHub..."
   git -C "$APP_DIR" fetch origin main
   git -C "$APP_DIR" reset --hard origin/main
+  log "Code updated to: $(git -C $APP_DIR log -1 --format='%h %s')"
 else
   log "Cloning repository..."
   git clone "$REPO" "$APP_DIR"
@@ -161,10 +176,13 @@ log "Directories ready"
 
 # ── 8. .env file ──────────────────────────────────────────────────────────────
 if [ ! -f "$APP_DIR/.env" ]; then
-  log "Creating .env..."
+  log "Creating .env with APP_DNS=${STATIC_IP} APP_DOMAIN=${APP_DOMAIN}..."
   cat > "$APP_DIR/.env" << ENVEOF
 PORT=3000
 BASE_URL=http://${STATIC_IP}
+APP_DNS=${STATIC_IP}
+APP_DOMAIN=${APP_DOMAIN}
+GATEWAY=${GATEWAY}
 JWT_SECRET=
 JWT_EXPIRY=8h
 GEMINI_API_KEY=
@@ -173,20 +191,19 @@ ENVEOF
   chown "$REAL_USER:$REAL_USER" "$APP_DIR/.env"
   log ".env created"
 else
-  log ".env already exists — keeping it"
+  # Ensure APP_DNS and APP_DOMAIN exist in the file
+  grep -q '^APP_DNS=' "$APP_DIR/.env"    || echo "APP_DNS=${STATIC_IP}"    >> "$APP_DIR/.env"
+  grep -q '^APP_DOMAIN=' "$APP_DIR/.env" || echo "APP_DOMAIN=${APP_DOMAIN}" >> "$APP_DIR/.env"
+  log ".env exists — keeping existing values"
 fi
 
-# ── 9. npm install (clean Linux build) ───────────────────────────────────────
-log "Installing npm dependencies (clean build for Linux)..."
-# Clear npm cache owned by root to avoid permission conflicts
+# ── 9. npm install ────────────────────────────────────────────────────────────
+log "Installing npm dependencies..."
 npm cache clean --force 2>/dev/null || true
 
 if [ "$REAL_USER" = "root" ]; then
-  cd "$APP_DIR"
-  rm -rf node_modules
-  npm install --no-audit --no-fund
+  cd "$APP_DIR" && rm -rf node_modules && npm install --no-audit --no-fund
 else
-  # Run as the real user so npm cache is owned correctly
   sudo -u "$REAL_USER" bash << NPMEOF
     cd "$APP_DIR"
     rm -rf node_modules
@@ -205,34 +222,54 @@ else
     npm run build
 BUILDEOF
 fi
-[ -d "$APP_DIR/dist" ] || fail "Build failed — dist/ directory not created"
-log "Frontend built successfully"
+[ -d "$APP_DIR/dist" ] || fail "Build failed — dist/ not created"
+log "Frontend built"
 
-# ── 11. nginx config ──────────────────────────────────────────────────────────
-log "Configuring nginx..."
-cp "$APP_DIR/nginx/gaf-wifi.conf" "$NGINX_CONF"
+# ── 11. nginx config — substitute APP_DNS and APP_DOMAIN ─────────────────────
+log "Configuring nginx for IP=${STATIC_IP} domain=${APP_DOMAIN}..."
+
+# Build server_name value — always include IP, add domain if set
+SERVER_NAME="_ ${STATIC_IP}"
+if [ -n "$APP_DOMAIN" ] && [ "$APP_DOMAIN" != "airforce.local" ]; then
+  SERVER_NAME="_ ${STATIC_IP} ${APP_DOMAIN} www.${APP_DOMAIN}"
+fi
+
+# Substitute placeholders in nginx config
+sed \
+  -e "s/APP_DNS_PLACEHOLDER/${STATIC_IP}/g" \
+  -e "s/APP_DOMAIN_PLACEHOLDER/${APP_DOMAIN}/g" \
+  "$APP_DIR/nginx/gaf-wifi.conf" > "$NGINX_CONF"
+
+nginx -t || fail "nginx config test failed — check $NGINX_CONF"
 ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/gaf-wifi
 rm -f /etc/nginx/sites-enabled/default
-nginx -t || fail "nginx config test failed — check $NGINX_CONF"
 systemctl enable nginx
 systemctl restart nginx
-log "nginx running on port 80"
+log "nginx running — serving ${STATIC_IP} and ${APP_DOMAIN}"
 
-# ── 12. Firewall ──────────────────────────────────────────────────────────────
+# ── 12. /etc/hosts — add local domain resolution ─────────────────────────────
+if [ -n "$APP_DOMAIN" ]; then
+  if ! grep -q "$APP_DOMAIN" /etc/hosts 2>/dev/null; then
+    echo "${STATIC_IP}  ${APP_DOMAIN} www.${APP_DOMAIN}" >> /etc/hosts
+    log "Added ${APP_DOMAIN} → ${STATIC_IP} to /etc/hosts"
+  else
+    log "/etc/hosts already has ${APP_DOMAIN}"
+  fi
+fi
+
+# ── 13. Firewall ──────────────────────────────────────────────────────────────
 log "Configuring firewall..."
-# Add SSH rule BEFORE resetting to avoid lockout
 ufw allow 22/tcp   2>/dev/null || true
 ufw allow 80/tcp   2>/dev/null || true
 ufw deny  3000/tcp 2>/dev/null || true
 ufw default deny incoming  2>/dev/null || true
 ufw default allow outgoing 2>/dev/null || true
 ufw --force enable 2>/dev/null || true
-log "Firewall: SSH(22) + HTTP(80) open | Node(3000) blocked externally"
+log "Firewall: SSH(22) + HTTP(80) open | Node(3000) blocked"
 
-# ── 13. PM2 — start app ───────────────────────────────────────────────────────
+# ── 14. PM2 — start app ───────────────────────────────────────────────────────
 log "Starting app with PM2..."
 
-# Stop existing instance if running
 if [ "$REAL_USER" = "root" ]; then
   pm2 stop airforce-app   2>/dev/null || true
   pm2 delete airforce-app 2>/dev/null || true
@@ -251,20 +288,18 @@ else
 PM2EOF
 fi
 
-# ── 14. PM2 startup on boot ───────────────────────────────────────────────────
+# ── 15. PM2 startup on boot ───────────────────────────────────────────────────
 log "Configuring PM2 auto-start on reboot..."
-# Generate the startup command and execute it
 STARTUP_CMD=$(sudo -u "$REAL_USER" pm2 startup systemd -u "$REAL_USER" --hp "$REAL_HOME" 2>/dev/null | grep "sudo env PATH" || true)
 if [ -n "$STARTUP_CMD" ]; then
   eval "$STARTUP_CMD" || true
 else
-  # Fallback: run as root directly
   pm2 startup systemd -u "$REAL_USER" --hp "$REAL_HOME" 2>/dev/null || true
 fi
 systemctl enable "pm2-${REAL_USER}" 2>/dev/null || true
-log "PM2 will auto-start on reboot"
+log "PM2 auto-start configured"
 
-# ── 15. PM2 log rotation ──────────────────────────────────────────────────────
+# ── 16. PM2 log rotation ──────────────────────────────────────────────────────
 if [ "$REAL_USER" = "root" ]; then
   pm2 install pm2-logrotate 2>/dev/null || true
   pm2 set pm2-logrotate:max_size 10M  2>/dev/null || true
@@ -280,38 +315,45 @@ LOGEOF
 fi
 log "Log rotation configured"
 
-# ── 16. Health check ──────────────────────────────────────────────────────────
+# ── 17. Auto-update via cron (pulls from GitHub every 5 minutes) ─────────────
+log "Setting up auto-update cron job..."
+CRON_CMD="*/5 * * * * root bash $APP_DIR/update.sh >> $LOG_FILE 2>&1"
+CRON_FILE="/etc/cron.d/gaf-wifi-autoupdate"
+echo "$CRON_CMD" > "$CRON_FILE"
+chmod 644 "$CRON_FILE"
+log "Auto-update cron: pulls GitHub every 5 minutes → logs to $LOG_FILE"
+
+# ── 18. Health check ──────────────────────────────────────────────────────────
 log "Waiting for server to start..."
 HTTP="000"
 for i in $(seq 1 20); do
   sleep 3
   HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
   if [ "$HTTP" = "200" ]; then break; fi
-  echo "   Waiting... ($i/20) — got HTTP $HTTP"
+  echo "   Waiting... ($i/20) — HTTP $HTTP"
 done
 
 if [ "$HTTP" != "200" ]; then
-  warn "Server not responding after 60s. PM2 logs:"
-  echo ""
+  warn "Server not responding. PM2 logs:"
   if [ "$REAL_USER" = "root" ]; then
     pm2 logs airforce-app --lines 50 --nostream 2>/dev/null || true
   else
     sudo -u "$REAL_USER" pm2 logs airforce-app --lines 50 --nostream 2>/dev/null || true
   fi
-  echo ""
-  fail "Server failed to start. Fix errors above and re-run: sudo bash deploy.sh"
+  fail "Server failed to start. Re-run: sudo bash deploy.sh"
 fi
 log "Node server healthy (HTTP 200)"
 
-# Verify nginx is proxying correctly
+# Verify nginx proxy
 NGINX_HTTP=$(curl -s -o /dev/null -w "%{http_code}" "http://${STATIC_IP}/api/health" 2>/dev/null || echo "000")
 if [ "$NGINX_HTTP" = "200" ]; then
   log "nginx proxy healthy (HTTP 200 via http://${STATIC_IP})"
 else
-  warn "nginx proxy check: HTTP $NGINX_HTTP — run: sudo nginx -t && sudo systemctl status nginx"
+  warn "nginx proxy returned HTTP $NGINX_HTTP"
+  warn "Check: sudo nginx -t && sudo systemctl status nginx"
 fi
 
-# ── 17. Seed admin account ────────────────────────────────────────────────────
+# ── 19. Seed admin ────────────────────────────────────────────────────────────
 log "Seeding admin account..."
 if [ "$REAL_USER" = "root" ]; then
   cd "$APP_DIR" && NODE_ENV=production ./node_modules/.bin/tsx scripts/reset-admin.ts
@@ -321,22 +363,39 @@ else
     NODE_ENV=production ./node_modules/.bin/tsx scripts/reset-admin.ts
 ADMINEOF
 fi
-log "Admin account ready"
+log "Admin ready"
+
+# ── 20. DNS validation ────────────────────────────────────────────────────────
+log "Validating network access..."
+echo ""
+echo "   Server IP   : ${STATIC_IP}"
+echo "   Local domain: ${APP_DOMAIN}"
+echo ""
+echo "   From other LAN devices, open:"
+echo "   → http://${STATIC_IP}"
+if [ -n "$APP_DOMAIN" ]; then
+  echo "   → http://${APP_DOMAIN}  (if DNS/hosts configured on client)"
+fi
+echo ""
+echo "   To access by domain name from other devices, add this to"
+echo "   their hosts file (C:\\Windows\\System32\\drivers\\etc\\hosts on Windows):"
+echo "   ${STATIC_IP}  ${APP_DOMAIN}"
+echo ""
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Deployment completed successfully" >> "$LOG_FILE" 2>/dev/null || true
 
 # ── Done ──────────────────────────────────────────────────────────────────────
-echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${GREEN}   Deployment complete!${NC}"
 echo ""
 echo "   App URL  : http://${STATIC_IP}"
+echo "   Domain   : http://${APP_DOMAIN}"
 echo "   Login    : admin@airforce.mil"
 echo "   Password : Admin@GAF2026!"
 echo ""
-echo "   Any device on 192.168.11.x → open http://${STATIC_IP}"
-echo ""
 echo "   pm2 status                — check app"
 echo "   pm2 logs airforce-app     — live logs"
-echo "   pm2 restart airforce-app  — restart"
-echo "   sudo bash update.sh       — pull & redeploy"
+echo "   sudo bash update.sh       — manual update"
+echo "   cat $LOG_FILE             — deployment log"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
