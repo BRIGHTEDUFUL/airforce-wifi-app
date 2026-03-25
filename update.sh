@@ -2,7 +2,7 @@
 # GAF WiFi — Update Script
 # Usage: sudo bash update.sh
 
-set -euo pipefail
+set -e
 
 APP_DIR="/var/www/airforce-wifi-app"
 STATIC_IP="192.168.11.10"
@@ -14,7 +14,12 @@ fail() { echo -e "${RED}[✗] $1${NC}"; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || fail "Run with: sudo bash update.sh"
 
-REAL_USER="${SUDO_USER:-$USER}"
+if [ -n "${SUDO_USER:-}" ] && [ "${SUDO_USER}" != "root" ]; then
+  REAL_USER="$SUDO_USER"
+else
+  REAL_USER="root"
+fi
+
 cd "$APP_DIR"
 
 log "Pulling latest code..."
@@ -37,35 +42,54 @@ ENVEOF
 fi
 
 log "Installing dependencies..."
-sudo -u "$REAL_USER" bash -c "
-  cd '$APP_DIR'
-  rm -rf node_modules
-  npm install --no-audit --no-fund 2>&1 | tail -5
-"
+if [ "$REAL_USER" = "root" ]; then
+  cd "$APP_DIR" && rm -rf node_modules && npm install --no-audit --no-fund
+else
+  sudo -u "$REAL_USER" bash << NPMEOF
+    cd "$APP_DIR"
+    rm -rf node_modules
+    npm install --no-audit --no-fund
+NPMEOF
+fi
 
 log "Building frontend..."
-sudo -u "$REAL_USER" bash -c "cd '$APP_DIR' && npm run build 2>&1 | tail -5"
+if [ "$REAL_USER" = "root" ]; then
+  cd "$APP_DIR" && npm run build
+else
+  sudo -u "$REAL_USER" bash << BUILDEOF
+    cd "$APP_DIR"
+    npm run build
+BUILDEOF
+fi
 [ -d "$APP_DIR/dist" ] || fail "Build failed — dist/ not created"
 
 # Reload nginx in case config changed
-nginx -t 2>&1 && systemctl reload nginx && log "nginx reloaded" || warn "nginx reload skipped"
+nginx -t 2>/dev/null && systemctl reload nginx && log "nginx reloaded" || warn "nginx reload skipped"
 
 log "Restarting app..."
-sudo -u "$REAL_USER" bash -c "pm2 restart airforce-app && pm2 save --force"
+if [ "$REAL_USER" = "root" ]; then
+  pm2 restart airforce-app && pm2 save --force
+else
+  sudo -u "$REAL_USER" bash -c "pm2 restart airforce-app && pm2 save --force"
+fi
 
 log "Checking health..."
 HTTP="000"
-for i in {1..10}; do
+for i in $(seq 1 10); do
   sleep 3
   HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
-  [ "$HTTP" = "200" ] && break
+  if [ "$HTTP" = "200" ]; then break; fi
   echo "   Waiting... ($i/10)"
 done
 
-[ "$HTTP" = "200" ] || {
-  sudo -u "$REAL_USER" pm2 logs airforce-app --lines 20 --nostream 2>/dev/null || true
-  fail "Server did not come back up"
-}
+if [ "$HTTP" != "200" ]; then
+  if [ "$REAL_USER" = "root" ]; then
+    pm2 logs airforce-app --lines 20 --nostream 2>/dev/null || true
+  else
+    sudo -u "$REAL_USER" pm2 logs airforce-app --lines 20 --nostream 2>/dev/null || true
+  fi
+  fail "Server did not come back up after update"
+fi
 
 log "Update complete"
 echo "   URL: http://${STATIC_IP}"
