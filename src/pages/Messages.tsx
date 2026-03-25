@@ -71,24 +71,24 @@ const Messages: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [compose, setCompose] = useState({ type: 'system', title: '', content: '' });
   const [isSending, setIsSending] = useState(false);
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
   const { isAdmin, isOperator } = usePermissions();
 
   const fetchMessages = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/messages', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await apiFetch('/api/messages');
       const data = await res.json();
       setMessages(data);
       setSelectedId(prev => prev === null && data.length > 0 ? data[0].id : prev);
     } catch (e) { console.error(e); }
     finally { setIsLoading(false); }
-  }, [token]);
+  }, [apiFetch]);
 
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
   const markRead = async (id: number) => {
-    await fetch(`/api/messages/${id}/read`, { method: 'PUT', headers: { Authorization: `Bearer ${token}` } });
+    await apiFetch(`/api/messages/${id}/read`, { method: 'PUT' });
     setMessages(prev => prev.map(m => m.id === id ? { ...m, is_read: 1 } : m));
   };
 
@@ -101,16 +101,14 @@ const Messages: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (!window.confirm('Delete this message?')) return;
-    await fetch(`/api/messages/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    await apiFetch(`/api/messages/${id}`, { method: 'DELETE' });
     setMessages(prev => prev.filter(m => m.id !== id));
     if (selectedId === id) { setSelectedId(null); setMobileView('list'); }
   };
 
   const markAllRead = async () => {
     const unread = messages.filter(m => !m.is_read);
-    await Promise.all(unread.map(m =>
-      fetch(`/api/messages/${m.id}/read`, { method: 'PUT', headers: { Authorization: `Bearer ${token}` } })
-    ));
+    await Promise.all(unread.map(m => apiFetch(`/api/messages/${m.id}/read`, { method: 'PUT' })));
     setMessages(prev => prev.map(m => ({ ...m, is_read: 1 })));
   };
 
@@ -118,9 +116,8 @@ const Messages: React.FC = () => {
     e.preventDefault();
     setIsSending(true);
     try {
-      await fetch('/api/messages', {
+      await apiFetch('/api/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(compose),
       });
       setShowCompose(false);

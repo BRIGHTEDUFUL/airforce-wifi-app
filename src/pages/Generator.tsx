@@ -24,15 +24,13 @@ const Generator: React.FC = () => {
   const [selectedDevice, setSelectedDevice] = useState<string>('');
   const [serviceName, setServiceName] = useState('');
   const [username, setUsername] = useState('admin');
-  const { token } = useAuth();
+  const { apiFetch } = useAuth();
 
   useEffect(() => {
-    fetch('/api/devices', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    apiFetch('/api/devices')
       .then(res => res.json())
       .then(data => setDevices(data));
-  }, [token]);
+  }, [apiFetch]);
 
   const handleGenerate = () => {
     if (mode === 'random') {
@@ -52,25 +50,19 @@ const Generator: React.FC = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) return;
-    
     setIsSaving(true);
     try {
-      const res = await fetch('/api/vault', {
+      const res = await apiFetch('/api/vault', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify({
           service_name: serviceName || (selectedDevice ? `Device: ${devices.find(d => d.id === parseInt(selectedDevice))?.device_name}` : 'Generated Password'),
-          username: username,
-          password: password,
+          username,
+          password,
           category: mode === 'random' ? 'Application' : 'Network',
           device_id: selectedDevice ? parseInt(selectedDevice) : null,
           notes: `Generated via system tool on ${new Date().toLocaleString()}`
         })
       });
-
       if (res.ok) {
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);

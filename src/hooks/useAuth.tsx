@@ -78,19 +78,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Centralized fetch — attaches auth header, auto-logouts on 401/403
   const apiFetch = useCallback(async (url: string, options: RequestInit = {}): Promise<Response> => {
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(options.headers || {}),
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
-    if (res.status === 401 || res.status === 403) logout();
-    return res;
+    try {
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(options.headers || {}),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (res.status === 401 || res.status === 403) logout();
+      return res;
+    } catch (err) {
+      // Network failure — return a synthetic 503 response so callers don't crash
+      console.error('[apiFetch] Network error:', url, err);
+      return new Response(JSON.stringify({ message: 'Network error — server unreachable' }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }, [token, logout]);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-theme flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-command-blue border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!token, apiFetch }}>

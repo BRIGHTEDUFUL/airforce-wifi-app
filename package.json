@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "clean": "rimraf dist",
     "lint": "tsc --noEmit",
-    "reset-admin": "NODE_ENV=production npx tsx scripts/reset-admin.ts",
+    "reset-admin": "NODE_ENV=production ./node_modules/.bin/tsx scripts/reset-admin.ts",
     "verify": "node verify-env.js"
   },
   "dependencies": {

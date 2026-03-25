@@ -1,0 +1,26 @@
+# GAF WiFi Server — Static IP Configuration
+# Deployed to: /etc/netplan/99-gaf-static.yaml
+#
+# Sets the server NIC to static IP 192.168.11.10/24
+# Gateway: 192.168.11.1  (adjust if your router uses a different IP)
+# DNS: 8.8.8.8 + 8.8.4.4 (Google) — change to local DNS if available
+#
+# Apply with: sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    # The interface name is auto-detected by deploy.sh
+    # If you need to set it manually, replace IFACE_PLACEHOLDER with e.g. eth0 or ens33
+    IFACE_PLACEHOLDER:
+      dhcp4: false
+      addresses:
+        - 192.168.11.10/24
+      routes:
+        - to: default
+          via: 192.168.11.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4

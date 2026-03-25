@@ -25,14 +25,23 @@ const Login: React.FC<LoginProps> = ({ onBack }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (res.ok) { login(data.token, data.user); }
-      else { setError(data.message || 'Login failed'); }
+
+      // Handle non-JSON responses (e.g. nginx 502/504 gateway errors)
+      let data: any = {};
+      try { data = await res.json(); } catch { /* non-JSON body */ }
+
+      if (res.ok) {
+        if (data.token && data.user) {
+          login(data.token, data.user);
+        } else {
+          setError('Invalid server response. Please try again.');
+        }
+      } else {
+        setError(data.message || `Authentication failed (${res.status})`);
+      }
     } catch (err) {
-      const msg = err instanceof TypeError && err.message.includes('fetch')
-        ? 'Cannot reach server. Check that the app is running and nginx is configured.'
-        : 'Network error. Please try again.';
-      setError(msg);
+      // Network-level failure — server unreachable
+      setError('Cannot reach server. Check your network connection.');
     } finally {
       setIsLoading(false);
     }

@@ -381,12 +381,23 @@ async function attachFrontend() {
     const vite = await createViteServer({ server: { middlewareMode: true }, appType: 'spa' });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    // Use __dirname so it works regardless of what cwd PM2 sets
+    const distPath = path.join(__dirname, 'dist');
     if (!fs.existsSync(distPath)) {
       console.error('[server] dist/ not found — run: npm run build');
       process.exit(1);
     }
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, {
+      etag: true,
+      lastModified: true,
+      setHeaders: (res, filePath) => {
+        if (filePath.includes('/assets/')) {
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        } else {
+          res.setHeader('Cache-Control', 'no-cache');
+        }
+      },
+    }));
     app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
 }

@@ -21,8 +21,10 @@ console.log(`[db] Opening database at: ${dbPath} (${IS_PROD ? 'production' : 'de
 
 const db = new Database(dbPath);
 
-// Enable foreign keys
+// Enable foreign keys and WAL mode (better concurrent read performance)
+db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
+db.pragma('synchronous = NORMAL');  // safe with WAL, faster than FULL
 
 export function initDb() {
   // Users Table
