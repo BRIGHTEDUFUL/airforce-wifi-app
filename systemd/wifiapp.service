@@ -1,0 +1,20 @@
+[Unit]
+Description=GAF WiFi Management System
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/airforce-wifi-app
+EnvironmentFile=/var/www/airforce-wifi-app/.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /var/www/airforce-wifi-app/node_modules/.bin/tsx server.ts
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wifiapp
+
+[Install]
+WantedBy=multi-user.target

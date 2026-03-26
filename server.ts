@@ -17,10 +17,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
 const PORT       = Number(process.env.PORT) || 3000;
+const HOST       = process.env.HOST       || '0.0.0.0';
 const JWT_EXPIRY = (process.env.JWT_EXPIRY || '8h') as import('jsonwebtoken').SignOptions['expiresIn'];
 const IS_PROD    = process.env.NODE_ENV === 'production';
-const APP_DNS    = process.env.APP_DNS    || '192.168.11.10';
-const APP_DOMAIN = process.env.APP_DOMAIN || '';
+const SERVER_IP  = process.env.SERVER_IP  || process.env.APP_DNS    || '192.168.11.10';
+const DOMAIN     = process.env.DOMAIN     || process.env.APP_DOMAIN || 'wifiapp.airforce';
 
 // ─── JWT Secret ───────────────────────────────────────────────────────────────
 const SECRET_FILE = IS_PROD
@@ -83,20 +84,19 @@ app.use(morgan(IS_PROD ? 'combined' : 'dev'));
 // All requests arrive via http://192.168.11.10 (nginx proxy), so origin is always that IP.
 // We also allow localhost for dev and any 192.168.x.x device accessing directly.
 const allowedOrigins = [
-  `http://${APP_DNS}`,
-  `http://${APP_DNS}:3000`,
+  `http://${SERVER_IP}`,
+  `http://${SERVER_IP}:3000`,
+  `http://${DOMAIN}`,
+  `http://www.${DOMAIN}`,
   'http://localhost:5173',
   'http://localhost:3000',
-  ...(APP_DOMAIN ? [`http://${APP_DOMAIN}`, `http://www.${APP_DOMAIN}`] : []),
   ...(process.env.BASE_URL ? [process.env.BASE_URL] : []),
 ];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    // Allow any 192.168.x.x device on the LAN
     if (/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/.test(origin)) return callback(null, true);
-    // Allow any 10.x.x.x device
     if (/^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/.test(origin)) return callback(null, true);
     callback(new Error(`CORS blocked: ${origin}`));
   },
@@ -412,13 +412,12 @@ initDb();
 
 attachFrontend().then(() => {
 
-  const server = app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, HOST, () => {
     console.log(`\n🚀 GAF WiFi Management System`);
     console.log(`   Mode   : ${IS_PROD ? 'production' : 'development'}`);
-    console.log(`   Port   : ${PORT}`);
-    console.log(`   DNS    : ${APP_DNS}`);
-    if (APP_DOMAIN) console.log(`   Domain : ${APP_DOMAIN}`);
-    console.log(`   URL    : http://${APP_DNS}\n`);
+    console.log(`   Listen : ${HOST}:${PORT}`);
+    console.log(`   IP     : ${SERVER_IP}`);
+    console.log(`   Domain : http://${DOMAIN}\n`);
   });
 
   // Keep connections alive longer — helps LAN devices stay connected
